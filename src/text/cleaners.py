@@ -29,7 +29,7 @@ _abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in 
     ('&', 'and'),       # Added '&'
 ]]
 
-_punctuation_list = list(_punctuation)
+_punctuation_list = list(_punctuation) + ["--"]
 
 def expand_abbreviations(text):
     for regex, replacement in _abbreviations:
@@ -88,9 +88,9 @@ def english_cleaners_v2(text):
         """
         processed_text = ''.join(f" {char} " if char in _punctuation_list else char for char in text)
         return processed_text
-    text = convert_to_ascii(text)
     text = lowercase(text)
     text = expand_numbers(text)
+    text = convert_to_ascii(text)
     text = expand_abbreviations(text)
     text = pad_punctuation(text)
     text = collapse_whitespace(text)
