@@ -11,7 +11,7 @@
 #SBATCH --ntasks-per-node=4 # nombre de tache MPI par noeud (= nombre de GPU par noeud)
 #SBATCH --gres=gpu:4 # reserver 4 GPU
 #SBATCH --cpus-per-task=3 # reserver 10 CPU par tache (et memoire associee)
-#SBATCH --time=10:00:00 # temps maximal d’allocation "(HH:MM:SS)"
+#SBATCH --time=00:10:00 # temps maximal d’allocation "(HH:MM:SS)"
 # #SBATCH --qos=qos_gpu-dev # QoS
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
 #SBATCH --account=rec@v100 # comptabilite V100
@@ -33,13 +33,14 @@ module purge
 #echo "pip list: $(pip list)"
 #echo "pip list: $(pip list)"
 
-source .venv/bin/activate
+source ../.venv/bin/activate
 
 echo "visible nvidia gpus $(nvidia-smi)"
 echo "Running job on $(hostname)"
 echo "python: $(which python)"
 echo "python-version $(python -V)"
 echo "CUDA_DEVICE: $CUDA_VISIBLE_DEVICES"
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True #avoid fragmentation issues?
 
 #python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
 #python -c "import torch; print(f'cuda device: {torch.cuda.current_device()}')"
@@ -51,7 +52,8 @@ echo "computation start $(date)"
 
 srun python -u scripts/encode_audio.py --device cuda \
                                     --wav_dir ../../data/LJSpeech-1.1/wavs \
-                                    --save_dir ../../data/LJSpeech-1.1/encoded_audio_en \
-                                    --ckpt_path ckpt/sparc_en.ckpt
+                                    --save_dir ../../data/LJSpeech-1.1/bullshit \
+                                    --ckpt_path ckpt/sparc_en.ckpt \
+                                    --num_gpus 4
 
 echo "computation end : $(date)"

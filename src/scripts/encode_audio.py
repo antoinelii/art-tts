@@ -1,15 +1,13 @@
 from sparc import load_model
 import argparse
-import tqdm
-import sys
+from tqdm import tqdm
+import logging
 from pathlib import Path
 import numpy as np
-import time
 import torch
+import torch.multiprocessing as mp
 
 parser = argparse.ArgumentParser()
-# parser.add_argument("--rank",type=int,default=0)
-# parser.add_argument("--n",type=int,default=1)
 parser.add_argument("--device", type=str, default="cuda")
 parser.add_argument(
     "--wav_dir",
@@ -20,53 +18,53 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument("--ckpt_path", type=str, default="ckpt/sparc_en.ckpt")
-# parser.add_argument("--batch_size",type=int,default=1)
+parser.add_argument("--num_gpus", type=int, default=4)
 
-if __name__ == "__main__":
-    args = parser.parse_args()
-    device = args.device
+"""
+Do it as array jobs instead of multiprocessing
+"""
+# Setup logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+
+class TqdmLoggingHandler(logging.Handler):
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            tqdm.write(msg)  # keeps progress bar clean
+            self.flush()
+        except Exception:
+            self.handleError(record)
+
+
+handler = TqdmLoggingHandler()
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+
+def process_files(rank, args, wav_files_split):
+    device = f"{args.device}:{rank}"
     ckpt = args.ckpt_path
-    wav_dir = Path(args.wav_dir)
     save_dir = Path(args.save_dir)
     spk_emb_save_dir = save_dir / "spk_emb"
-    spk_emb_save_dir.mkdir(exist_ok=True)
     ft_save_dir = save_dir / "emasrc"
-    ft_save_dir.mkdir(exist_ok=True)
+    logger.info("Loading model on GPU %d", rank)
     coder = load_model(ckpt=ckpt, device=device)
+    logger.info("Model loaded on GPU %d", rank)
 
-    wav_files = [f for f in wav_dir.glob("**/*.flac")] + [
-        f for f in wav_dir.glob("**/*.wav")
-    ]
-
-    print(f"Found {len(wav_files)} audio files in {wav_dir}", flush=True)
-    start = time.time()
-    print(f"starting time: {tqdm.tqdm.format_interval(start)}")
-    ##create a data loader
-    # from torch.utils.data import DataLoader
-    ##create a dataset with the files found
-    # from torch.utils.data import Dataset
-    # class WavDataset(Dataset):
-    #    def __init__(self, wav_files):
-    #        self.wav_files = wav_files
-    #    def __len__(self):
-    #        return len(self.wav_files)
-    #    def __getitem__(self, idx):
-    #        return self.wav_files[idx]
-    #
-    # wav_files = WavDataset(wav_files)
-    # data_loader = DataLoader(wav_files, batch_size=4, shuffle=False)
-
-    for wav_file in tqdm.tqdm(
-        wav_files, file=sys.stdout, dynamic_ncols=False, disable=False
+    gpu_wav_files = wav_files_split[rank]
+    logger.info(f"GPU {rank} processing {len(gpu_wav_files)} files.")
+    for wav_file in tqdm(
+        gpu_wav_files, desc=f"GPU {rank}", position=rank, dynamic_ncols=True
     ):
-        save_name = str(wav_file).replace(str(wav_dir), "")
+        save_name = str(wav_file).replace(str(args.wav_dir), "")
         save_name = Path(save_name).stem + ".npy"
-        path_depth = len(save_name.split("/"))
-
         ft_save_path = ft_save_dir / save_name
         spk_emb_save_path = spk_emb_save_dir / save_name
 
-        if (spk_emb_save_path).exists():
+        if spk_emb_save_path.exists():
             continue
 
         def _recursive_path_solver(file_path):
@@ -82,16 +80,37 @@ if __name__ == "__main__":
         _recursive_path_solver(ft_save_path.parent)
 
         try:
-            with torch.no_grad():
+            with torch.inference_mode():
                 outputs = coder.encode(wav_file, concat=True)
-            # dictionary with keys: "features", "spk_emb"
-            # "features" = 12 EMA + pitch + loudness + periodicity
-            # "spk_emb" = 64 features embedding vector
-        except FileNotFoundError:
+            np.save(ft_save_path, outputs["features"])
+            np.save(spk_emb_save_path, outputs["spk_emb"])
+        except Exception as e:
+            logger.error(f"Error processing {wav_file}: {e}")
             continue
-        np.save(ft_save_path, outputs["features"])
-        np.save(spk_emb_save_path, outputs["spk_emb"])
 
-    print(f"Finished processing {len(wav_files)} audio files.")
-    end = time.time()
-    print(f"Execution time: {end - start:.4f} seconds")
+    logger.info(f"GPU {rank} finished processing {len(gpu_wav_files)} files.")
+
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    logger.info("Starting the script...")
+    wav_dir = Path(args.wav_dir)
+    save_dir = Path(args.save_dir)
+    spk_emb_save_dir = save_dir / "spk_emb"
+    spk_emb_save_dir.mkdir(exist_ok=True)
+    ft_save_dir = save_dir / "emasrc"
+    ft_save_dir.mkdir(exist_ok=True)
+
+    wav_files = [f for f in wav_dir.glob("**/*.flac")] + [
+        f for f in wav_dir.glob("**/*.wav")
+    ]
+    logger.info(f"Found {len(wav_files)} audio files in {wav_dir}")
+
+    # Split files across GPUs
+    num_gpus = args.num_gpus
+    wav_files_split = np.array_split(wav_files[:400], num_gpus)
+    # Start multiprocessing
+    logger.info(f"Starting processing on {num_gpus} GPUs...")
+    mp.spawn(process_files, args=(args, wav_files_split), nprocs=num_gpus, join=True)
+
+    logger.info("Finished processing all audio files.")
