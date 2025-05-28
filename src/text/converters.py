@@ -106,10 +106,12 @@ arpabet2ipa = {
     "Z": "z",
     "ZH": "ʒ",
 }
-# vec_a
-# vec_i
+
+diphtongues_ipa = ["aʊ", "aɪ", "ɔɪ", "eɪ", "oʊ"]
+
+# vec_a, vec_i
 # mask = vec_a == vec_i
-# vec_final = np:zeros_like(vec_a)
+# vec_final = np.zeros_like(vec_a)
 # vec_final[mask] = vec_a[mask]
 
 
@@ -118,7 +120,7 @@ def text_to_ipa(
     dictionary: Optional[CMUDict] = None,
     cleaner_names: List[str] = ["english_cleaners_v2"],
     remove_punctuation: bool = False,
-) -> str:
+) -> List[str]:
     """
     Convert text to IPA characters sequence.
     """
@@ -138,26 +140,39 @@ def ipa_to_ternary(
 ) -> np.ndarray:
     """
     Convert a list of IPA words to a ternary sequence.
+    Each IPA word consists in a string of IPA characters separated by "%".
+
     The sequence is a numpy array of shape (n_chars, N_traits)
     where n_chars is the number of characters in the IPA words
     and N_traits is the number of traits.
     The sequence is padded with zeros for punctuation and space tokens.
     """
+    # create a single string of IPA/punc/space separated by "%"
+    ipawords_str = "%".join(ipawords_list)
     ternary_seq = []
-    for word_ipa in ipawords_list:
-        if ft.validate_word(word_ipa):
-            emb_arr = ft.word_array(traits_list, word_ipa)  # shape: (n_chars, N_traits)
-            ternary_seq.append(
-                np.pad(emb_arr, ((0, 0), (0, 1)), mode="constant", constant_values=0)
-            )
-        elif word_ipa in _punctuation_list:
-            if word_ipa == " ":
+    for char_ipa in ipawords_str.split("%"):
+        if char_ipa in _punctuation_list:
+            if char_ipa == " ":
                 ternary_seq.append(space_tok)
-            elif word_ipa in _signicative_punc_:
+            elif char_ipa in _signicative_punc_:
                 ternary_seq.append(punc_tok)
-        else:
-            print(f"Word not found in panphon: {word_ipa}")
-            continue
+        else:  # normal phoneme character
+            if char_ipa in diphtongues_ipa:
+                # Handle diphtongues by merging the two IPA char into one
+                # vector representation
+                emb_0 = ft.word_array(traits_list, char_ipa[0])
+                emb_1 = ft.word_array(traits_list, char_ipa[1])
+                mask = emb_0 == emb_1
+                emb_24 = np.zeros_like(emb_0)  # shape: (1, N_traits)
+                emb_24[mask] = emb_0[mask]
+            elif ft.validate_word(char_ipa):
+                emb_24 = ft.word_array(traits_list, char_ipa)  # shape: (1, N_traits)
+            else:
+                print(f"Character not found in panphon: {char_ipa}")
+                continue
+            ternary_seq.append(
+                np.pad(emb_24, ((0, 0), (0, 1)), mode="constant", constant_values=0)
+            )  # append the ternary embedding with the additional dim
     return np.concatenate(ternary_seq, axis=0)
 
 
@@ -262,8 +277,8 @@ def get_ipa_from_arp(arp_seq: str) -> str | None:
     Args:
         arp_seq: ARPAbet sequence or punctuation string
     Returns:
-        IPA transcription : str or None if not found
-                            ex : "pɹɪntɪŋ"
+        IPA transcription : str with "%"-separated phonemes or None if not found
+                            ex : "p%ɹ%ɪ%n%t%ɪ%ŋ"
     """
 
     def arpchar_to_ipa(arp: str) -> str | None:
@@ -281,7 +296,7 @@ def get_ipa_from_arp(arp_seq: str) -> str | None:
     if arp_seq.startswith("{") and arp_seq.endswith("}"):
         arp_seq = arp_seq[1:-1].split(" ")
         ipa_seq = [arpchar_to_ipa(arp) for arp in arp_seq]
-        return "".join(ipa_seq)
+        return "%".join(ipa_seq)  # use "%" as a separator between IPA characters
     elif arp_seq in _punctuation_list:
         return arp_seq
     else:
