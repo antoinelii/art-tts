@@ -12,6 +12,16 @@ _curly_re = re.compile(r"(.*?)\{(.+?)\}(.*)")
 _composed_re = re.compile(r"\b[a-zA-Z]+(?:-[a-zA-Z]+)+\b")  # composed words with dashes
 
 _punctuation_list = list(_punctuation) + ["--"]
+_signicative_punc_ = [
+    "!",
+    ",",
+    ".",
+    ":",
+    ";",
+    "?",
+    "|",
+    "--",
+]  # punctuation signicative of a pause
 
 ft = panphon.FeatureTable()
 
@@ -43,9 +53,11 @@ traits_list = [
     "hireg",
 ]
 N_traits = len(traits_list)
-emb_dim = N_traits + 1  # add a dim for one hot space token
+emb_dim = N_traits + 1  # add a dim for space/punctuation token
 space_tok = np.zeros((1, emb_dim))
-space_tok[0, -1] = 1
+space_tok[0, -1] = -1
+punc_tok = np.zeros((1, emb_dim))
+punc_tok[0, -1] = 1  # set the last dim to 1 for punctuation token
 
 
 # CMU ARPabet to ipa conversion table from
@@ -94,6 +106,11 @@ arpabet2ipa = {
     "Z": "z",
     "ZH": "ʒ",
 }
+# vec_a
+# vec_i
+# mask = vec_a == vec_i
+# vec_final = np:zeros_like(vec_a)
+# vec_final[mask] = vec_a[mask]
 
 
 def text_to_ipa(
@@ -134,7 +151,10 @@ def ipa_to_ternary(
                 np.pad(emb_arr, ((0, 0), (0, 1)), mode="constant", constant_values=0)
             )
         elif word_ipa in _punctuation_list:
-            ternary_seq.append(space_tok)
+            if word_ipa == " ":
+                ternary_seq.append(space_tok)
+            elif word_ipa in _signicative_punc_:
+                ternary_seq.append(punc_tok)
         else:
             print(f"Word not found in panphon: {word_ipa}")
             continue
