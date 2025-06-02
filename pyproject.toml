@@ -8,7 +8,7 @@ dependencies = [
     "cython>=0.29.23",
     "einops==0.3.0",
     "inflect==5.0.2",
-    "panphon>=0.21.2",
+    "panphon",
     "speech-articulatory-coding>=0.1.0",
     "unidecode==1.1.2",
 ]
@@ -19,3 +19,6 @@ dev = [
     "pandas>=2.2.3",
     "pre-commit>=4.2.0",
 ]
+
+[tool.uv.sources]
+panphon = { git = "https://github.com/antoinelii/panphon" }

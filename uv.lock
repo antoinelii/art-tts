@@ -66,7 +66,7 @@ requires-dist = [
     { name = "cython", specifier = ">=0.29.23" },
     { name = "einops", specifier = "==0.3.0" },
     { name = "inflect", specifier = "==5.0.2" },
-    { name = "panphon", specifier = ">=0.21.2" },
+    { name = "panphon", git = "https://github.com/antoinelii/panphon" },
     { name = "speech-articulatory-coding", specifier = ">=0.1.0" },
     { name = "unidecode", specifier = "==1.1.2" },
 ]
@@ -1167,20 +1167,17 @@ wheels = [
 
 [[package]]
 name = "panphon"
-version = "0.21.2"
-source = { registry = "https://pypi.org/simple" }
+version = "0.22.1"
+source = { git = "https://github.com/antoinelii/panphon#ef2b3c1bc7dff39e10735473bd4cc09c372a54d0" }
 dependencies = [
     { name = "editdistance" },
     { name = "munkres" },
     { name = "numpy" },
+    { name = "pandas" },
     { name = "pyyaml" },
     { name = "regex" },
     { name = "setuptools" },
     { name = "unicodecsv" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/d1/42/78ef4373ff4513eb288647ecffce052447b0e7699cf1d872ecc968701b7d/panphon-0.21.2.tar.gz", hash = "sha256:1696076e411e433c8f7dba62819d4430d9732cb15607fc0d7061d81588841369", size = 75440, upload-time = "2024-07-31T08:52:46.362Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/15/20/96ea424c324e04821080e1a7afcef34ca701d6bd8f7d07016f2132289885/panphon-0.21.2-py2.py3-none-any.whl", hash = "sha256:53aa8375b69e78b585c4559d347d890e9953b4e06fb899b7998f1d8d56b91056", size = 75379, upload-time = "2024-07-31T08:52:37.143Z" },
 ]
 
 [[package]]
