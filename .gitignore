@@ -14,3 +14,15 @@ Grad-TTS/
 
 # Samples
 LJ_samples/
+
+# checkpoints
+src/ckpt
+
+# original filelist
+src/resources/filelists/ljspeech/test.txt
+src/resources/filelists/ljspeech/train.txt
+src/resources/filelists/ljspeech/valid.txt
+
+# MAS C
+src/model/monotonic_align/core.c
+src/model/monotonic_align/*.so
