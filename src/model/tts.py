@@ -26,7 +26,7 @@ from model.utils import (
 class GradTTS(BaseModule):
     def __init__(
         self,
-        n_vocab,
+        n_ipa_feats,
         n_spks,
         spk_emb_dim,
         n_enc_channels,
@@ -44,7 +44,7 @@ class GradTTS(BaseModule):
         pe_scale,
     ):
         super(GradTTS, self).__init__()
-        self.n_vocab = n_vocab
+        self.n_ipa_feats = n_ipa_feats
         self.n_spks = n_spks
         self.spk_emb_dim = spk_emb_dim
         self.n_enc_channels = n_enc_channels
@@ -64,7 +64,7 @@ class GradTTS(BaseModule):
         if n_spks > 1:
             self.spk_emb = torch.nn.Embedding(n_spks, spk_emb_dim)
         self.encoder = TextEncoder(
-            n_vocab,
+            n_ipa_feats,
             n_feats,
             n_enc_channels,
             filter_channels,

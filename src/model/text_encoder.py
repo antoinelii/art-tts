@@ -357,7 +357,7 @@ class Encoder(BaseModule):
 class TextEncoder(BaseModule):
     def __init__(
         self,
-        n_vocab,
+        n_ipa_feats,
         n_feats,
         n_channels,
         filter_channels,
@@ -371,7 +371,7 @@ class TextEncoder(BaseModule):
         n_spks=1,
     ):
         super(TextEncoder, self).__init__()
-        self.n_vocab = n_vocab
+        self.n_ipa_feats = n_ipa_feats
         self.n_feats = n_feats
         self.n_channels = n_channels
         self.filter_channels = filter_channels
@@ -384,17 +384,25 @@ class TextEncoder(BaseModule):
         self.spk_emb_dim = spk_emb_dim
         self.n_spks = n_spks
 
-        self.emb = torch.nn.Embedding(n_vocab, n_channels)
-        torch.nn.init.normal_(self.emb.weight, 0.0, n_channels**-0.5)
+        # self.emb = torch.nn.Embedding(n_vocab, n_channels)
+        # torch.nn.init.normal_(self.emb.weight, 0.0, n_channels**-0.5)
 
+        # here chose to reduce last dimension to n_ipa_feats to preserve residual
+        # connection with input dim (though slow dim 25 compared to 192)
         self.prenet = ConvReluNorm(
-            n_channels, n_channels, n_channels, kernel_size=5, n_layers=3, p_dropout=0.5
+            n_ipa_feats,
+            n_channels,
+            n_ipa_feats,
+            kernel_size=5,
+            n_layers=3,
+            p_dropout=0.5,
         )
 
         self.encoder = Encoder(
-            n_channels + (spk_emb_dim if n_spks > 1 else 0),
+            # small input dim 25... especially compared to spk_emb_dim 64
+            n_ipa_feats + (spk_emb_dim if n_spks > 1 else 0),
             filter_channels,
-            n_heads,
+            n_heads,  # normally 2 but need to divide n_ipa_feats so 1 here
             n_layers,
             kernel_size,
             p_dropout,
@@ -402,27 +410,26 @@ class TextEncoder(BaseModule):
         )
 
         self.proj_m = torch.nn.Conv1d(
-            n_channels + (spk_emb_dim if n_spks > 1 else 0), n_feats, 1
+            n_ipa_feats + (spk_emb_dim if n_spks > 1 else 0), n_feats, 1
         )
         self.proj_w = DurationPredictor(
-            n_channels + (spk_emb_dim if n_spks > 1 else 0),
+            n_ipa_feats + (spk_emb_dim if n_spks > 1 else 0),
             filter_channels_dp,
             kernel_size,
             p_dropout,
         )
 
     def forward(self, x, x_lengths, spk=None):
-        x = self.emb(x) * math.sqrt(self.n_channels)
-        x = torch.transpose(x, 1, -1)
-        x_mask = torch.unsqueeze(sequence_mask(x_lengths, x.size(2)), 1).to(x.dtype)
-
-        x = self.prenet(x, x_mask)
+        # x = self.emb(x) * math.sqrt(self.n_channels)  # shape: (B, T, C)
+        # x = torch.transpose(x, 1, -1)  # shape: (B, C, T)
+        x_mask = torch.unsqueeze(sequence_mask(x_lengths, x.size(2)), 1).to(
+            x.dtype
+        )  # shape: (B, 1, T)
+        x = self.prenet(x, x_mask)  # shape: (B, n_ipa_feats, T)
         if self.n_spks > 1:
             x = torch.cat([x, spk.unsqueeze(-1).repeat(1, 1, x.shape[-1])], dim=1)
-        x = self.encoder(x, x_mask)
-        mu = self.proj_m(x) * x_mask
-
+        x = self.encoder(x, x_mask)  # shape: (B, n_ipa_feats, T)
+        mu = self.proj_m(x) * x_mask  # shape: (B, n_feats, T)
         x_dp = torch.detach(x)
-        logw = self.proj_w(x_dp, x_mask)
-
+        logw = self.proj_w(x_dp, x_mask)  # shape: (B, 1, T)
         return mu, logw, x_mask
