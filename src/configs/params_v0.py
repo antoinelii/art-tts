@@ -9,8 +9,8 @@
 from model.utils import fix_len_compatibility
 
 # data parameters
-wavs_dir = "../../data/LJSpeech_1.1/wavs"
-artic_dir = "../../data/LJSpeech_1.1/encoded_audio_en"
+wavs_dir = "../../data/LJSpeech-1.1/wavs"
+artic_dir = "../../data/LJSpeech-1.1/encoded_audio_en"
 # wavs_dir = "../LJ_samples"
 # artic_dir = "../LJ_samples/encoded_audio_en"
 train_filelist_path = "resources/filelists/ljspeech/train_v0.txt"
