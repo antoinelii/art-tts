@@ -57,7 +57,7 @@ def process_files(task_id, args, task_wavfiles):
 
     logger.info(f"Task_id {task_id} gpu processing {len(task_wavfiles)} files.")
     for wav_file in tqdm(
-        task_wavfiles, desc=f"GPU {task_id}", position=0, dynamic_ncols=True
+        task_wavfiles, desc=f"GPU {task_id}", position=1, dynamic_ncols=True
     ):
         save_name = str(wav_file).replace(str(args.wav_dir), "")
         save_name = Path(save_name).stem + ".npy"
