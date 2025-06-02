@@ -5,7 +5,7 @@ import logging
 from pathlib import Path
 import numpy as np
 import torch
-import torch.multiprocessing as mp
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--device", type=str, default="cuda")
@@ -18,7 +18,6 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument("--ckpt_path", type=str, default="ckpt/sparc_en.ckpt")
-parser.add_argument("--num_gpus", type=int, default=4)
 
 """
 Do it as array jobs instead of multiprocessing
@@ -44,40 +43,29 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 
-def process_files(rank, args, wav_files_split):
-    device = f"{args.device}:{rank}"
+def process_files(task_id, args, task_wavfiles):
+    device = f"{args.device}"
     ckpt = args.ckpt_path
     save_dir = Path(args.save_dir)
     spk_emb_save_dir = save_dir / "spk_emb"
     ft_save_dir = save_dir / "emasrc"
-    logger.info("Loading model on GPU %d", rank)
+    spk_emb_save_dir.mkdir(exist_ok=True, parents=True)
+    ft_save_dir.mkdir(exist_ok=True, parents=True)
+    logger.info("Loading model for task_id %d", task_id)
     coder = load_model(ckpt=ckpt, device=device)
-    logger.info("Model loaded on GPU %d", rank)
+    logger.info("Model loaded for task_id %d", task_id)
 
-    gpu_wav_files = wav_files_split[rank]
-    logger.info(f"GPU {rank} processing {len(gpu_wav_files)} files.")
+    logger.info(f"Task_id {task_id} gpu processing {len(task_wavfiles)} files.")
     for wav_file in tqdm(
-        gpu_wav_files, desc=f"GPU {rank}", position=rank, dynamic_ncols=True
+        task_wavfiles, desc=f"GPU {task_id}", position=0, dynamic_ncols=True
     ):
         save_name = str(wav_file).replace(str(args.wav_dir), "")
         save_name = Path(save_name).stem + ".npy"
         ft_save_path = ft_save_dir / save_name
         spk_emb_save_path = spk_emb_save_dir / save_name
 
-        if spk_emb_save_path.exists():
-            continue
-
-        def _recursive_path_solver(file_path):
-            if file_path.exists():
-                return
-            elif file_path.parent.exists():
-                file_path.mkdir(exist_ok=True)
-                return
-            else:
-                _recursive_path_solver(file_path.parent)
-
-        _recursive_path_solver(spk_emb_save_path.parent)
-        _recursive_path_solver(ft_save_path.parent)
+        # if spk_emb_save_path.exists():
+        #    continue
 
         try:
             with torch.inference_mode():
@@ -88,29 +76,21 @@ def process_files(rank, args, wav_files_split):
             logger.error(f"Error processing {wav_file}: {e}")
             continue
 
-    logger.info(f"GPU {rank} finished processing {len(gpu_wav_files)} files.")
+    logger.info(f"GPU {task_id} finished processing {len(task_wavfiles)} files.")
 
 
 if __name__ == "__main__":
-    args = parser.parse_args()
-    logger.info("Starting the script...")
-    wav_dir = Path(args.wav_dir)
-    save_dir = Path(args.save_dir)
-    spk_emb_save_dir = save_dir / "spk_emb"
-    spk_emb_save_dir.mkdir(exist_ok=True)
-    ft_save_dir = save_dir / "emasrc"
-    ft_save_dir.mkdir(exist_ok=True)
+    task_id = int(os.environ["SLURM_ARRAY_TASK_ID"])
+    nb_tasks = int(os.environ["SLURM_ARRAY_TASK_COUNT"])
 
-    wav_files = [f for f in wav_dir.glob("**/*.flac")] + [
-        f for f in wav_dir.glob("**/*.wav")
-    ]
+    args = parser.parse_args()
+    logger.info(f"Starting the script for task {task_id}...")
+    wav_dir = Path(args.wav_dir)
+
+    wav_files = sorted([f for f in wav_dir.glob("**/*.wav")])
     logger.info(f"Found {len(wav_files)} audio files in {wav_dir}")
 
-    # Split files across GPUs
-    num_gpus = args.num_gpus
-    wav_files_split = np.array_split(wav_files[:400], num_gpus)
-    # Start multiprocessing
-    logger.info(f"Starting processing on {num_gpus} GPUs...")
-    mp.spawn(process_files, args=(args, wav_files_split), nprocs=num_gpus, join=True)
-
-    logger.info("Finished processing all audio files.")
+    # split the work into nb_tasks subtasks and process the task_id one
+    wav_files_split = np.array_split(wav_files, nb_tasks)
+    task_wavfiles = wav_files_split[task_id]
+    process_files(task_id, args, task_wavfiles)

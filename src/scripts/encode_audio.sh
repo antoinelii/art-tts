@@ -3,18 +3,19 @@
 #SBATCH --partition=gpu_p2             # Take a node from the 'gpu' partition
 # #SBATCH --export=ALL                  # Export your environment to the compute node
 
-#SBATCH --output=%x-%j.out # fichier de sortie (%j = job ID)
-#SBATCH --error=%x-%j.err # fichier d’erreur (%j = job ID)
+#SBATCH --output=%x-%A_%a.out # fichier de sortie (%j = job ID)
+#SBATCH --error=%x-%A_%a.err # fichier d’erreur (%j = job ID)
 # #SBATCH --constraint=v100-16g # demander des GPU a 16 Go de RAM
 #SBATCH --nodes=1 # reserver 1 nœud
-#SBATCH --ntasks=4 # reserver 4 taches (ou processus)
-#SBATCH --ntasks-per-node=4 # nombre de tache MPI par noeud (= nombre de GPU par noeud)
-#SBATCH --gres=gpu:4 # reserver 4 GPU
+#SBATCH --ntasks=1 # reserver 4 taches (ou processus)
+#SBATCH --ntasks-per-node=1 # nombre de tache MPI par noeud (= nombre de GPU par noeud)
+#SBATCH --gres=gpu:1 # reserver 4 GPU
 #SBATCH --cpus-per-task=3 # reserver 10 CPU par tache (et memoire associee)
-#SBATCH --time=00:10:00 # temps maximal d’allocation "(HH:MM:SS)"
+#SBATCH --time=3:00:00 # temps maximal d’allocation "(HH:MM:SS)"
 # #SBATCH --qos=qos_gpu-dev # QoS
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
 #SBATCH --account=rec@v100 # comptabilite V100
+#SBATCH --array=0-3 # job array with 4 tasks (0 to 3)
 
 module purge
 #module load miniconda3/24.3.0
@@ -52,8 +53,7 @@ echo "computation start $(date)"
 
 srun python -u scripts/encode_audio.py --device cuda \
                                     --wav_dir ../../data/LJSpeech-1.1/wavs \
-                                    --save_dir ../../data/LJSpeech-1.1/bullshit \
+                                    --save_dir ../../data/LJSpeech-1.1/encoded_audio_en \
                                     --ckpt_path ckpt/sparc_en.ckpt \
-                                    --num_gpus 4
 
 echo "computation end : $(date)"
