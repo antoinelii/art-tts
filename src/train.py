@@ -141,20 +141,19 @@ if __name__ == "__main__":
 
     mylogger.info("Start training...")
     iteration = 0
-    for epoch in range(1, n_epochs + 1):
-        model.train()
-        dur_losses = []
-        prior_losses = []
-        diff_losses = []
-        with tqdm(
-            loader,
-            total=len(train_dataset) // batch_size,
-            desc=f"epoch {epoch}",
-            position=1,
-            dynamic_ncols=True,
-        ) as progress_bar:
-            # with tqdm(loader, total=len(train_dataset)//batch_size) as progress_bar:
-            for batch_idx, batch in enumerate(progress_bar):
+    with tqdm(
+        range(1, n_epochs + 1),
+        total=n_epochs,
+        desc="Training",
+        position=1,
+        dynamic_ncols=True,
+    ) as progress_bar:
+        for epoch in progress_bar:
+            model.train()
+            dur_losses = []
+            prior_losses = []
+            diff_losses = []
+            for batch_idx, batch in enumerate(loader):
                 model.zero_grad()
                 x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
                 y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
@@ -192,61 +191,61 @@ if __name__ == "__main__":
                 prior_losses.append(prior_loss.item())
                 diff_losses.append(diff_loss.item())
 
-                if batch_idx % 5 == 0:
+                if batch_idx % 10 == 0:
                     msg = f"Epoch: {epoch}, iteration: {iteration} | dur_loss: {dur_loss.item()}, prior_loss: {prior_loss.item()}, diff_loss: {diff_loss.item()}"
                     progress_bar.set_description(msg)
 
                 iteration += 1
 
-        log_msg = "Epoch %d: duration loss = %.3f " % (epoch, np.mean(dur_losses))
-        log_msg += "| prior loss = %.3f " % np.mean(prior_losses)
-        log_msg += "| diffusion loss = %.3f\n" % np.mean(diff_losses)
-        with open(f"{log_dir}/train.log", "a") as f:
-            f.write(log_msg)
+            log_msg = "Epoch %d: duration loss = %.3f " % (epoch, np.mean(dur_losses))
+            log_msg += "| prior loss = %.3f " % np.mean(prior_losses)
+            log_msg += "| diffusion loss = %.3f\n" % np.mean(diff_losses)
+            with open(f"{log_dir}/train.log", "a") as f:
+                f.write(log_msg)
 
-        if epoch % params_v0.save_every > 0:
-            continue
+            if epoch % params_v0.save_every > 0:
+                continue
 
-        model.eval()
-        mylogger.info("Synthesis...")
-        with torch.no_grad():
-            for i, item in enumerate(test_batch):
-                x = item["x"].to(torch.float32).unsqueeze(0).cuda()
-                x_lengths = torch.LongTensor([x.shape[-1]]).cuda()
-                y_enc, y_dec, attn = model(x, x_lengths, n_timesteps=50)
-                logger.add_image(
-                    f"image_{i}/generated_enc",
-                    plot_tensor(y_enc.squeeze().cpu(), norm_pitch=True),
-                    global_step=iteration,
-                    dataformats="HWC",
-                )
-                logger.add_image(
-                    f"image_{i}/generated_dec",
-                    plot_tensor(y_dec.squeeze().cpu(), norm_pitch=True),
-                    global_step=iteration,
-                    dataformats="HWC",
-                )
-                logger.add_image(
-                    f"image_{i}/alignment",
-                    plot_tensor(attn.squeeze().cpu(), norm_pitch=True),
-                    global_step=iteration,
-                    dataformats="HWC",
-                )
-                save_plot(
-                    y_enc.squeeze().cpu(),
-                    f"{log_dir}/generated_enc_{i}.png",
-                    norm_pitch=True,
-                )
-                save_plot(
-                    y_dec.squeeze().cpu(),
-                    f"{log_dir}/generated_dec_{i}.png",
-                    norm_pitch=True,
-                )
-                save_plot(
-                    attn.squeeze().cpu(),
-                    f"{log_dir}/alignment_{i}.png",
-                    norm_pitch=True,
-                )
+            model.eval()
+            mylogger.info("Synthesis...")
+            with torch.no_grad():
+                for i, item in enumerate(test_batch):
+                    x = item["x"].to(torch.float32).unsqueeze(0).cuda()
+                    x_lengths = torch.LongTensor([x.shape[-1]]).cuda()
+                    y_enc, y_dec, attn = model(x, x_lengths, n_timesteps=50)
+                    logger.add_image(
+                        f"image_{i}/generated_enc",
+                        plot_tensor(y_enc.squeeze().cpu(), norm_pitch=True),
+                        global_step=iteration,
+                        dataformats="HWC",
+                    )
+                    logger.add_image(
+                        f"image_{i}/generated_dec",
+                        plot_tensor(y_dec.squeeze().cpu(), norm_pitch=True),
+                        global_step=iteration,
+                        dataformats="HWC",
+                    )
+                    logger.add_image(
+                        f"image_{i}/alignment",
+                        plot_tensor(attn.squeeze().cpu(), norm_pitch=True),
+                        global_step=iteration,
+                        dataformats="HWC",
+                    )
+                    save_plot(
+                        y_enc.squeeze().cpu(),
+                        f"{log_dir}/generated_enc_{i}.png",
+                        norm_pitch=True,
+                    )
+                    save_plot(
+                        y_dec.squeeze().cpu(),
+                        f"{log_dir}/generated_dec_{i}.png",
+                        norm_pitch=True,
+                    )
+                    save_plot(
+                        attn.squeeze().cpu(),
+                        f"{log_dir}/alignment_{i}.png",
+                        norm_pitch=True,
+                    )
 
-        ckpt = model.state_dict()
-        torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")
+            ckpt = model.state_dict()
+            torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")
