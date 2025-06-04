@@ -227,7 +227,7 @@ if __name__ == "__main__":
                     )
                     logger.add_image(
                         f"image_{i}/alignment",
-                        plot_tensor(attn.squeeze().cpu(), norm_pitch=plot_norm_pitch),
+                        plot_tensor(attn.squeeze().cpu(), norm_pitch=False),
                         global_step=iteration,
                         dataformats="HWC",
                     )
@@ -244,7 +244,7 @@ if __name__ == "__main__":
                     save_plot(
                         attn.squeeze().cpu(),
                         f"{log_dir}/alignment_{i}.png",
-                        norm_pitch=plot_norm_pitch,
+                        norm_pitch=False,
                     )
 
             ckpt = model.state_dict()

@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 import torch
 
-from configs.params_v0 import pitch_idx, non_pitch_idx, plot_norm_pitch
+from configs.params_v0 import pitch_idx, plot_norm_pitch
 
 
 def intersperse(lst, item):
@@ -59,8 +59,6 @@ def plot_tensor(tensor, norm_pitch=plot_norm_pitch):
         tensor_[pitch_idx] = (tensor_[pitch_idx] - tensor_[pitch_idx].mean()) / tensor_[
             pitch_idx
         ].std()
-    else:
-        tensor_ = tensor_[non_pitch_idx]
     plt.style.use("default")
     fig, ax = plt.subplots(figsize=(12, 3))
     im = ax.imshow(tensor_, aspect="auto", origin="lower", interpolation="none")
@@ -78,8 +76,6 @@ def save_plot(tensor, savepath, norm_pitch=plot_norm_pitch):
         tensor_[pitch_idx] = (tensor_[pitch_idx] - tensor_[pitch_idx].mean()) / tensor_[
             pitch_idx
         ].std()
-    else:
-        tensor_ = tensor_[non_pitch_idx]
     plt.style.use("default")
     fig, ax = plt.subplots(figsize=(12, 3))
     im = ax.imshow(tensor_, aspect="auto", origin="lower", interpolation="none")
