@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 
 import torch
 
+from configs.params_v0 import pitch_idx, non_pitch_idx, plot_norm_pitch
+
 
 def intersperse(lst, item):
     # Adds blank symbol
@@ -45,24 +47,20 @@ def load_checkpoint(logdir, model, num=None):
     return model
 
 
-no_pitch_idx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13]
-pitch_idx = 12
-
-
 def save_figure_to_numpy(fig):
     data = np.frombuffer(fig.canvas.tostring_argb(), dtype=np.uint8)
     data = data.reshape(fig.canvas.get_width_height()[::-1] + (4,))
     return data
 
 
-def plot_tensor(tensor, norm_pitch=True):
+def plot_tensor(tensor, norm_pitch=plot_norm_pitch):
     tensor_ = tensor.detach().numpy().copy()
     if norm_pitch:
         tensor_[pitch_idx] = (tensor_[pitch_idx] - tensor_[pitch_idx].mean()) / tensor_[
             pitch_idx
         ].std()
     else:
-        tensor_ = tensor_[no_pitch_idx]
+        tensor_ = tensor_[non_pitch_idx]
     plt.style.use("default")
     fig, ax = plt.subplots(figsize=(12, 3))
     im = ax.imshow(tensor_, aspect="auto", origin="lower", interpolation="none")
@@ -74,14 +72,14 @@ def plot_tensor(tensor, norm_pitch=True):
     return data
 
 
-def save_plot(tensor, savepath, norm_pitch=True):
+def save_plot(tensor, savepath, norm_pitch=plot_norm_pitch):
     tensor_ = tensor.detach().numpy().copy()
     if norm_pitch:
         tensor_[pitch_idx] = (tensor_[pitch_idx] - tensor_[pitch_idx].mean()) / tensor_[
             pitch_idx
         ].std()
     else:
-        tensor_ = tensor_[no_pitch_idx]
+        tensor_ = tensor_[non_pitch_idx]
     plt.style.use("default")
     fig, ax = plt.subplots(figsize=(12, 3))
     im = ax.imshow(tensor_, aspect="auto", origin="lower", interpolation="none")
