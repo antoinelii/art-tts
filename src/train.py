@@ -25,6 +25,8 @@ train_filelist_path = params_v0.train_filelist_path
 valid_filelist_path = params_v0.valid_filelist_path
 cmudict_path = params_v0.cmudict_path
 add_blank = params_v0.add_blank
+n_feats = params_v0.n_feats
+plot_norm_pitch = params_v0.plot_norm_pitch
 
 log_dir = params_v0.log_dir
 n_epochs = params_v0.n_epochs
@@ -42,8 +44,6 @@ enc_kernel = params_v0.enc_kernel
 enc_dropout = params_v0.enc_dropout
 n_heads = params_v0.n_heads
 window_size = params_v0.window_size
-
-n_feats = params_v0.n_feats
 
 dec_dim = params_v0.dec_dim
 beta_min = params_v0.beta_min
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         art = item["y"]
         logger.add_image(
             f"image_{i}/ground_truth",
-            plot_tensor(art.squeeze(), norm_pitch=True),
+            plot_tensor(art.squeeze(), norm_pitch=plot_norm_pitch),
             global_step=0,
             dataformats="HWC",
         )
@@ -215,36 +215,36 @@ if __name__ == "__main__":
                     y_enc, y_dec, attn = model(x, x_lengths, n_timesteps=50)
                     logger.add_image(
                         f"image_{i}/generated_enc",
-                        plot_tensor(y_enc.squeeze().cpu(), norm_pitch=True),
+                        plot_tensor(y_enc.squeeze().cpu(), norm_pitch=plot_norm_pitch),
                         global_step=iteration,
                         dataformats="HWC",
                     )
                     logger.add_image(
                         f"image_{i}/generated_dec",
-                        plot_tensor(y_dec.squeeze().cpu(), norm_pitch=True),
+                        plot_tensor(y_dec.squeeze().cpu(), norm_pitch=plot_norm_pitch),
                         global_step=iteration,
                         dataformats="HWC",
                     )
                     logger.add_image(
                         f"image_{i}/alignment",
-                        plot_tensor(attn.squeeze().cpu(), norm_pitch=True),
+                        plot_tensor(attn.squeeze().cpu(), norm_pitch=plot_norm_pitch),
                         global_step=iteration,
                         dataformats="HWC",
                     )
                     save_plot(
                         y_enc.squeeze().cpu(),
                         f"{log_dir}/generated_enc_{i}.png",
-                        norm_pitch=True,
+                        norm_pitch=plot_norm_pitch,
                     )
                     save_plot(
                         y_dec.squeeze().cpu(),
                         f"{log_dir}/generated_dec_{i}.png",
-                        norm_pitch=True,
+                        norm_pitch=plot_norm_pitch,
                     )
                     save_plot(
                         attn.squeeze().cpu(),
                         f"{log_dir}/alignment_{i}.png",
-                        norm_pitch=True,
+                        norm_pitch=plot_norm_pitch,
                     )
 
             ckpt = model.state_dict()
