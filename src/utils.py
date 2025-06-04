@@ -22,7 +22,7 @@ def intersperse(lst, item):
 
 
 def parse_filelist(filelist_path, split_char="|"):
-    with open(filelist_path, encoding='utf-8') as f:
+    with open(filelist_path, encoding="utf-8") as f:
         filepaths_and_text = [line.strip().split(split_char) for line in f]
     return filepaths_and_text
 
@@ -39,22 +39,33 @@ def load_checkpoint(logdir, model, num=None):
         model_path = latest_checkpoint_path(logdir, regex="grad_*.pt")
     else:
         model_path = os.path.join(logdir, f"grad_{num}.pt")
-    print(f'Loading checkpoint {model_path}...')
+    print(f"Loading checkpoint {model_path}...")
     model_dict = torch.load(model_path, map_location=lambda loc, storage: loc)
     model.load_state_dict(model_dict, strict=False)
     return model
 
 
+no_pitch_idx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13]
+pitch_idx = 12
+
+
 def save_figure_to_numpy(fig):
-    data = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8, sep='')
-    data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    data = np.frombuffer(fig.canvas.tostring_argb(), dtype=np.uint8)
+    data = data.reshape(fig.canvas.get_width_height()[::-1] + (4,))
     return data
 
 
-def plot_tensor(tensor):
-    plt.style.use('default')
+def plot_tensor(tensor, norm_pitch=True):
+    tensor_ = tensor.detach().numpy().copy()
+    if norm_pitch:
+        tensor_[pitch_idx] = (tensor_[pitch_idx] - tensor_[pitch_idx].mean()) / tensor_[
+            pitch_idx
+        ].std()
+    else:
+        tensor_ = tensor_[no_pitch_idx]
+    plt.style.use("default")
     fig, ax = plt.subplots(figsize=(12, 3))
-    im = ax.imshow(tensor, aspect="auto", origin="lower", interpolation='none')
+    im = ax.imshow(tensor_, aspect="auto", origin="lower", interpolation="none")
     plt.colorbar(im, ax=ax)
     plt.tight_layout()
     fig.canvas.draw()
@@ -63,10 +74,17 @@ def plot_tensor(tensor):
     return data
 
 
-def save_plot(tensor, savepath):
-    plt.style.use('default')
+def save_plot(tensor, savepath, norm_pitch=True):
+    tensor_ = tensor.detach().numpy().copy()
+    if norm_pitch:
+        tensor_[pitch_idx] = (tensor_[pitch_idx] - tensor_[pitch_idx].mean()) / tensor_[
+            pitch_idx
+        ].std()
+    else:
+        tensor_ = tensor_[no_pitch_idx]
+    plt.style.use("default")
     fig, ax = plt.subplots(figsize=(12, 3))
-    im = ax.imshow(tensor, aspect="auto", origin="lower", interpolation='none')
+    im = ax.imshow(tensor_, aspect="auto", origin="lower", interpolation="none")
     plt.colorbar(im, ax=ax)
     plt.tight_layout()
     fig.canvas.draw()
