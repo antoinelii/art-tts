@@ -22,6 +22,16 @@ add_blank = True
 n_feats = 16  # 14 to 16, actually need n_feats // 2**2 fot compatibility with U-Net
 n_spks = 1  # 247 for Libri-TTS filelist and 1 for LJSpeech
 spk_emb_dim = 64
+# SPARC features order
+# "ULX", "ULY", "LLX", "LLY", "LIX", "LIY",
+# "TTX", "TTY", "TBX", "TBY", "TDX", "TDY"
+# "pitch", "loudness"
+reorder_feats = [0, 3, 1, 4, 2, 5, 6, 9, 7, 10, 8, 11, 15, 13]
+pitch_idx = reorder_feats[12]  # pitch channel index among n_feats
+non_pitch_idx = [
+    i for i in range(n_feats) if i != pitch_idx
+]  # non-pitch channels indices
+plot_norm_pitch = False  # whether to plot normalized pitch or not
 
 # encoder parameters
 n_ipa_feats = 25
