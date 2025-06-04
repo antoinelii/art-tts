@@ -19,7 +19,7 @@ test_filelist_path = "resources/filelists/ljspeech/test_v0.txt"
 cmudict_path = "resources/cmu_dictionary"
 sparc_ckpt_path = "ckpt/sparc_en.ckpt"
 add_blank = True
-n_feats = 14
+n_feats = 16  # 14 to 16, actually need n_feats // 2**2 fot compatibility with U-Net
 n_spks = 1  # 247 for Libri-TTS filelist and 1 for LJSpeech
 spk_emb_dim = 64
 
@@ -43,9 +43,10 @@ pe_scale = 1000  # 1 for `grad-tts-old.pt` checkpoint
 # training parameters
 log_dir = "logs/new_exp"
 test_size = 4
-n_epochs = 1  # 10000 normally
+n_epochs = 100  # 10000 normally
 batch_size = 16
 learning_rate = 1e-4
 seed = 37
-save_every = 1
-out_size = fix_len_compatibility(2 * 22050 // 256)
+save_every = 5
+# out_size = fix_len_compatibility(2 * 22050 // 256)      # 2* sr/hop_size meaning 2 seconds of audio
+out_size = fix_len_compatibility(2 * 50)  # 2* art_sr meaning 2 seconds of audio
