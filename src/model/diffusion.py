@@ -273,16 +273,20 @@ class Diffusion(BaseModule):
             dim, n_spks=n_spks, spk_emb_dim=spk_emb_dim, pe_scale=pe_scale
         )
 
-    def forward_diffusion(self, x0, mask, mu, t):
-        time = t.unsqueeze(-1).unsqueeze(-1)
-        cum_noise = get_noise(time, self.beta_min, self.beta_max, cumulative=True)
+    def forward_diffusion(self, x0, mask, mu, t):  # 3 (B, n_feats, out_size) (B,)
+        time = t.unsqueeze(-1).unsqueeze(-1)  # (B, 1, 1)
+        cum_noise = get_noise(
+            time, self.beta_min, self.beta_max, cumulative=True
+        )  # (B, 1, 1)
         mean = x0 * torch.exp(-0.5 * cum_noise) + mu * (
             1.0 - torch.exp(-0.5 * cum_noise)
-        )
-        variance = 1.0 - torch.exp(-cum_noise)
-        z = torch.randn(x0.shape, dtype=x0.dtype, device=x0.device, requires_grad=False)
-        xt = mean + z * torch.sqrt(variance)
-        return xt * mask, z * mask
+        )  # rho (B, n_feats, out_size)
+        variance = 1.0 - torch.exp(-cum_noise)  # lambda (B, 1, 1)
+        z = torch.randn(
+            x0.shape, dtype=x0.dtype, device=x0.device, requires_grad=False
+        )  # (B, n_feats, out_size)
+        xt = mean + z * torch.sqrt(variance)  # (B, n_feats, out_size)
+        return xt * mask, z * mask  # 2 (B, n_feats, out_size)
 
     @torch.no_grad()
     def reverse_diffusion(self, z, mask, mu, n_timesteps, stoc=False, spk=None):
@@ -313,11 +317,15 @@ class Diffusion(BaseModule):
         return self.reverse_diffusion(z, mask, mu, n_timesteps, stoc, spk)
 
     def loss_t(self, x0, mask, mu, t, spk=None):
-        xt, z = self.forward_diffusion(x0, mask, mu, t)
-        time = t.unsqueeze(-1).unsqueeze(-1)
-        cum_noise = get_noise(time, self.beta_min, self.beta_max, cumulative=True)
+        xt, z = self.forward_diffusion(x0, mask, mu, t)  # 2 (B, n_feats, out_size)
+        time = t.unsqueeze(-1).unsqueeze(-1)  # (B, 1, 1)
+        cum_noise = get_noise(
+            time, self.beta_min, self.beta_max, cumulative=True
+        )  # (B, 1, 1)
         noise_estimation = self.estimator(xt, mask, mu, t, spk)
-        noise_estimation *= torch.sqrt(1.0 - torch.exp(-cum_noise))
+        noise_estimation *= torch.sqrt(
+            1.0 - torch.exp(-cum_noise)
+        )  # (B, n_feats, out_size) * std_lambda
         loss = torch.sum((noise_estimation + z) ** 2) / (torch.sum(mask) * self.n_feats)
         return loss, xt
 
@@ -325,5 +333,5 @@ class Diffusion(BaseModule):
         t = torch.rand(
             x0.shape[0], dtype=x0.dtype, device=x0.device, requires_grad=False
         )
-        t = torch.clamp(t, offset, 1.0 - offset)
+        t = torch.clamp(t, offset, 1.0 - offset)  # (B,)
         return self.loss_t(x0, mask, mu, t, spk)
