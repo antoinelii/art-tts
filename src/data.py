@@ -22,7 +22,13 @@ from utils import parse_filelist, intersperse
 
 # from model.utils import fix_len_compatibility
 from configs.params_v0 import seed as random_seed
-from configs.params_v0 import wavs_dir, artic_dir, sparc_ckpt_path
+from configs.params_v0 import (
+    wavs_dir,
+    artic_dir,
+    sparc_ckpt_path,
+    reorder_feats,
+    pitch_idx,
+)
 from model.utils import fix_len_compatibility
 
 
@@ -79,6 +85,33 @@ class TextArticDataset(torch.utils.data.Dataset):
     def get_art(
         self, filepath: str, from_preprocessed: bool = True
     ) -> torch.FloatTensor:  # shape: (n_art_feats, T)
+        def reorder_art_feats(art: np.ndarray) -> np.ndarray:
+            """
+            Fix the articulatory features to have 16 channels.
+            The original SPARC model has 14 features, but we need to pad it to 16.
+            We also reorder the features
+            """
+            art16 = np.zeros((art.shape[0], 16))
+            art16 = np.zeros((art.shape[0], 16))
+            for i, j in enumerate(reorder_feats):
+                art16[:, j] = art[:, i]
+            return art16
+
+        def normalize_pitch_channel(art: np.ndarray) -> np.ndarray:
+            """
+            Normalize the pitch channel to have zero mean and unit variance.
+            must be called after reordering the features.
+            """
+            std = np.std(art[:, pitch_idx])
+            if std > 0:
+                art[:, pitch_idx] = (
+                    art[:, pitch_idx] - np.mean(art[:, pitch_idx])
+                ) / np.std(art[:, pitch_idx])
+            else:
+                print("Zero variance in pitch channel. Centering to zero mean.")
+                art[:, pitch_idx] = art[:, pitch_idx] - np.mean(art[:, pitch_idx])
+            return art
+
         art_filename = f"{Path(filepath).stem}.npy"
         if from_preprocessed:  # Favor loading precomputed features
             preprocessed_fp = Path(artic_dir) / "emasrc" / art_filename
@@ -106,8 +139,8 @@ class TextArticDataset(torch.utils.data.Dataset):
             # Extract the first 14 features
             art = outputs["features"][:, :14]
         # pad n_art_feats to 16
-        pad = np.zeros((art.shape[0], 2))
-        art = np.hstack((art, pad))
+        art = reorder_art_feats(art)
+        art = normalize_pitch_channel(art)
         return torch.FloatTensor(art).T  # shape: (n_art_feats, T)
 
     def __getitem__(self, index):
