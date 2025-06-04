@@ -105,6 +105,9 @@ class TextArticDataset(torch.utils.data.Dataset):
             np.save(spk_emb_save_path, outputs["spk_emb"])
             # Extract the first 14 features
             art = outputs["features"][:, :14]
+        # pad n_art_feats to 16
+        pad = np.zeros((art.shape[0], 2))
+        art = np.hstack((art, pad))
         return torch.FloatTensor(art).T  # shape: (n_art_feats, T)
 
     def __getitem__(self, index):
