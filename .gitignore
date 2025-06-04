@@ -26,3 +26,6 @@ src/resources/filelists/ljspeech/valid.txt
 # MAS C
 src/model/monotonic_align/core.c
 src/model/monotonic_align/*.so
+
+# logs
+logs/new_exp
