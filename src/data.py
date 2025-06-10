@@ -32,14 +32,6 @@ from configs.params_v0 import (
 from model.utils import fix_len_compatibility
 
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-spk_emb_save_dir = Path(artic_dir) / "spk_emb"
-spk_emb_save_dir.mkdir(exist_ok=True)
-ft_save_dir = Path(artic_dir) / "emasrc"
-ft_save_dir.mkdir(exist_ok=True)
-coder = load_model(ckpt=sparc_ckpt_path, device=device)
-
-
 class TextArticDataset(torch.utils.data.Dataset):
     def __init__(
         self,
@@ -47,13 +39,34 @@ class TextArticDataset(torch.utils.data.Dataset):
         cmudict_path,
         add_blank=True,
         sample_rate=22050,
+        wavs_dir=wavs_dir,
+        artic_dir=artic_dir,
+        sparc_ckpt_path=sparc_ckpt_path,
+        reorder_feats=reorder_feats,
+        pitch_idx=pitch_idx,
+        load_coder=True,
+        shuffle=True,
     ):
         self.filepaths_and_text = parse_filelist(filelist_path)
         self.cmudict = cmudict.CMUDict(cmudict_path)
         self.add_blank = add_blank
         self.sample_rate = sample_rate
+        self.wavs_dir = wavs_dir
+        self.artic_dir = artic_dir
+        self.sparc_ckpt_path = sparc_ckpt_path
+        self.reorder_feats = reorder_feats
+        self.pitch_idx = pitch_idx
         random.seed(random_seed)
-        random.shuffle(self.filepaths_and_text)
+        if shuffle:
+            random.shuffle(self.filepaths_and_text)
+        # init SPARC model in case we need to extract features
+        if load_coder:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            self.spk_emb_save_dir = Path(artic_dir) / "spk_emb"
+            self.spk_emb_save_dir.mkdir(exist_ok=True)
+            self.ft_save_dir = Path(artic_dir) / "emasrc"
+            self.ft_save_dir.mkdir(exist_ok=True)
+            self.coder = load_model(ckpt=sparc_ckpt_path, device=device)
 
     def get_pair(
         self,
@@ -93,7 +106,7 @@ class TextArticDataset(torch.utils.data.Dataset):
             """
             art16 = np.zeros((art.shape[0], 16))
             art16 = np.zeros((art.shape[0], 16))
-            for i, j in enumerate(reorder_feats):
+            for i, j in enumerate(self.reorder_feats):
                 art16[:, j] = art[:, i]
             return art16
 
@@ -102,19 +115,21 @@ class TextArticDataset(torch.utils.data.Dataset):
             Normalize the pitch channel to have zero mean and unit variance.
             must be called after reordering the features.
             """
-            std = np.std(art[:, pitch_idx])
+            std = np.std(art[:, self.pitch_idx])
             if std > 0:
-                art[:, pitch_idx] = (
-                    art[:, pitch_idx] - np.mean(art[:, pitch_idx])
-                ) / np.std(art[:, pitch_idx])
+                art[:, self.pitch_idx] = (
+                    art[:, self.pitch_idx] - np.mean(art[:, self.pitch_idx])
+                ) / np.std(art[:, self.pitch_idx])
             else:
                 print("Zero variance in pitch channel. Centering to zero mean.")
-                art[:, pitch_idx] = art[:, pitch_idx] - np.mean(art[:, pitch_idx])
+                art[:, self.pitch_idx] = art[:, self.pitch_idx] - np.mean(
+                    art[:, self.pitch_idx]
+                )
             return art
 
         art_filename = f"{Path(filepath).stem}.npy"
         if from_preprocessed:  # Favor loading precomputed features
-            preprocessed_fp = Path(artic_dir) / "emasrc" / art_filename
+            preprocessed_fp = Path(self.artic_dir) / "emasrc" / art_filename
             if preprocessed_fp.exists():
                 art = np.load(preprocessed_fp)[
                     :, :14
@@ -124,16 +139,16 @@ class TextArticDataset(torch.utils.data.Dataset):
                     f"Preprocessed file {preprocessed_fp} does not exist."
                 )
         else:  # Long inference time better to precompute the features
-            filepath = filepath.replace("DUMMY/", str(wavs_dir) + "/")
+            filepath = filepath.replace("DUMMY/", str(self.wavs_dir) + "/")
             with torch.inference_mode():
-                outputs = coder.encode(filepath, concat=True)
+                outputs = self.coder.encode(filepath, concat=True)
             # Save the outputs to avoid recomputing
-            if not ft_save_dir.exists():
-                ft_save_dir.mkdir(parents=True, exist_ok=True)
-            if not spk_emb_save_dir.exists():
-                spk_emb_save_dir.mkdir(parents=True, exist_ok=True)
-            ft_save_path = ft_save_dir / art_filename
-            spk_emb_save_path = spk_emb_save_dir / art_filename
+            if not self.ft_save_dir.exists():
+                self.ft_save_dir.mkdir(parents=True, exist_ok=True)
+            if not self.spk_emb_save_dir.exists():
+                self.spk_emb_save_dir.mkdir(parents=True, exist_ok=True)
+            ft_save_path = self.ft_save_dir / art_filename
+            spk_emb_save_path = self.spk_emb_save_dir / art_filename
             np.save(ft_save_path, outputs["features"])
             np.save(spk_emb_save_path, outputs["spk_emb"])
             # Extract the first 14 features

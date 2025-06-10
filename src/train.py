@@ -20,11 +20,13 @@ from data import TextArticDataset, TextArticBatchCollate
 from utils import plot_tensor, save_plot
 # from text.symbols import symbols
 
+patience = params_v0.patience
 
 train_filelist_path = params_v0.train_filelist_path
 valid_filelist_path = params_v0.valid_filelist_path
 cmudict_path = params_v0.cmudict_path
 add_blank = params_v0.add_blank
+n_spks = params_v0.n_spks
 n_feats = params_v0.n_feats
 plot_norm_pitch = params_v0.plot_norm_pitch
 
@@ -92,16 +94,24 @@ if __name__ == "__main__":
         num_workers=3,
         shuffle=False,
     )
-    test_dataset = TextArticDataset(
+    valid_dataset = TextArticDataset(
         valid_filelist_path,
         cmudict_path,
         add_blank,
+    )
+    val_loader = DataLoader(
+        dataset=valid_dataset,
+        batch_size=batch_size,
+        collate_fn=batch_collate,
+        drop_last=False,
+        num_workers=3,
+        shuffle=False,
     )
 
     mylogger.info("Initializing model...")
     model = GradTTS(
         n_ipa_feats,
-        1,
+        n_spks,
         None,
         n_enc_channels,
         filter_channels,
@@ -127,9 +137,9 @@ if __name__ == "__main__":
     mylogger.info("Initializing optimizer...")
     optimizer = torch.optim.Adam(params=model.parameters(), lr=learning_rate)
 
-    mylogger.info("Logging test batch...")
-    test_batch = test_dataset.sample_test_batch(size=params_v0.test_size)
-    for i, item in enumerate(test_batch):
+    mylogger.info("Logging valid batch...")
+    valid_batch = valid_dataset.sample_test_batch(size=params_v0.test_size)
+    for i, item in enumerate(valid_batch):
         art = item["y"]
         logger.add_image(
             f"image_{i}/ground_truth",
@@ -141,6 +151,7 @@ if __name__ == "__main__":
 
     mylogger.info("Start training...")
     iteration = 0
+    best_val_loss = float("inf")
     with tqdm(
         range(1, n_epochs + 1),
         total=n_epochs,
@@ -153,6 +164,7 @@ if __name__ == "__main__":
             dur_losses = []
             prior_losses = []
             diff_losses = []
+            losses = []
             for batch_idx, batch in enumerate(loader):
                 model.zero_grad()
                 x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
@@ -180,6 +192,7 @@ if __name__ == "__main__":
                 logger.add_scalar(
                     "training/diffusion_loss", diff_loss.item(), global_step=iteration
                 )
+                logger.add_scalar("training/loss", loss.item(), global_step=iteration)
                 logger.add_scalar(
                     "training/encoder_grad_norm", enc_grad_norm, global_step=iteration
                 )
@@ -190,6 +203,7 @@ if __name__ == "__main__":
                 dur_losses.append(dur_loss.item())
                 prior_losses.append(prior_loss.item())
                 diff_losses.append(diff_loss.item())
+                losses.append(loss.item())
 
                 if batch_idx % 10 == 0:
                     msg = f"Epoch: {epoch}, iteration: {iteration} | dur_loss: {dur_loss.item()}, prior_loss: {prior_loss.item()}, diff_loss: {diff_loss.item()}"
@@ -200,16 +214,76 @@ if __name__ == "__main__":
             log_msg = "Epoch %d: duration loss = %.3f " % (epoch, np.mean(dur_losses))
             log_msg += "| prior loss = %.3f " % np.mean(prior_losses)
             log_msg += "| diffusion loss = %.3f\n" % np.mean(diff_losses)
+            log_msg += "| loss = %.3f\n" % np.mean(losses)
             with open(f"{log_dir}/train.log", "a") as f:
                 f.write(log_msg)
+            mylogger.info(f"Train : {log_msg}")
 
             if epoch % params_v0.save_every > 0:
                 continue
 
+            mylogger.info(f"Validation loss at epoch {epoch}...")
             model.eval()
+            val_dur_losses = []
+            val_prior_losses = []
+            val_diff_losses = []
+            val_losses = []
+            for batch_idx, batch in enumerate(loader):
+                with torch.no_grad():
+                    x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
+                    y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
+                    dur_loss, prior_loss, diff_loss = model.compute_loss(
+                        x, x_lengths, y, y_lengths, out_size=out_size
+                    )
+                    val_loss = sum([dur_loss, prior_loss, diff_loss])
+                    logger.add_scalar(
+                        "validation/duration_loss",
+                        dur_loss.item(),
+                        global_step=iteration,
+                    )
+                    logger.add_scalar(
+                        "validation/prior_loss",
+                        prior_loss.item(),
+                        global_step=iteration,
+                    )
+                    logger.add_scalar(
+                        "validation/diffusion_loss",
+                        diff_loss.item(),
+                        global_step=iteration,
+                    )
+                    logger.add_scalar(
+                        "validation/loss", val_loss.item(), global_step=iteration
+                    )
+                    val_dur_losses.append(dur_loss.item())
+                    val_prior_losses.append(prior_loss.item())
+                    val_diff_losses.append(diff_loss.item())
+                    val_losses.append(val_loss.item())
+            log_msg = "Epoch %d: duration loss = %.3f " % (
+                epoch,
+                np.mean(val_dur_losses),
+            )
+            log_msg += "| prior loss = %.3f " % np.mean(val_prior_losses)
+            log_msg += "| diffusion loss = %.3f\n" % np.mean(val_diff_losses)
+            log_msg += "| loss = %.3f\n" % np.mean(val_losses)
+            with open(f"{log_dir}/val.log", "a") as f:
+                f.write(log_msg)
+            mylogger.info(f"Val : {log_msg}")
+
+            if np.mean(val_losses) < best_val_loss:
+                best_val_loss = np.mean(val_losses)
+                patience_counter = 0
+                torch.save(model.state_dict(), f=f"{log_dir}/grad_best.pt")
+            else:
+                patience_counter += 1
+                if patience_counter > patience:
+                    mylogger.info(
+                        f"Early stopping at epoch {epoch} after {patience_counter} times {params_v0.save_every} epochs without improvement."
+                    )
+                    break
+
             mylogger.info("Synthesis...")
             with torch.no_grad():
-                for i, item in enumerate(test_batch):
+                for i, item in enumerate(valid_batch):
                     x = item["x"].to(torch.float32).unsqueeze(0).cuda()
                     x_lengths = torch.LongTensor([x.shape[-1]]).cuda()
                     y_enc, y_dec, attn = model(x, x_lengths, n_timesteps=50)

@@ -53,10 +53,11 @@ pe_scale = 1000  # 1 for `grad-tts-old.pt` checkpoint
 # training parameters
 log_dir = "logs/new_exp"
 test_size = 4
-n_epochs = 100  # 10000 normally
+n_epochs = 10000  # 10000 normally
 batch_size = 16
 learning_rate = 1e-4
 seed = 37
 save_every = 5
+patience = 2  # patience each save_every epochs
 # out_size = fix_len_compatibility(2 * 22050 // 256)      # 2* sr/hop_size meaning 2 seconds of audio
 out_size = fix_len_compatibility(2 * 50)  # 2* art_sr meaning 2 seconds of audio
