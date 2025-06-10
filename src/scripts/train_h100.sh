@@ -10,7 +10,8 @@
 #SBATCH --ntasks-per-node=1 # nombre de tache MPI par noeud (= nombre de GPU par noeud)
 #SBATCH --gres=gpu:1 # reserver 4 GPU
 #SBATCH --cpus-per-task=24 # reserver 10 CPU par tache (et memoire associee)
-#SBATCH --time=2:00:00 # temps maximal d’allocation "(HH:MM:SS)"
+#SBATCH --time=100:00:00 # temps maximal d’allocation "(HH:MM:SS)"
+#SBATCH -qos=qos_gpu_h100-t4 
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
 #SBATCH --account=rec@h100 # comptabilite V100
 
