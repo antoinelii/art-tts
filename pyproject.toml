@@ -10,6 +10,7 @@ dependencies = [
     "inflect==5.0.2",
     "panphon",
     "speech-articulatory-coding>=0.1.0",
+    "tslearn>=0.6.3",
     "unidecode==1.1.2",
 ]
 

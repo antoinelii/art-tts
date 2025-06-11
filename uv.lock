@@ -51,6 +51,7 @@ dependencies = [
     { name = "inflect" },
     { name = "panphon" },
     { name = "speech-articulatory-coding" },
+    { name = "tslearn" },
     { name = "unidecode" },
 ]
 
@@ -68,6 +69,7 @@ requires-dist = [
     { name = "inflect", specifier = "==5.0.2" },
     { name = "panphon", git = "https://github.com/antoinelii/panphon" },
     { name = "speech-articulatory-coding", specifier = ">=0.1.0" },
+    { name = "tslearn", specifier = ">=0.6.3" },
     { name = "unidecode", specifier = "==1.1.2" },
 ]
 
@@ -2033,6 +2035,22 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/11/53/ce18470914ab6cfbec9384ee565d23c4d1c55f0548160b1c7b33000b11fd/triton-3.3.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:b68c778f6c4218403a6bd01be7484f6dc9e20fe2083d22dd8aef33e3b87a10a3", size = 156504509, upload-time = "2025-04-09T20:27:40.413Z" },
     { url = "https://files.pythonhosted.org/packages/7d/74/4bf2702b65e93accaa20397b74da46fb7a0356452c1bb94dbabaf0582930/triton-3.3.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:47bc87ad66fa4ef17968299acacecaab71ce40a238890acc6ad197c3abe2b8f1", size = 156516468, upload-time = "2025-04-09T20:27:48.196Z" },
     { url = "https://files.pythonhosted.org/packages/0a/93/f28a696fa750b9b608baa236f8225dd3290e5aff27433b06143adc025961/triton-3.3.0-cp313-cp313t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:ce4700fc14032af1e049005ae94ba908e71cd6c2df682239aed08e49bc71b742", size = 156580729, upload-time = "2025-04-09T20:27:55.424Z" },
+]
+
+[[package]]
+name = "tslearn"
+version = "0.6.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "joblib" },
+    { name = "numba" },
+    { name = "numpy" },
+    { name = "scikit-learn" },
+    { name = "scipy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5d/e2/3954832e6a69841f4041b872c42597f39f03b20a780c5d8bc8555b6cefd9/tslearn-0.6.3.tar.gz", hash = "sha256:c855c0b784b42dc4c50f4eaf524ec7ed658037e86fc14af38ca3b66c75dd6adb", size = 500469, upload-time = "2023-12-12T14:39:25.545Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/97/22/8dba9a7149d51fe0b6163a5a6b7efc315ab3c097cb6b0d1fc649a03f2722/tslearn-0.6.3-py3-none-any.whl", hash = "sha256:18c3b1984b4be2af0e7579c0b914633f2220bba2b6610c11861c4563272e9169", size = 374440, upload-time = "2023-12-12T14:39:23.114Z" },
 ]
 
 [[package]]
