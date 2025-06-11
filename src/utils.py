@@ -10,6 +10,8 @@ import os
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
+from tqdm import tqdm
 
 import torch
 
@@ -85,3 +87,69 @@ def save_plot(tensor, savepath, norm_pitch=plot_norm_pitch):
     plt.savefig(savepath)
     plt.close()
     return
+
+
+class TqdmLoggingHandler(logging.Handler):
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            tqdm.write(msg)  # keeps progress bar clean
+            self.flush()
+        except Exception:
+            self.handleError(record)
+
+
+class EarlyStopping:
+    def __init__(self, patience=5, step_size=5, smoothing_factor=0.1):
+        """
+        EarlyStopping with exponential moving average (EMA) smoothing and step-based patience.
+
+        Args:
+            patience (int): Number of steps (not successive epochs) to wait before stopping.
+            step_size (int): Number of epochs between each patience check.
+            smoothing_factor (float): Smoothing factor for EMA (0 < smoothing_factor <= 1).
+        """
+        self.patience = patience
+        self.step_size = step_size
+        self.smoothing_factor = smoothing_factor
+        self.counter = 0
+        self.best_loss = float("inf")
+        self.ema_loss = None  # Exponential moving average of the loss
+
+    def step(self, loss):
+        """
+        Update the EMA and check if early stopping criteria are met.
+
+        Args:
+            loss (float): Current validation loss.
+
+        Returns:
+            tuple: (should_stop, improved)
+                - should_stop (bool): Whether to stop training.
+                - improved (bool): Whether the loss has improved.
+        """
+        # Update EMA loss
+        if self.ema_loss is None:
+            self.ema_loss = loss  # Initialize EMA with the first loss
+        else:
+            self.ema_loss = (
+                self.smoothing_factor * loss
+                + (1 - self.smoothing_factor) * self.ema_loss
+            )
+
+        # Check for improvement
+        improved = self.ema_loss < self.best_loss
+        if improved:
+            self.best_loss = self.ema_loss
+            self.counter = 0
+        else:
+            self.counter += 1
+
+        # Return stopping condition and best model saving
+        return self.counter >= self.patience, improved
+
+    def reset(self):
+        """Reset the early stopping state."""
+        self.counter = 0
+        self.best_loss = float("inf")
+        self.ema_loss = None
