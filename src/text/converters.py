@@ -107,7 +107,18 @@ arpabet2ipa = {
     "ZH": "ʒ",
 }
 
-diphtongues_ipa = ["aʊ", "aɪ", "ɔɪ", "eɪ", "oʊ"]
+diphtongues_ipa = [
+    "aʊ",
+    "aɪ",
+    "ɔɪ",
+    "eɪ",
+    "oʊ",  # added from cmu dict phoneme vocab
+    "əʊ",
+    "ɛɪ",
+    "ɪə",
+    "ɛə",
+    "ʊə",
+]  # # added from mngu0 phoneme vocab
 
 # vec_a, vec_i
 # mask = vec_a == vec_i
