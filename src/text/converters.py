@@ -137,6 +137,7 @@ def text_to_ipa(
 
 def ipa_to_ternary(
     ipawords_list: List[str],
+    merge_diphtongues: bool = True,
 ) -> np.ndarray:
     """
     Convert a list of IPA words to a ternary sequence.
@@ -162,9 +163,12 @@ def ipa_to_ternary(
                 # vector representation
                 emb_0 = ft.word_array(traits_list, char_ipa[0])
                 emb_1 = ft.word_array(traits_list, char_ipa[1])
-                mask = emb_0 == emb_1
-                emb_24 = np.zeros_like(emb_0)  # shape: (1, N_traits)
-                emb_24[mask] = emb_0[mask]
+                if merge_diphtongues:  # merge the two embeddings into one
+                    mask = emb_0 == emb_1
+                    emb_24 = np.zeros_like(emb_0)  # shape: (1, N_traits)
+                    emb_24[mask] = emb_0[mask]
+                else:
+                    emb_24 = np.concatenate((emb_0, emb_1), axis=0)
             elif ft.validate_word(char_ipa):
                 emb_24 = ft.word_array(traits_list, char_ipa)  # shape: (1, N_traits)
             else:

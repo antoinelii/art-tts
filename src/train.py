@@ -29,6 +29,7 @@ add_blank = params_v0.add_blank
 n_spks = params_v0.n_spks
 n_feats = params_v0.n_feats
 plot_norm_pitch = params_v0.plot_norm_pitch
+merge_diphtongues = params_v0.merge_diphtongues
 
 log_dir = params_v0.log_dir
 n_epochs = params_v0.n_epochs
@@ -80,6 +81,7 @@ if __name__ == "__main__":
         train_filelist_path,
         cmudict_path,
         add_blank,
+        merge_diphtongues=merge_diphtongues,
     )
     batch_collate = TextArticBatchCollate()
     loader = DataLoader(
@@ -94,6 +96,7 @@ if __name__ == "__main__":
         valid_filelist_path,
         cmudict_path,
         add_blank,
+        merge_diphtongues=merge_diphtongues,
     )
     val_loader = DataLoader(
         dataset=valid_dataset,

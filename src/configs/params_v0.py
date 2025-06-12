@@ -32,6 +32,7 @@ non_pitch_idx = [
     i for i in range(n_feats) if i != pitch_idx
 ]  # non-pitch channels indices
 plot_norm_pitch = False  # whether to plot normalized pitch or not
+merge_diphtongues = True  # whether to merge diphthongs in IPA embedding
 
 # encoder parameters
 n_ipa_feats = 25

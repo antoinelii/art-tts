@@ -44,6 +44,7 @@ class TextArticDataset(torch.utils.data.Dataset):
         sparc_ckpt_path=sparc_ckpt_path,
         reorder_feats=reorder_feats,
         pitch_idx=pitch_idx,
+        merge_diphtongues=True,
         load_coder=True,
         shuffle=True,
     ):
@@ -56,6 +57,9 @@ class TextArticDataset(torch.utils.data.Dataset):
         self.sparc_ckpt_path = sparc_ckpt_path
         self.reorder_feats = reorder_feats
         self.pitch_idx = pitch_idx
+        self.merge_diphtongues = (
+            merge_diphtongues  # whether to merge diphthongs in IPA embedding
+        )
         random.seed(random_seed)
         if shuffle:
             random.shuffle(self.filepaths_and_text)
@@ -91,7 +95,9 @@ class TextArticDataset(torch.utils.data.Dataset):
         )
         if add_blank:
             ipawords_list = intersperse(ipawords_list, " ")
-        ternary_emb = ipa_to_ternary(ipawords_list)
+        ternary_emb = ipa_to_ternary(
+            ipawords_list, merge_diphtongues=self.merge_diphtongues
+        )
         ternary_emb = torch.FloatTensor(ternary_emb).T  # shape: (n_ipa_feats, seq_len)
         return ternary_emb
 
