@@ -31,7 +31,7 @@ non_pitch_idx = [
     i for i in range(n_feats) if i != pitch_idx
 ]  # non-pitch channels indices
 plot_norm_pitch = False  # whether to plot normalized pitch or not
-merge_diphtongues = True  # whether to merge diphthongs in IPA embedding
+merge_diphtongues = False  # whether to merge diphthongs in IPA embedding
 
 # encoder parameters
 n_ipa_feats = 25
@@ -59,6 +59,6 @@ learning_rate = 1e-4
 seed = 37
 save_every = 5
 val_every = 5
-patience = 3  # patience each save_every epochs
+patience = 10  # patience each save_every epochs
 # out_size = fix_len_compatibility(2 * 22050 // 256)      # 2* sr/hop_size meaning 2 seconds of audio
 out_size = fix_len_compatibility(2 * 50)  # 2* art_sr meaning 2 seconds of audio
