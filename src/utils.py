@@ -17,6 +17,23 @@ import torch
 
 from configs.params_v0 import pitch_idx, plot_norm_pitch
 
+channel_names = [
+    "xul",
+    "zul",
+    "xll",
+    "zll",
+    "xli",
+    "zli",
+    "xtt",
+    "ztt",
+    "xtm",
+    "ztm",
+    "xtb",
+    "ztb",
+    "pitch",
+    "loudness",
+]
+
 
 def intersperse(lst, item):
     # Adds blank symbol
@@ -100,9 +117,9 @@ class TqdmLoggingHandler(logging.Handler):
 
 
 class EarlyStopping:
-    def __init__(self, patience=5, step_size=5, smoothing_factor=0.1):
+    def __init__(self, patience=10, step_size=5):
         """
-        EarlyStopping with exponential moving average (EMA) smoothing and step-based patience.
+        EarlyStopping when none of the sublosses improve for a given number of steps.
 
         Args:
             patience (int): Number of steps (not successive epochs) to wait before stopping.
@@ -111,45 +128,108 @@ class EarlyStopping:
         """
         self.patience = patience
         self.step_size = step_size
-        self.smoothing_factor = smoothing_factor
         self.counter = 0
-        self.best_loss = float("inf")
-        self.ema_loss = None  # Exponential moving average of the loss
+        self.losses = [
+            None,
+            None,
+            None,
+            None,
+        ]  # dur_loss, prior_loss, diff_loss, tot_loss
+        self.best_losses = [float("inf"), float("inf"), float("inf"), float("inf")]
 
-    def step(self, loss):
+    def step(self, losses):
         """
         Update the EMA and check if early stopping criteria are met.
 
         Args:
-            loss (float): Current validation loss.
+            loss (float): list of losses to consider for early stopping.
+                          (dur_loss, prior_loss, diff_loss, tot_loss)
 
         Returns:
             tuple: (should_stop, improved)
                 - should_stop (bool): Whether to stop training.
                 - improved (bool): Whether the loss has improved.
         """
-        # Update EMA loss
-        if self.ema_loss is None:
-            self.ema_loss = loss  # Initialize EMA with the first loss
-        else:
-            self.ema_loss = (
-                self.smoothing_factor * loss
-                + (1 - self.smoothing_factor) * self.ema_loss
-            )
+        self.losses = losses
 
         # Check for improvement
-        improved = self.ema_loss < self.best_loss
-        if improved:
-            self.best_loss = self.ema_loss
+        improvements = ([self.losses[i] < self.best_losses[i] for i in range(4)],)
+        if any(improvements):
             self.counter = 0
+            for i in range(4):
+                if improvements[i]:
+                    self.best_losses[i] = self.losses[i]
+            if improvements[-1]:
+                glob_improv = True
         else:
             self.counter += 1
 
         # Return stopping condition and best model saving
-        return self.counter >= self.patience, improved
+        return self.counter >= self.patience, glob_improv
 
     def reset(self):
         """Reset the early stopping state."""
         self.counter = 0
         self.best_loss = float("inf")
-        self.ema_loss = None
+        self.loss = None
+
+
+def plot_art_14(tensor_list, title_prefix="Tensor", figsize=(8, 5), sr=50):
+    """
+    Plot each of the 14 features in its own subplot for each tensor
+    of the list
+    Overlay all tensors in the same figure.
+
+    Args:
+        tensor_list: list of np.ndarray or torch.Tensor of shape (14, n_frames)
+        title_prefix: title prefix for the figure
+        figsize: size of the entire figure
+    Returns:
+        Matplotlib figure
+    """
+
+    fig, axes = plt.subplots(7, 2, figsize=figsize, dpi=100, sharey=True, sharex=True)
+    axes = axes.flatten()
+
+    for tensor in tensor_list:
+        if hasattr(tensor, "detach"):
+            tensor = tensor.detach().cpu().numpy()
+
+        assert tensor.shape[0] == 14, "Expected tensor shape (14, n_frames)"
+        t = np.arange(tensor.shape[1]) / sr
+        for i in range(14):
+            axes[i].plot(t, tensor[i], alpha=0.9)
+            # axes[i].set_title(f"Feature {i}")
+            # axes[i].set_xlabel("Frames")
+            # axes[i].set_ylabel("Value")
+            axes[i].grid(True)
+    fig.suptitle(f"{title_prefix}", fontsize=16)
+    fig.canvas.draw()
+    data = save_figure_to_numpy(fig)
+    plt.close(fig)
+    return fig, data
+
+
+def save_plot_art_14(
+    tensor_list, savepath, title_prefix="Tensor", figsize=(8, 5), sr=50
+):
+    fig, axes = plt.subplots(7, 2, figsize=figsize, dpi=100, sharey=True, sharex=True)
+    axes = axes.flatten()
+
+    for tensor in tensor_list:
+        if hasattr(tensor, "detach"):
+            tensor = tensor.detach().cpu().numpy()
+
+        assert tensor.shape[0] == 14, "Expected tensor shape (14, n_frames)"
+        t = np.arange(tensor.shape[1]) / sr
+        for i in range(14):
+            axes[i].plot(t, tensor[i], alpha=0.9)
+            # axes[i].set_title(f"Feature {i}")
+            # axes[i].set_xlabel("Frames")
+            # axes[i].set_ylabel("Value")
+            axes[i].grid(True)
+    fig.suptitle(f"{title_prefix}", fontsize=16)
+    fig.canvas.draw()
+    plt.savefig(savepath)
+    plt.close(fig)
+    return
