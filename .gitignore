@@ -13,8 +13,7 @@ wheels/
 Grad-TTS/
 
 # Samples
-LJ_samples/
-data_phnm/
+data/
 
 # checkpoints
 src/ckpt
