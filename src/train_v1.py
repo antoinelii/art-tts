@@ -107,7 +107,7 @@ if __name__ == "__main__":
     mylogger.info("Logging valid batch...")
     valid_batch = valid_dataset.sample_test_batch(size=params_v1.test_size)
     for i, item in enumerate(valid_batch):
-        art = item["y"][0, reorder_feats, :].T.cpu()
+        art = item["y"][reorder_feats, :].T.cpu()
         logger.add_image(
             f"image_{i}/ground_truth",
             plot_art_14(art)[1],
@@ -269,7 +269,7 @@ if __name__ == "__main__":
                         logger.add_image(
                             f"image_{i}/generated_enc",
                             plot_art_14(
-                                y_enc[0, reorder_feats, :].T.cpu(),
+                                y_enc[reorder_feats, :].T.cpu(),
                             )[1],
                             global_step=epoch,
                             dataformats="HWC",
@@ -277,7 +277,7 @@ if __name__ == "__main__":
                         logger.add_image(
                             f"image_{i}/generated_dec",
                             plot_art_14(
-                                y_dec[0, reorder_feats, :].T.cpu(),
+                                y_dec[reorder_feats, :].T.cpu(),
                             )[1],
                             global_step=epoch,
                             dataformats="HWC",
@@ -289,11 +289,11 @@ if __name__ == "__main__":
                             dataformats="HWC",
                         )
                         save_plot_art_14(
-                            y_enc[0, reorder_feats, :].T.cpu(),
+                            y_enc[reorder_feats, :].T.cpu(),
                             f"{log_dir}/generated_enc_{i}.png",
                         )
                         save_plot_art_14(
-                            y_dec[0, reorder_feats, :].T.cpu(),
+                            y_dec[reorder_feats, :].T.cpu(),
                             f"{log_dir}/generated_dec_{i}.png",
                         )
                         save_plot_art_14(
