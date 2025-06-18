@@ -153,7 +153,7 @@ class EarlyStopping:
         self.losses = losses
 
         # Check for improvement
-        improvements = ([self.losses[i] < self.best_losses[i] for i in range(4)],)
+        improvements = [self.losses[i] < self.best_losses[i] for i in range(4)]
         if any(improvements):
             self.counter = 0
             for i in range(4):
