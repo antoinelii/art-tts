@@ -248,7 +248,14 @@ if __name__ == "__main__":
                 mylogger.info(f"Val : {log_msg}")
 
                 mean_val_loss = mean_val_loss
-                should_stop, glob_improv = early_stopping.step(mean_val_loss)
+                should_stop, glob_improv = early_stopping.step(
+                    [
+                        mean_val_prior_loss,
+                        mean_val_diff_loss,
+                        mean_val_dur_loss,
+                        mean_val_loss,
+                    ]
+                )
 
                 if glob_improv:
                     torch.save(model.state_dict(), f=f"{log_dir}/grad_best.pt")
