@@ -247,8 +247,7 @@ if __name__ == "__main__":
                     f.write(log_msg)
                 mylogger.info(f"Val : {log_msg}")
 
-                mean_val_loss = mean_val_loss
-                should_stop, glob_improv = early_stopping.step(
+                patience_counter, glob_improv = early_stopping.step(
                     [
                         mean_val_prior_loss,
                         mean_val_diff_loss,
@@ -257,13 +256,21 @@ if __name__ == "__main__":
                     ]
                 )
 
+                mylogger.info(f"patience_counter: {patience_counter}")
+
+                # save early stopping object
+                torch.save(
+                    early_stopping,
+                    f=f"{log_dir}/early_stopping.pt",
+                )
+
                 if glob_improv:
                     torch.save(model.state_dict(), f=f"{log_dir}/grad_best.pt")
                     best_epoch = epoch
                     mylogger.info(
                         f"Best model saved at epoch {best_epoch} with validation loss {mean_val_loss:.3f}"
                     )
-                elif should_stop:
+                elif patience_counter >= params_v1.patience:
                     mylogger.info(
                         f"Early stopping at epoch {epoch} after {early_stopping.counter} times {params_v1.save_every} epochs without \
                             any subloss improvement. Best model epoch: {best_epoch}"

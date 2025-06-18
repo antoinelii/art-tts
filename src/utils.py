@@ -134,7 +134,7 @@ class EarlyStopping:
             None,
             None,
             None,
-        ]  # dur_loss, prior_loss, diff_loss, tot_loss
+        ]  # prior_loss, diff_loss, dur_loss, tot_loss
         self.best_losses = [float("inf"), float("inf"), float("inf"), float("inf")]
 
     def step(self, losses):
@@ -143,12 +143,12 @@ class EarlyStopping:
 
         Args:
             loss (float): list of losses to consider for early stopping.
-                          (dur_loss, prior_loss, diff_loss, tot_loss)
+                          (prior_loss, diff_loss, dur_loss, tot_loss)
 
         Returns:
-            tuple: (should_stop, improved)
-                - should_stop (bool): Whether to stop training.
-                - improved (bool): Whether the loss has improved.
+            tuple: (patience_count, glob_improv)
+                - patience_count (bool): Count of consecutive no subloss improvements.
+                - glob_improv (bool): Whether the tot loss has improved.
         """
         self.losses = losses
 
@@ -166,7 +166,7 @@ class EarlyStopping:
             glob_improv = False
 
         # Return stopping condition and best model saving
-        return self.counter >= self.patience, glob_improv
+        return self.counter, glob_improv
 
     def reset(self):
         """Reset the early stopping state."""
