@@ -34,6 +34,9 @@ set -x # activer l’echo des commandes
 echo "computation start $(date)"
 # launch your computation
 
+export CUDA_LAUNCH_BLOCKING=1
+echo "CUDA_LAUNCH_BLOCKING=$CUDA_LAUNCH_BLOCKING"
+
 srun python -u ./train_v1.py
 
 echo "computation end : $(date)"
