@@ -20,7 +20,7 @@ from text.converters import ipa_to_ternary
 from utils import parse_filelist
 
 # from model.utils import fix_len_compatibility
-from configs.params_v1 import seed as random_seed
+from configs.params_v1 import random_seed
 from configs.params_v1 import (
     data_root_dir,
     sparc_ckpt_path,
