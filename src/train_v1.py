@@ -140,7 +140,6 @@ if __name__ == "__main__":
             diff_losses = []
             losses = []
             for batch_idx, batch in enumerate(loader):
-                model.zero_grad()
                 x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
                 y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
                 dur_loss, prior_loss, diff_loss = model.compute_loss(
@@ -283,36 +282,39 @@ if __name__ == "__main__":
                         logger.add_image(
                             f"image_{i}/generated_enc",
                             plot_art_14(
-                                [y_enc[reorder_feats, :].cpu()],
-                            )[1],
+                                [y_enc[0, reorder_feats, :].cpu()],
+                            )[1][:, :, 1:],
                             global_step=epoch,
                             dataformats="HWC",
                         )
                         logger.add_image(
                             f"image_{i}/generated_dec",
                             plot_art_14(
-                                [y_dec[reorder_feats, :].cpu()],
-                            )[1],
+                                [y_dec[0, reorder_feats, :].cpu()],
+                            )[1][:, :, 1:],
                             global_step=epoch,
                             dataformats="HWC",
                         )
                         logger.add_image(
                             f"image_{i}/alignment",
-                            plot_tensor(attn.squeeze().cpu())[1],
+                            plot_tensor(attn.squeeze().cpu(), norm_pitch=False)[
+                                :, :, 1:
+                            ],
                             global_step=epoch,
                             dataformats="HWC",
                         )
                         save_plot_art_14(
-                            [y_enc[reorder_feats, :].cpu()],
+                            [y_enc[0, reorder_feats, :].cpu()],
                             f"{log_dir}/generated_enc_{i}.png",
                         )
                         save_plot_art_14(
-                            [y_dec[reorder_feats, :].cpu()],
+                            [y_dec[0, reorder_feats, :].cpu()],
                             f"{log_dir}/generated_dec_{i}.png",
                         )
                         save_plot(
                             attn.squeeze().cpu(),
                             f"{log_dir}/alignment_{i}.png",
+                            norm_pitch=False,
                         )
 
                 ckpt = model.state_dict()
