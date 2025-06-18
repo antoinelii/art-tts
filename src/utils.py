@@ -163,6 +163,7 @@ class EarlyStopping:
                 glob_improv = True
         else:
             self.counter += 1
+            glob_improv = False
 
         # Return stopping condition and best model saving
         return self.counter >= self.patience, glob_improv
