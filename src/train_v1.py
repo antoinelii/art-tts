@@ -17,7 +17,14 @@ from torch.utils.tensorboard import SummaryWriter
 from configs import params_v1
 from model import GradTTS
 from data_phnm import PhnmArticDataset, PhnmArticBatchCollate
-from utils import plot_art_14, save_plot_art_14, TqdmLoggingHandler, EarlyStopping
+from utils import (
+    plot_tensor,
+    save_plot,
+    plot_art_14,
+    save_plot_art_14,
+    TqdmLoggingHandler,
+    EarlyStopping,
+)
 
 log_dir = params_v1.log_dir
 reorder_feats = params_v1.reorder_feats
@@ -107,14 +114,14 @@ if __name__ == "__main__":
     mylogger.info("Logging valid batch...")
     valid_batch = valid_dataset.sample_test_batch(size=params_v1.test_size)
     for i, item in enumerate(valid_batch):
-        art = item["y"][reorder_feats, :].T.unsqueeze(0).cpu()
+        art = item["y"][reorder_feats, :].cpu()
         logger.add_image(
             f"image_{i}/ground_truth",
-            plot_art_14(art)[1],
+            plot_art_14([art])[1],
             global_step=0,
             dataformats="HWC",
         )
-        save_plot_art_14(art, f"{params_v1.log_dir}/original_{i}.png")
+        save_plot_art_14([art], f"{params_v1.log_dir}/original_{i}.png")
 
     mylogger.info("Start training...")
     iteration = 0
@@ -269,7 +276,7 @@ if __name__ == "__main__":
                         logger.add_image(
                             f"image_{i}/generated_enc",
                             plot_art_14(
-                                y_enc[reorder_feats, :].T.unsqueeze(0).cpu(),
+                                [y_enc[reorder_feats, :].cpu()],
                             )[1],
                             global_step=epoch,
                             dataformats="HWC",
@@ -277,26 +284,26 @@ if __name__ == "__main__":
                         logger.add_image(
                             f"image_{i}/generated_dec",
                             plot_art_14(
-                                y_dec[reorder_feats, :].T.unsqueeze(0).cpu(),
+                                [y_dec[reorder_feats, :].cpu()],
                             )[1],
                             global_step=epoch,
                             dataformats="HWC",
                         )
                         logger.add_image(
                             f"image_{i}/alignment",
-                            plot_art_14(attn.squeeze().cpu())[1],
+                            plot_tensor(attn.squeeze().cpu())[1],
                             global_step=epoch,
                             dataformats="HWC",
                         )
                         save_plot_art_14(
-                            y_enc[reorder_feats, :].T.unsqueeze(0).cpu(),
+                            [y_enc[reorder_feats, :].cpu()],
                             f"{log_dir}/generated_enc_{i}.png",
                         )
                         save_plot_art_14(
-                            y_dec[reorder_feats, :].T.unsqueeze(0).cpu(),
+                            [y_dec[reorder_feats, :].cpu()],
                             f"{log_dir}/generated_dec_{i}.png",
                         )
-                        save_plot_art_14(
+                        save_plot(
                             attn.squeeze().cpu(),
                             f"{log_dir}/alignment_{i}.png",
                         )
