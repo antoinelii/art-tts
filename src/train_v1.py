@@ -25,6 +25,7 @@ from utils import (
     TqdmLoggingHandler,
     EarlyStopping,
 )
+from metrics import normalized_dtw_score
 
 log_dir = params_v1.log_dir
 reorder_feats = params_v1.reorder_feats
@@ -273,16 +274,38 @@ if __name__ == "__main__":
             if epoch % params_v1.save_every == 0:
                 model.eval()
                 mylogger.info("Synthesis...")
+                gt_enc_dtw_scores = []
+                gt_dec_dtw_scores = []
                 with torch.no_grad():
                     for i, item in enumerate(valid_batch):
                         x = item["x"].to(torch.float32).unsqueeze(0).cuda()
                         x_lengths = torch.LongTensor([x.shape[-1]]).cuda()
                         y_enc, y_dec, attn = model(x, x_lengths, n_timesteps=50)
 
+                        y_enc_14 = y_enc[
+                            0, reorder_feats, :
+                        ].T.cpu()  # (n_frames, n_feats)
+                        y_dec_14 = y_dec[
+                            0, reorder_feats, :
+                        ].T.cpu()  # (n_frames, n_feats)
+                        y_gt = (
+                            item["y"][reorder_feats, :].T.cpu().numpy()
+                        )  # (n_frames, n_feats)
+
+                        # Compute DTW distance to targets
+                        dist_gt_enc, y_gt_enc_ada, y_enc_14_ada = normalized_dtw_score(
+                            y_gt, y_enc_14.numpy()
+                        )
+                        dist_gt_dec, y_gt_dec_ada, y_dec_14_ada = normalized_dtw_score(
+                            y_gt, y_dec_14.numpy()
+                        )
+                        gt_enc_dtw_scores.append(dist_gt_enc)
+                        gt_dec_dtw_scores.append(dist_gt_dec)
+
                         logger.add_image(
                             f"image_{i}/generated_enc",
                             plot_art_14(
-                                [y_enc[0, reorder_feats, :].cpu()],
+                                [y_enc_14.T],
                             )[1][:, :, 1:],
                             global_step=epoch,
                             dataformats="HWC",
@@ -290,7 +313,7 @@ if __name__ == "__main__":
                         logger.add_image(
                             f"image_{i}/generated_dec",
                             plot_art_14(
-                                [y_dec[0, reorder_feats, :].cpu()],
+                                [y_dec_14.T],
                             )[1][:, :, 1:],
                             global_step=epoch,
                             dataformats="HWC",
@@ -304,11 +327,11 @@ if __name__ == "__main__":
                             dataformats="HWC",
                         )
                         save_plot_art_14(
-                            [y_enc[0, reorder_feats, :].cpu()],
+                            [y_enc_14.T],
                             f"{log_dir}/generated_enc_{i}.png",
                         )
                         save_plot_art_14(
-                            [y_dec[0, reorder_feats, :].cpu()],
+                            [y_dec_14.T],
                             f"{log_dir}/generated_dec_{i}.png",
                         )
                         save_plot(
@@ -316,6 +339,17 @@ if __name__ == "__main__":
                             f"{log_dir}/alignment_{i}.png",
                             norm_pitch=False,
                         )
+                    logger.add_scalar(
+                        "valid_batch/dtw_enc_score",
+                        np.mean(gt_enc_dtw_scores),
+                        global_step=epoch,
+                    )
+
+                    logger.add_scalar(
+                        "valid_batch/dtw_dec_score",
+                        np.mean(gt_dec_dtw_scores),
+                        global_step=epoch,
+                    )
 
                 ckpt = model.state_dict()
                 torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")

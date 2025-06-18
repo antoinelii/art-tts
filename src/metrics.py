@@ -1,5 +1,5 @@
 import numpy as np
-
+from tslearn.metrics import dtw_path
 
 # Perform DTW between y_gt and y_enc_14
 # use example
@@ -31,3 +31,21 @@ def signals_from_path(
         s1_adapted[i] = s1[i1]
         s2_adapted[i] = s2[i2]
     return s1_adapted, s2_adapted
+
+
+def normalized_dtw_score(
+    s1: np.ndarray,
+    s2: np.ndarray,
+) -> float:
+    """
+    Calculate the normalized DTW score between two signals
+    using the provided path.
+
+    Parameters:
+    - s1: array of shape (n_frames_1, n_features)
+    - s2: array of shape (n_frames_2, n_features)
+    """
+    path_s1_s2, dist_s1_s2 = dtw_path(s1, s2)
+    norm_dist = dist_s1_s2 / np.sqrt(len(path_s1_s2))
+    s1_adapted, s2_adapted = signals_from_path(s1, s2, path_s1_s2)
+    return norm_dist, s1_adapted, s2_adapted

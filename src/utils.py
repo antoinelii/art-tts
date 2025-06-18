@@ -174,7 +174,7 @@ class EarlyStopping:
         self.loss = None
 
 
-def plot_art_14(tensor_list, title_prefix="Tensor", figsize=(8, 5), sr=50):
+def plot_art_14(tensor_list, title="Tensor", figsize=(8, 5), sr=50):
     """
     Plot each of the 14 features in its own subplot for each tensor
     of the list
@@ -182,7 +182,7 @@ def plot_art_14(tensor_list, title_prefix="Tensor", figsize=(8, 5), sr=50):
 
     Args:
         tensor_list: list of np.ndarray or torch.Tensor of shape (14, n_frames)
-        title_prefix: title prefix for the figure
+        title: title prefix for the figure
         figsize: size of the entire figure
     Returns:
         Matplotlib figure
@@ -203,16 +203,14 @@ def plot_art_14(tensor_list, title_prefix="Tensor", figsize=(8, 5), sr=50):
             # axes[i].set_xlabel("Frames")
             # axes[i].set_ylabel("Value")
             axes[i].grid(True)
-    fig.suptitle(f"{title_prefix}", fontsize=16)
+    fig.suptitle(f"{title}", fontsize=16)
     fig.canvas.draw()
     data = save_figure_to_numpy(fig)
     plt.close(fig)
     return fig, data
 
 
-def save_plot_art_14(
-    tensor_list, savepath, title_prefix="Tensor", figsize=(8, 5), sr=50
-):
+def save_plot_art_14(tensor_list, savepath, title="Tensor", figsize=(8, 5), sr=50):
     fig, axes = plt.subplots(7, 2, figsize=figsize, dpi=100, sharey=True, sharex=True)
     axes = axes.flatten()
 
@@ -228,7 +226,7 @@ def save_plot_art_14(
             # axes[i].set_xlabel("Frames")
             # axes[i].set_ylabel("Value")
             axes[i].grid(True)
-    fig.suptitle(f"{title_prefix}", fontsize=16)
+    fig.suptitle(f"{title}", fontsize=16)
     fig.canvas.draw()
     plt.savefig(savepath)
     plt.close(fig)
