@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=train_v0     # Job name
+#SBATCH --job-name=train_v1     # Job name
 #SBATCH --partition=gpu_p6             # Take a node from the 'gpu' partition
 # #SBATCH --export=ALL                  # Export your environment to the compute node
 #SBATCH -C h100
@@ -11,7 +11,7 @@
 #SBATCH --gres=gpu:1 # reserver 4 GPU
 #SBATCH --cpus-per-task=24 # reserver 10 CPU par tache (et memoire associee)
 #SBATCH --time=100:00:00 # temps maximal d’allocation "(HH:MM:SS)"
-#SBATCH -qos=qos_gpu_h100-t4 
+#SBATCH --qos=qos_gpu_h100-t4 
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
 #SBATCH --account=rec@h100 # comptabilite V100
 
@@ -34,6 +34,6 @@ set -x # activer l’echo des commandes
 echo "computation start $(date)"
 # launch your computation
 
-srun python -u ./train.py
+srun python -u ./train_v1.py
 
 echo "computation end : $(date)"

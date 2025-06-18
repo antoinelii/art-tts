@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=train_v0     # Job name
+#SBATCH --job-name=train_v1     # Job name
 #SBATCH --partition=gpu_p2             # Take a node from the 'gpu' partition
 # #SBATCH --export=ALL                  # Export your environment to the compute node
 
@@ -34,6 +34,6 @@ set -x # activer l’echo des commandes
 echo "computation start $(date)"
 # launch your computation
 
-srun python -u ./train.py
+srun python -u ./train_v1.py
 
 echo "computation end : $(date)"
