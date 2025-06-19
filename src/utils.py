@@ -151,7 +151,7 @@ class EarlyStopping:
                 - glob_improv (bool): Whether the tot loss has improved.
         """
         self.losses = losses
-
+        glob_improv = False  # whether the total loss has improved
         # Check for improvement
         improvements = [self.losses[i] < self.best_losses[i] for i in range(4)]
         if any(improvements):
@@ -163,7 +163,6 @@ class EarlyStopping:
                 glob_improv = True
         else:
             self.counter += 1
-            glob_improv = False
 
         # Return stopping condition and best model saving
         return self.counter, glob_improv
