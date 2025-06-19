@@ -127,10 +127,18 @@ if __name__ == "__main__":
                 for j, (filepath, y_enc_j, y_dec_j) in enumerate(
                     zip(batch_filepaths, y_enc_14, y_dec_14)
                 ):
+                    x_len = x_lengths[j]
+                    attn_j = attn[j, 0, :x_len, :].detach().cpu()  # (x_len, y_len_max)
+                    y_len = np.max(
+                        np.where(attn_j[-1])
+                    )  # last row, last value=1 index (binary attn)
                     sample_id = filepath[0].split("/")[-1][:-4]
                     save_path = save_dir / f"{sample_id}.npy"
                     y_enc_dec_j = np.array(
-                        [y_enc_j.numpy(), y_dec_j.numpy()]
+                        [
+                            y_enc_j[:, : y_len + 1].numpy(),
+                            y_dec_j[:, : y_len + 1].numpy(),
+                        ]
                     )  # (2, 14, T)
                     np.save(save_path, y_enc_dec_j)
                     mylogger.info(f"Saved {save_path}")
