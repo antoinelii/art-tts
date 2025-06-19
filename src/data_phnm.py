@@ -215,3 +215,21 @@ class PhnmArticBatchCollate(object):
         y_lengths = torch.LongTensor(y_lengths)
         x_lengths = torch.LongTensor(x_lengths)
         return {"x": x, "x_lengths": x_lengths, "y": y, "y_lengths": y_lengths}
+
+
+class PhnmBatchCollate(object):
+    def __call__(self, batch):
+        B = len(batch)
+        x_max_length = max([item["x"].shape[-1] for item in batch])
+        n_ipa_feats = batch[0]["x"].shape[-2]
+
+        x = torch.zeros((B, n_ipa_feats, x_max_length), dtype=torch.float32)
+        x_lengths = []
+
+        for i, item in enumerate(batch):
+            x_ = item["x"]
+            x_lengths.append(x_.shape[-1])
+            x[i, :, : x_.shape[-1]] = x_
+
+        x_lengths = torch.LongTensor(x_lengths)
+        return {"x": x, "x_lengths": x_lengths}
