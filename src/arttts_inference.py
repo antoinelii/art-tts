@@ -129,7 +129,7 @@ if __name__ == "__main__":
                 ):
                     sample_id = filepath[0].split("/")[-1][:-4]
                     save_path = save_dir / f"{sample_id}.npy"
-                    y_enc_dec_j = np.vstack(
+                    y_enc_dec_j = np.array(
                         [y_enc_j.numpy(), y_dec_j.numpy()]
                     )  # (2, 14, T)
                     np.save(save_path, y_enc_dec_j)
