@@ -37,10 +37,10 @@ echo "computation start $(date)"
 # launch your computation
 
 srun python -u arttts_inference.py  --data_dir ../../data/ \
-                                    --save_dir ../../data/LJSpeech-1.1/arttts_pred/v1/grad_210 \
+                                    --save_dir ../../data/LJSpeech-1.1/arttts_pred/v1/grad_565 \
                                     --filelist_path resources/filelists/ljspeech/valid_v1.txt \
                                     --version v1 \
-                                    --ckpt_name grad_210.pt \
+                                    --ckpt_name grad_565.pt \
                                     --params_name params_v1 \
                                     --device cuda \
                                     --batch_size 16 \

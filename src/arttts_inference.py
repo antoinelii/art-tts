@@ -27,7 +27,7 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument(
-    "--save_dir",  # ex: ../../data/LJSpeech-1.1/arttts_pred/v1/grad_200
+    "--save_dir",  # ex: ../../data/LJSpeech-1.1/arttts_pred/v1/grad_565
     type=str,
 )
 parser.add_argument(
@@ -35,7 +35,7 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument("--version", type=str, default="v1")
-parser.add_argument("--ckpt_name", type=str, default="grad_210.pt")
+parser.add_argument("--ckpt_name", type=str, default="grad_565.pt")
 parser.add_argument("--params_name", type=str, default="params_v1")
 parser.add_argument("--device", type=str, default="cuda")
 parser.add_argument(
