@@ -17,7 +17,7 @@ from pathlib import Path
 from sparc import load_model
 
 from text.converters import ipa_to_ternary
-from utils import parse_filelist
+from utils import parse_filelist, normalize_pitch_channel
 
 # from model.utils import fix_len_compatibility
 from configs.params_v1 import random_seed
@@ -125,23 +125,6 @@ class PhnmArticDataset(torch.utils.data.Dataset):
                 art16[:, j] = art[:, i]
             return art16
 
-        def normalize_pitch_channel(art: np.ndarray) -> np.ndarray:
-            """
-            Normalize the pitch channel to have zero mean and unit variance.
-            must be called after reordering the features.
-            """
-            std = np.std(art[:, self.pitch_idx])
-            if std > 0:
-                art[:, self.pitch_idx] = (
-                    art[:, self.pitch_idx] - np.mean(art[:, self.pitch_idx])
-                ) / np.std(art[:, self.pitch_idx])
-            else:
-                print("Zero variance in pitch channel. Centering to zero mean.")
-                art[:, self.pitch_idx] = art[:, self.pitch_idx] - np.mean(
-                    art[:, self.pitch_idx]
-                )
-            return art
-
         wav_fp, phnm3_fp = filepaths[0], filepaths[1]
 
         if from_preprocessed:  # Prefered way, loading precomputed features
@@ -173,7 +156,7 @@ class PhnmArticDataset(torch.utils.data.Dataset):
                 )
         # pad n_art_feats to 16
         art = reorder_art_feats(art)
-        art = normalize_pitch_channel(art)
+        art = normalize_pitch_channel(art, pitch_idx=self.pitch_idx)
         return torch.FloatTensor(art).T  # shape: (n_art_feats, T)
 
     def __getitem__(self, index):

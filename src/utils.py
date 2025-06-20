@@ -231,3 +231,37 @@ def save_plot_art_14(tensor_list, savepath, title="Tensor", figsize=(8, 5), sr=5
     plt.savefig(savepath)
     plt.close(fig)
     return
+
+
+def normalize_pitch_channel(art: np.ndarray, pitch_idx=12) -> np.ndarray:
+    """
+    Normalize the pitch channel to have zero mean and unit variance.
+    must be called after reordering the features.
+    """
+    std = np.std(art[:, pitch_idx])
+    if std > 0:
+        art[:, pitch_idx] = (art[:, pitch_idx] - np.mean(art[:, pitch_idx])) / np.std(
+            art[:, pitch_idx]
+        )
+    else:
+        print("Zero variance in pitch channel. Centering to zero mean.")
+        art[:, pitch_idx] = art[:, pitch_idx] - np.mean(art[:, pitch_idx])
+    return art
+
+
+def smooth_multivariate_signal(signal: np.ndarray, window_size: int = 5) -> np.ndarray:
+    """
+    Smooth a multivariate signal using a moving average.
+
+    Parameters:
+    - signal: numpy array of shape (T, d), where T is the number of timesteps and d is the number of features.
+    - window_size: size of the moving average window.
+
+    Returns:
+    - smoothed_signal: numpy array of the same shape as input.
+    """
+    kernel = np.ones(window_size) / window_size
+    smoothed_signal = np.apply_along_axis(
+        lambda x: np.convolve(x, kernel, mode="same"), axis=0, arr=signal
+    )
+    return smoothed_signal
