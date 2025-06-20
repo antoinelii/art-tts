@@ -358,5 +358,5 @@ if __name__ == "__main__":
                         global_step=epoch,
                     )
 
-                ckpt = model.state_dict()
-                torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")
+    ckpt = model.state_dict()
+    torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")
