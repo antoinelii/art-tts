@@ -76,7 +76,7 @@ if __name__ == "__main__":
         params.beta_min,
         params.beta_max,
         params.pe_scale,
-    ).cuda()
+    ).to(device)
 
     ckpt_filepath = CKPT_DIR / version / ckpt_name
     ckpt_state_dict = torch.load(ckpt_filepath, map_location=torch.device(device))
