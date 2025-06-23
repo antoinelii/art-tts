@@ -357,6 +357,8 @@ if __name__ == "__main__":
                         np.mean(gt_dec_dtw_scores),
                         global_step=epoch,
                     )
+                ckpt = model.state_dict()
+                torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")
 
     ckpt = model.state_dict()
     torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")
