@@ -174,7 +174,7 @@ class EarlyStopping:
         self.loss = None
 
 
-def plot_art_14(tensor_list, title="Tensor", figsize=(8, 5), sr=50):
+def plot_art_14(tensor_list, phnm3=None, title="Tensor", figsize=(8, 5), sr=50):
     """
     Plot each of the 14 features in its own subplot for each tensor
     of the list
@@ -188,8 +188,9 @@ def plot_art_14(tensor_list, title="Tensor", figsize=(8, 5), sr=50):
         Matplotlib figure
     """
 
-    fig, axes = plt.subplots(7, 2, figsize=figsize, dpi=100, sharey=True, sharex=True)
+    fig, axes = plt.subplots(7, 2, figsize=figsize, dpi=200, sharey=True, sharex=True)
     axes = axes.flatten()
+    colors = ["g", "r"]
 
     for tensor in tensor_list:
         if hasattr(tensor, "detach"):
@@ -199,10 +200,16 @@ def plot_art_14(tensor_list, title="Tensor", figsize=(8, 5), sr=50):
         t = np.arange(tensor.shape[1]) / sr
         for i in range(14):
             axes[i].plot(t, tensor[i], alpha=0.9)
-            # axes[i].set_title(f"Feature {i}")
-            # axes[i].set_xlabel("Frames")
-            # axes[i].set_ylabel("Value")
             axes[i].grid(True)
+
+    if phnm3 is not None:
+        for i, (start, end, label) in enumerate(phnm3):
+            facecolor = colors[i % len(colors)]
+            for j in range(14):
+                axes[j].axvspan(start, end, alpha=0.3, facecolor=facecolor)
+                axes[j].text(
+                    (start + end) / 2, 3, label, ha="center", va="top", fontsize=8
+                )
     fig.suptitle(f"{title}", fontsize=16)
     fig.canvas.draw()
     data = save_figure_to_numpy(fig)
