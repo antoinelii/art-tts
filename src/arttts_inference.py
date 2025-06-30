@@ -39,7 +39,11 @@ parser.add_argument("--ckpt_name", type=str, default="grad_565.pt")
 parser.add_argument("--params_name", type=str, default="params_v1")
 parser.add_argument("--device", type=str, default="cuda")
 parser.add_argument(
-    "--batch_size", type=int, default=16, help="Batch size for inference, default is 16"
+    "--batch_size",
+    type=int,
+    default=1,
+    help="Batch size for inference, default is 1 and should be done with 1\
+        sample at a time to avoid messing up with group normalization",  # should remove groupnorm in future versions
 )
 
 
@@ -100,12 +104,6 @@ if __name__ == "__main__":
     filepaths_list = dataset.filepaths_list
     collator = PhnmBatchCollate()
 
-    good_sample = dataset.get_phnm_emb(
-        "DUMMY/MNGU0/arttts/s1/phnm3/mngu0_s1_0001_phnm3.npy"
-    )
-    len_good = good_sample.shape[-1]
-    # around 3 seconds (39 phnms) good sample, perfect to reach sufficient length
-
     model.eval()
     with torch.no_grad():
         with tqdm(
@@ -119,11 +117,7 @@ if __name__ == "__main__":
                 batch_filepaths = filepaths_list[i : i + batch_size]
                 phnm3_filepaths = [fp[1] for fp in batch_filepaths]
                 phnm_embs = [
-                    {
-                        "x": torch.cat(
-                            (good_sample, dataset.get_phnm_emb(phnm3_fp)), dim=1
-                        )
-                    }
+                    {"x": dataset.get_phnm_emb(phnm3_fp)}
                     for phnm3_fp in phnm3_filepaths
                 ]
                 batch = collator(phnm_embs)
@@ -139,16 +133,15 @@ if __name__ == "__main__":
                 ):
                     x_len = x_lengths[j]
                     attn_j = attn[j, 0, :x_len, :].detach().cpu()  # (x_len, y_len_max)
-                    y_len_good = np.max(np.where(attn_j[len_good - 1]))
-                    y_len_tot = np.max(
+                    y_len = np.max(
                         np.where(attn_j[-1])
                     )  # last row, last value=1 index (binary attn)
                     sample_id = filepath[0].split("/")[-1][:-4]
                     save_path = save_dir / f"{sample_id}.npy"
                     y_enc_dec_j = np.array(
                         [
-                            y_enc_j[:, y_len_good + 1 : y_len_tot + 1].numpy(),
-                            y_dec_j[:, y_len_good + 1 : y_len_tot + 1].numpy(),
+                            y_enc_j[:, : y_len + 1].numpy(),
+                            y_dec_j[:, : y_len + 1].numpy(),
                         ]
                     )  # (2, 14, T)
                     np.save(save_path, y_enc_dec_j)
