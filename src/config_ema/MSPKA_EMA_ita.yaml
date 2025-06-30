@@ -1,0 +1,15 @@
+##### Configuration for the MSPKA-EMA dataset
+##### Generator and is skipped.
+
+## signals params
+audio_sr : 22050
+ema_sr : 400
+
+## directories
+src_audio_reldir: speaker#_1.0.0/wav_1.0.0/
+src_ema_reldir: speaker#_1.0.0/ema_1.0.0/
+src_phone_reldir: speaker#_1.0.0/lab_1.0.0/
+
+sentences_relpath: speaker#_1.0.0/list_sentences
+
+filestem: speaker#_id#
