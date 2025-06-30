@@ -100,6 +100,12 @@ if __name__ == "__main__":
     filepaths_list = dataset.filepaths_list
     collator = PhnmBatchCollate()
 
+    good_sample = dataset.get_phnm_emb(
+        "DUMMY/MNGU0/arttts/s1/phnm3/mngu0_s1_0001_phnm3.npy"
+    )
+    len_good = good_sample.shape[-1]
+    # around 3 seconds (39 phnms) good sample, perfect to reach sufficient length
+
     model.eval()
     with torch.no_grad():
         with tqdm(
@@ -113,7 +119,11 @@ if __name__ == "__main__":
                 batch_filepaths = filepaths_list[i : i + batch_size]
                 phnm3_filepaths = [fp[1] for fp in batch_filepaths]
                 phnm_embs = [
-                    {"x": dataset.get_phnm_emb(phnm3_fp)}
+                    {
+                        "x": torch.cat(
+                            (good_sample, dataset.get_phnm_emb(phnm3_fp)), dim=1
+                        )
+                    }
                     for phnm3_fp in phnm3_filepaths
                 ]
                 batch = collator(phnm_embs)
@@ -129,15 +139,16 @@ if __name__ == "__main__":
                 ):
                     x_len = x_lengths[j]
                     attn_j = attn[j, 0, :x_len, :].detach().cpu()  # (x_len, y_len_max)
-                    y_len = np.max(
+                    y_len_good = np.max(np.where(attn_j[len_good - 1]))
+                    y_len_tot = np.max(
                         np.where(attn_j[-1])
                     )  # last row, last value=1 index (binary attn)
                     sample_id = filepath[0].split("/")[-1][:-4]
                     save_path = save_dir / f"{sample_id}.npy"
                     y_enc_dec_j = np.array(
                         [
-                            y_enc_j[:, : y_len + 1].numpy(),
-                            y_dec_j[:, : y_len + 1].numpy(),
+                            y_enc_j[:, y_len_good + 1 : y_len_tot + 1].numpy(),
+                            y_dec_j[:, y_len_good + 1 : y_len_tot + 1].numpy(),
                         ]
                     )  # (2, 14, T)
                     np.save(save_path, y_enc_dec_j)
