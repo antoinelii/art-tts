@@ -88,10 +88,16 @@ class PhnmArticDataset(torch.utils.data.Dataset):
     def get_phnm_emb(
         self,
         phnm3_fp: str,
+        remove_trailing_sil: bool = False,
     ) -> torch.IntTensor:  # shape: (n_ipa_feats, seq_len)
         # get ipa_phnm3 from file
         phnm3_fp = phnm3_fp.replace("DUMMY/", str(self.data_root_dir) + "/")
-        ipa_phnm3 = np.load(phnm3_fp)
+        ipa_phnm3 = np.load(phnm3_fp)  # shape: (seq_len, 3) where 3 = [start, end, ipa]
+        if remove_trailing_sil:  # remove trailing silence
+            while len(ipa_phnm3) > 0 and ipa_phnm3[0][2] == ".":
+                ipa_phnm3 = ipa_phnm3[1:]
+            while len(ipa_phnm3) > 0 and ipa_phnm3[-1][2] == ".":
+                ipa_phnm3 = ipa_phnm3[:-1]
         ipawords_list = ["%".join([elem[2] for elem in ipa_phnm3])]
         ternary_phnm_emb = ipa_to_ternary(
             ipawords_list, merge_diphtongues=self.merge_diphtongues
