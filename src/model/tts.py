@@ -13,7 +13,7 @@ import torch
 
 from model import monotonic_align
 from model.base import BaseModule
-from model.text_encoder import TextEncoder
+from model.text_encoder import IpaTraitEncoder
 from model.diffusion import Diffusion
 from model.utils import (
     sequence_mask,
@@ -63,7 +63,7 @@ class ArtTTS(BaseModule):
 
         if n_spks > 1:
             self.spk_emb = torch.nn.Embedding(n_spks, spk_emb_dim)
-        self.encoder = TextEncoder(
+        self.encoder = IpaTraitEncoder(
             n_ipa_feats,
             n_feats,
             n_enc_channels,
