@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 from configs import params_v1
-from model import GradTTS
+from model import ArtTTS
 from data_phnm import PhnmArticDataset, PhnmArticBatchCollate
 from utils import (
     plot_tensor,
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     )
 
     mylogger.info("Initializing model...")
-    model = GradTTS(
+    model = ArtTTS(
         params_v1.n_ipa_feats,
         params_v1.n_spks,
         None,

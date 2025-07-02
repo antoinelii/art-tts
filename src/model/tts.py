@@ -23,7 +23,7 @@ from model.utils import (
 )
 
 
-class GradTTS(BaseModule):
+class ArtTTS(BaseModule):
     def __init__(
         self,
         n_ipa_feats,
@@ -43,7 +43,7 @@ class GradTTS(BaseModule):
         beta_max,
         pe_scale,
     ):
-        super(GradTTS, self).__init__()
+        super(ArtTTS, self).__init__()
         self.n_ipa_feats = n_ipa_feats
         self.n_spks = n_spks
         self.spk_emb_dim = spk_emb_dim
@@ -89,6 +89,7 @@ class GradTTS(BaseModule):
         stoc=False,
         spk=None,
         length_scale=1.0,
+        x_durations=None,
     ):
         """
         Generates mel-spectrogram from text. Returns:
@@ -113,26 +114,47 @@ class GradTTS(BaseModule):
             spk = self.spk_emb(spk)
 
         # Get encoder_outputs `mu_x` and log-scaled token durations `logw`
-        mu_x, logw, x_mask = self.encoder(x, x_lengths, spk)
+        mu_x, logw, x_mask = self.encoder(
+            x, x_lengths, spk
+        )  # (B, n_feats, T_x), (B, 1, T_x), (B, 1, T_x)
 
-        w = torch.exp(logw) * x_mask
-        w_ceil = torch.ceil(w) * length_scale
-        y_lengths = torch.clamp_min(torch.sum(w_ceil, [1, 2]), 1).long()
+        # If `x_durations` is provided, use it to align text and mel-spectrogram
+        if not isinstance(x_durations, type(None)):
+            # `x_durations` is a tensor of shape (B, T_x) with durations for each phoneme
+            ## PB WITH GETTING EXACTLY THE SAME SIZE AS PHNM EMB... (diphtongues, phnm with various emb lengths...)
+            w = x_durations.unsqueeze(1) * x_mask  # (B, 1, T_x)
+        else:
+            w = torch.exp(logw) * x_mask  # (B, 1, T_x)
+
+        w_ceil = torch.ceil(w) * length_scale  # (B, 1, T_x) upper int rounding
+        y_lengths = torch.clamp_min(torch.sum(w_ceil, [1, 2]), 1).long()  # (B,)
         y_max_length = int(y_lengths.max())
-        y_max_length_ = fix_len_compatibility(y_max_length)
+        y_max_length_ = fix_len_compatibility(
+            y_max_length
+        )  # lower int rounding to be divisible by 2^{num of UNet downsamplings}
 
         # Using obtained durations `w` construct alignment map `attn`
-        y_mask = sequence_mask(y_lengths, y_max_length_).unsqueeze(1).to(x_mask.dtype)
-        attn_mask = x_mask.unsqueeze(-1) * y_mask.unsqueeze(2)
-        attn = generate_path(w_ceil.squeeze(1), attn_mask.squeeze(1)).unsqueeze(1)
+        y_mask = (
+            sequence_mask(y_lengths, y_max_length_).unsqueeze(1).to(x_mask.dtype)
+        )  # (B, 1, y_max_length_)
+        attn_mask = x_mask.unsqueeze(-1) * y_mask.unsqueeze(
+            2
+        )  # (B, 1, T_x, y_max_length_)
+        attn = generate_path(w_ceil.squeeze(1), attn_mask.squeeze(1)).unsqueeze(
+            1
+        )  # (B, 1, T_x, y_max_length_)
 
         # Align encoded text and get mu_y
-        mu_y = torch.matmul(attn.squeeze(1).transpose(1, 2), mu_x.transpose(1, 2))
-        mu_y = mu_y.transpose(1, 2)
-        encoder_outputs = mu_y[:, :, :y_max_length]
+        mu_y = torch.matmul(
+            attn.squeeze(1).transpose(1, 2), mu_x.transpose(1, 2)
+        )  # (B, y_max_length_, n_feats)
+        mu_y = mu_y.transpose(1, 2)  # (B, n_feats, y_max_length_)
+        encoder_outputs = mu_y[:, :, :y_max_length]  # (B, n_feats, y_max_length)
 
         # Sample latent representation from terminal distribution N(mu_y, I)
-        z = mu_y + torch.randn_like(mu_y, device=mu_y.device) / temperature
+        z = (
+            mu_y + torch.randn_like(mu_y, device=mu_y.device) / temperature
+        )  # (B, n_feats, y_max_length_)
         # Generate sample by performing reverse dynamics
         decoder_outputs = self.decoder(z, y_mask, mu_y, n_timesteps, stoc, spk)
         decoder_outputs = decoder_outputs[:, :, :y_max_length]

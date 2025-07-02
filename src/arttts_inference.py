@@ -6,7 +6,7 @@ from pathlib import Path
 
 import torch
 
-from model import GradTTS
+from model import ArtTTS
 from data_phnm import PhnmArticDataset, PhnmBatchCollate
 from utils import TqdmLoggingHandler
 from paths import CKPT_DIR
@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     mylogger.info("Start model init...")
 
-    model = GradTTS(
+    model = ArtTTS(
         params.n_ipa_feats,
         params.n_spks,
         None if params.n_spks == 1 else params.spk_emb_dim,  # spk_emb_dim

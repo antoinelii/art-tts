@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 from configs import params_v0
-from model import GradTTS
+from model import ArtTTS
 from data import TextArticDataset, TextArticBatchCollate
 from utils import plot_tensor, save_plot, TqdmLoggingHandler, EarlyStopping
 # from text.symbols import symbols
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     )
 
     mylogger.info("Initializing model...")
-    model = GradTTS(
+    model = ArtTTS(
         n_ipa_feats,
         n_spks,
         None,
