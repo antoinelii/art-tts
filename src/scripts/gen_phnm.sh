@@ -42,20 +42,20 @@ set -x # activer l’echo des commandes
 echo "computation start $(date)"
 # launch your computation
 
-#srun python -u ./generate_phnm3.py --phnm_dir ../../../../scratch2/ali/data/mocha_timit/src_data/$SPK \
-#                                        --save_dir ../../../../scratch2/ali/data/mocha_timit/arttts/$SPK/phnm3 \
+#srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/data/mocha_timit/src_data/$SPK \
+#                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/mocha_timit/arttts/$SPK/phnm3 \
 #                                        --dataset_name mocha \
 #
-#srun python -u ./generate_phnm3.py --phnm_dir ../../../../scratch1/data/raw_data/MNGU0/phone_labels \
-#                                        --save_dir ../../../../scratch2/ali/data/MNGU0/arttts/$SPK/phnm3 \
+#srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/MNGU0/src_data/$SPK/phone_labels \
+#                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/MNGU0/arttts/$SPK/phnm3 \
 #                                        --dataset_name mngu0
 #
-srun python -u ./generate_phnm3.py --phnm_dir ../../../../scratch2/ali/data/MSPKA_EMA_ita/src_data/${SPK}_1.0.0/lab_1.0.0 \
-                                        --save_dir ../../../../scratch2/ali/data/MSPKA_EMA_ita/arttts/$SPK/phnm3 \
+srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/data/MSPKA_EMA_ita/src_data/${SPK}_1.0.0/lab_1.0.0 \
+                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/MSPKA_EMA_ita/arttts/$SPK/phnm3 \
                                         --dataset_name mspka
 
-#srun python -u ./generate_phnm3.py --phnm_dir ../../../../scratch2/ali/data/pb2007/src_data/$SPK \
-#                                        --save_dir ../../../../scratch2/ali/data/pb2007/arttts/$SPK/phnm3 \
+#srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/data/pb2007/src_data/$SPK \
+#                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/pb2007/arttts/$SPK/phnm3 \
 #                                        --dataset_name pb2007
 
 echo "computation end : $(date)"

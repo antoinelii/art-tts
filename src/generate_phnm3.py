@@ -6,10 +6,10 @@ from pathlib import Path
 import numpy as np
 
 dataset_params = {
-    "mngu0": ("phnm.mngu0", "get_mngu0_phnm3", ".lab"),
-    "mspka": ("phnm.mspka", "get_mspka_phnm3", ".lab"),
-    "pb2007": ("phnm.pb2007", "get_pb2007_phnm3", ".phone"),
-    "mocha": ("phnm.mocha", "get_mocha_phnm3", ".phnm"),
+    "mngu0": ("utils_dataset.mngu0", "get_mngu0_phnm3", ".lab"),
+    "mspka": ("utils_dataset.mspka", "get_mspka_phnm3", ".lab"),
+    "pb2007": ("utils_dataset.pb2007", "get_pb2007_phnm3", ".phone"),
+    "mocha": ("utils_dataset.mocha", "get_mocha_phnm3", ".phnm"),
 }
 
 parser = argparse.ArgumentParser()
