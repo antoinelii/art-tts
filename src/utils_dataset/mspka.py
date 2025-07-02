@@ -1,6 +1,8 @@
 import numpy as np
 from utils_ema.cst import MSPKA_ema_idx_to_keep
 
+# used chatgpt then https://www.leskoff.com/s01763-0 to get a more
+# italian specific version of the phones
 mspka2ipa = {
     "a": "a",
     "e": "e",
@@ -23,15 +25,15 @@ mspka2ipa = {
     "JJ": "ʒ",
     "m": "m",
     "n": "n",
-    "ng": "ŋ",
+    "ng": "ɲ",  # "ŋ" but "ɲ" more italian
     "l": "l",
-    "r": "ɹ",
+    "r": "ɾ",  # "ɹ" but "ɾ" more italian r
     "j": "j",
     "w": "w",
-    "dZ": "dʒ",
-    "tS": "tʃ",
-    "dz": "dz",
-    "ts": "ts",
+    "dZ": "d͡ʒ",  # "dʒ" but "d͡ʒ" to get a single embed
+    "tS": "t͡ʃ",  # "tʃ" but "t͡ʃ" to get a single embed
+    "dz": "d͡z",  # "dz",but "d͡z" to get a single embed
+    "ts": "t͡s",  # "ts" but "t͡s" to get a single embed
     "dd": "dː",
     "tt": "tː",
     "ss": "sː",
@@ -43,12 +45,12 @@ mspka2ipa = {
     "mm": "mː",
     "gg": "ɡː",
     "vv": "vː",
-    "ddZ": "dʒː",
-    "ddz": "dzː",
-    "ttS": "tʃː",
-    "tts": "tsː",
+    "ddZ": "d͡ʒː",  # "dʒ" but "d͡ʒ" to get a single embed
+    "ddz": "d͡zː",  # "dzː" but "d͡zː" to get a single embed
+    "ttS": "t͡ʃː",  # "tʃ" but "t͡ʃ" to get a single embed
+    "tts": "t͡sː",  # "tsː" but "t͡sː" to get a single embed
     "nf": "nf",
-    "LL": "lː",
+    "LL": "ʎ",  # "lː" but "ʎ" to get the gli
     "bb": "bː",
     "ff": "fː",
     "sil": ".",
@@ -95,10 +97,15 @@ def get_mspka_phnm3(lab_file):
     for line in lines:
         if len(line) == 4:  # beginning of word
             s, e, phone, word = line
-            phnm3.append((float(s), float(e), phone))
         elif len(line) == 3:
             s, e, phone = line
+        if phone != "nf":
             phnm3.append((float(s), float(e), phone))
+        else:  # if phone is "nf", we split it into "n" and "f"
+            delta = float(e) - float(s)
+            delta_n = delta / 2
+            phnm3.append((float(s), float(s) + delta_n, "n"))
+            phnm3.append((float(s) + delta_n, float(e), "f"))
     phnm3 = [(s, e, mspka2ipa[phone]) for s, e, phone in phnm3]
     phnm3 = np.array(phnm3, dtype=[("start", "f4"), ("end", "f4"), ("phone", "U10")])
     return phnm3

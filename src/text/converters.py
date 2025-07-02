@@ -72,7 +72,7 @@ arpabet2ipa = {
     "AW": "aʊ",
     "AY": "aɪ",
     "B": "b",
-    "CH": "tʃ",
+    "CH": "t͡ʃ",  # "tʃ" but "t͡ʃ" to get a single embed
     "D": "d",
     "DH": "ð",
     "EH": "ɛ",
@@ -84,7 +84,7 @@ arpabet2ipa = {
     "HH": "h",
     "IH": "ɪ",
     "IY": "i",
-    "JH": "dʒ",
+    "JH": "d͡ʒ",  # "dʒ" but "d͡ʒ" to get a single embed
     "K": "k",
     "L": "l",
     "M": "m",

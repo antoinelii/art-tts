@@ -21,8 +21,8 @@ mngu02ipa = {
     "z": "z",
     "S": "ʃ",
     "Z": "ʒ",
-    "tS": "tʃ",  #'ʧ' in the original
-    "dZ": "dʒ",  # 'ʤ' in the original
+    "tS": "t͡ʃ",  # "ʧ" in the original then "tʃ" but"t͡ʃ" to get a single embed
+    "dZ": "d͡ʒ",  # "ʤ" in the original then "dʒ" but "d͡ʒ" to get a single embed
     "h": "h",
     "l": "l",
     "lw": "ɫ",
