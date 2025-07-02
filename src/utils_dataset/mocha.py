@@ -1,4 +1,5 @@
 import numpy as np
+from utils_ema.cst import mochatimit_idx_to_keep
 
 
 def get_mocha_sentence(trans_file: str) -> str:
@@ -36,3 +37,35 @@ def get_mocha_phnm3(phnm_file: str) -> np.ndarray:
     phnm3 = [(float(s), float(e), norm_special(phone)) for s, e, phone in phnm3]
     phnm3 = np.array(phnm3, dtype=[("start", "f4"), ("end", "f4"), ("phone", "U10")])
     return phnm3
+
+
+def _read_mocha_ema(src_ema_fp):
+    with open(src_ema_fp, "rb") as f:
+        # Read and parse header
+        header_lines = []
+        while True:
+            line = f.readline().decode("ascii")
+            header_lines.append(line)
+            if line.strip() == "EST_Header_End":
+                break
+        # Read rest of file as binary floats
+        data = np.fromfile(f, dtype=np.float32)
+
+    num_features = 22  # 1 time, 1 valid, 20 EMA values
+    assert data.size % num_features == 0, "Data does not align to expected frame size"
+    frames = data.reshape(-1, num_features)
+    # parse into dictionary
+    parsed = {
+        "time": frames[:, 0],
+        "valid": frames[:, 1],
+        "ema": frames[:, 2:22],
+        "header": header_lines,
+    }
+    return parsed
+
+
+def get_mochatimit_ema(src_ema_fp):
+    ema = _read_mocha_ema(src_ema_fp)["ema"]  # shape (n_timesteps, 20)
+    ema = ema[:, mochatimit_idx_to_keep]  # shape (n_timesteps, 12)
+    ema = ema.astype(np.float32)
+    return ema

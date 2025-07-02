@@ -1,4 +1,5 @@
 import numpy as np
+from utils_ema.cst import pb2007_idx_to_keep
 
 ema_sr = 100
 
@@ -64,3 +65,10 @@ def get_pb2007_phnm3(phone_file: str) -> np.ndarray:
     phnm3 = [(s, e, pb20072ipa[phone]) for s, e, phone in phnm3]
     phnm3 = np.array(phnm3, dtype=[("start", "f4"), ("end", "f4"), ("phone", "U10")])
     return phnm3
+
+
+def get_pb2007_ema(src_ema_fp):
+    ema = np.fromfile(src_ema_fp, dtype=np.float32)
+    ema = ema.reshape((-1, 12))  # shape (n_timesteps, n_channels)
+    ema = ema[:, pb2007_idx_to_keep]
+    return ema

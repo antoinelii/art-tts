@@ -1,4 +1,5 @@
 import numpy as np
+from utils_ema.cst import MSPKA_ema_idx_to_keep
 
 mspka2ipa = {
     "a": "a",
@@ -101,3 +102,13 @@ def get_mspka_phnm3(lab_file):
     phnm3 = [(s, e, mspka2ipa[phone]) for s, e, phone in phnm3]
     phnm3 = np.array(phnm3, dtype=[("start", "f4"), ("end", "f4"), ("phone", "U10")])
     return phnm3
+
+
+def get_MSPKA_ema(src_ema_fp):
+    with open(src_ema_fp, "r") as f:
+        lines = f.readlines()
+    lines = [line.strip().split() for line in lines]
+
+    ema = np.array(lines, dtype=np.float32)  # shape (n_channels, n_timesteps)
+    ema = ema[MSPKA_ema_idx_to_keep, :].T  # shape (n_timesteps, n_channels)
+    return ema
