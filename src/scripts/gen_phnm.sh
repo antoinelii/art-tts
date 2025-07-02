@@ -11,7 +11,7 @@
 #SBATCH --cpus-per-task=1 # reserver 10 CPU par tache (et memoire associee)
 #SBATCH --time=1:00:00 # temps maximal d’allocation "(HH:MM:SS)"
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
-#SBATCH --acount=rec@cpu
+#SBATCH --account=rec@cpu
 #SBATCH --array=0 # job array with 4 tasks (0 to 3)
 
 module purge
