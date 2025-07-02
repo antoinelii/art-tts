@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=gen_phnms     # Job name
-#SBATCH --partition=cpu             # Take a node from the 'gpu' partition
+#SBATCH --partition=cpu_p1             # Take a node from the 'gpu' partition
 #SBATCH --export=ALL                  # Export your environment to the compute node
 
 #SBATCH --output=%x-%A_%a.out # fichier de sortie (%j = job ID)
@@ -11,6 +11,7 @@
 #SBATCH --cpus-per-task=1 # reserver 10 CPU par tache (et memoire associee)
 #SBATCH --time=1:00:00 # temps maximal d’allocation "(HH:MM:SS)"
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
+#SBATCH --acount=rec@cpu
 #SBATCH --array=0 # job array with 4 tasks (0 to 3)
 
 module purge
@@ -21,13 +22,13 @@ source ../.venv/bin/activate
 #SPEAKERS=(faet0 ffes0 fsew0 maps0 mjjn0 msak0)
 #SPK=${SPEAKERS[$SLURM_ARRAY_TASK_ID]}
 #
-##mngu0
-#SPEAKERS=(s1)
-#SPK=${SPEAKERS[$SLURM_ARRAY_TASK_ID]}
+#mngu0
+SPEAKERS=(s1)
+SPK=${SPEAKERS[$SLURM_ARRAY_TASK_ID]}
 #
 ##mspka
-SPEAKERS=(cnz lls olm)
-SPK=${SPEAKERS[$SLURM_ARRAY_TASK_ID]}
+#SPEAKERS=(cnz lls olm)
+#SPK=${SPEAKERS[$SLURM_ARRAY_TASK_ID]}
 
 #pb2007
 #SPEAKERS=(spk1)
@@ -46,14 +47,14 @@ echo "computation start $(date)"
 #                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/mocha_timit/arttts/$SPK/phnm3 \
 #                                        --dataset_name mocha \
 #
-#srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/MNGU0/src_data/$SPK/phone_labels \
-#                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/MNGU0/arttts/$SPK/phnm3 \
-#                                        --dataset_name mngu0
-#
-srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/data/MSPKA_EMA_ita/src_data/${SPK}_1.0.0/lab_1.0.0 \
-                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/MSPKA_EMA_ita/arttts/$SPK/phnm3 \
-                                        --dataset_name mspka
+srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/data/MNGU0/src_data/$SPK/phone_labels \
+                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/MNGU0/arttts/$SPK/phnm3 \
+                                        --dataset_name mngu0
 
+#srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/data/MSPKA_EMA_ita/src_data/${SPK}_1.0.0/lab_1.0.0 \
+#                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/MSPKA_EMA_ita/arttts/$SPK/phnm3 \
+#                                        --dataset_name mspka
+#
 #srun python -u ./generate_phnm3.py --phnm_dir /lustre/fsn1/projects/rech/rec/commun/data/pb2007/src_data/$SPK \
 #                                        --save_dir /lustre/fsn1/projects/rech/rec/commun/data/pb2007/arttts/$SPK/phnm3 \
 #                                        --dataset_name pb2007
