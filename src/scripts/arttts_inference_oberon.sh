@@ -66,6 +66,7 @@ srun python -u ./arttts_inference.py  --data_dir /scratch2/ali/data \
                                     --ckpt_name grad_565.pt \
                                     --params_name params_v1 \
                                     --device cuda \
-                                    --batch_size 16 \
+                                    --batch_size 1 \
+                                    --use_align False
                                     
 echo "computation end : $(date)"
