@@ -45,7 +45,12 @@ parser.add_argument(
     help="Batch size for inference, default is 1 and should be done with 1\
         sample at a time to avoid messing up with group normalization",  # should remove groupnorm in future versions
 )
-
+parser.add_argument(
+    "--use_align",
+    type=bool,
+    default=False,
+    help="Whether to use alignment for inference. If True, will create x_durations from dataset phoneme alignment",
+)
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -57,6 +62,7 @@ if __name__ == "__main__":
     params_name = args.params_name
     device = args.device
     batch_size = args.batch_size
+    use_align = args.use_align
 
     save_dir.mkdir(parents=True, exist_ok=True)
     params = importlib.import_module(f"configs.{params_name}")
@@ -114,6 +120,7 @@ if __name__ == "__main__":
             dynamic_ncols=True,
         ) as progress_bar:
             for i in progress_bar:
+                # Prepare batch
                 batch_filepaths = filepaths_list[i : i + batch_size]
                 phnm3_filepaths = [fp[1] for fp in batch_filepaths]
                 phnm_embs = [
@@ -123,16 +130,43 @@ if __name__ == "__main__":
                 batch = collator(phnm_embs)
                 x = batch["x"].to(torch.float32)
                 x_lengths = batch["x_lengths"]
-                y_enc, y_dec, attn = model(
-                    x, x_lengths, n_timesteps=50
-                )  # (B, 16, T) x 2 , (B,1,T0,T)
-                y_enc_14 = y_enc[:, reorder_feats, :].detach().cpu()
-                y_dec_14 = y_dec[:, reorder_feats, :].detach().cpu()
+
+                # Run inference
+                if use_align:
+                    x_durs = [
+                        dataset.get_x_durations(
+                            phnm3_fp, merge_diphtongues=dataset.merge_diphtongues
+                        )
+                        for phnm3_fp in phnm3_filepaths
+                    ]
+                    x_durations = torch.zeros(
+                        (len(x_durs), x.shape[-1]), dtype=torch.float32
+                    )
+                    for i, durs in enumerate(x_durs):
+                        x_durations[i, : len(durs)] = durs
+                    # Run inference
+                    y_enc, y_dec, attn = model(
+                        x,
+                        x_lengths,
+                        n_timesteps=50,
+                        x_durations=x_durations,
+                    )  # (B, 16, T) x 2 , (B,1,T0,T)
+                else:
+                    y_enc, y_dec, attn = model(
+                        x, x_lengths, n_timesteps=50
+                    )  # (B, 16, T) x 2 , (B,1,T0,T)
+
+                y_enc_14 = y_enc[:, reorder_feats, :].detach().cpu()  # (B, 14, T)
+                y_dec_14 = y_dec[:, reorder_feats, :].detach().cpu()  # (B, 14, T)
+
                 for j, (filepath, y_enc_j, y_dec_j) in enumerate(
                     zip(batch_filepaths, y_enc_14, y_dec_14)
                 ):
                     x_len = x_lengths[j]
                     attn_j = attn[j, 0, :x_len, :].detach().cpu()  # (x_len, y_len_max)
+                    phnm_map = np.where(attn_j == 1)[
+                        0
+                    ]  # (y_len,)  easier storage with enc & dec
                     y_len = np.max(
                         np.where(attn_j[-1])
                     )  # last row, last value=1 index (binary attn)
@@ -142,8 +176,9 @@ if __name__ == "__main__":
                         [
                             y_enc_j[:, : y_len + 1].numpy(),
                             y_dec_j[:, : y_len + 1].numpy(),
+                            phnm_map,
                         ]
-                    )  # (2, 14, T)
+                    )  # (29, T)  # 29 (14 enc + 14 dec + 1 phnm_map)
                     np.save(save_path, y_enc_dec_j)
                     mylogger.info(f"Saved {save_path}")
 
