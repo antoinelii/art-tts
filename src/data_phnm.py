@@ -16,7 +16,7 @@ from pathlib import Path
 
 from sparc import load_model
 
-from text.converters import ipa_to_ternary
+from text.converters import ipa_to_ternary, diphtongues_ipa
 from utils import parse_filelist, normalize_pitch_channel
 
 # from model.utils import fix_len_compatibility
@@ -164,6 +164,26 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         art = reorder_art_feats(art)
         art = normalize_pitch_channel(art, pitch_idx=self.pitch_idx)
         return torch.FloatTensor(art).T  # shape: (n_art_feats, T)
+
+    def get_x_durations(
+        self, phnm3_fp: str, merge_diphtongues: bool = False
+    ) -> np.ndarray:
+        phnm3_fp = phnm3_fp.replace("DUMMY/", str(self.data_root_dir) + "/")
+        phnm3 = np.load(phnm3_fp)
+        if merge_diphtongues:
+            durations = [e[1] - e[0] for e in phnm3]
+        else:
+            durations = []
+            for start, end, phone in phnm3:
+                if phone in diphtongues_ipa:
+                    mid = (end + start) / 2
+                    durations.append(mid - start)
+                    durations.append(end - mid)
+                else:
+                    durations.append(end - start)
+        frames_mult = [delta * 50 for delta in durations]  # 50 = Art feats rate
+        frames_mult = torch.tensor(frames_mult, dtype=torch.float32)
+        return frames_mult
 
     def __getitem__(self, index):
         text, art = self.get_pair(self.filepaths_list[index], from_preprocessed=True)
