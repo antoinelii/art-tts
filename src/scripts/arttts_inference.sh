@@ -52,7 +52,7 @@ if [ "$DATASET" = "LJSpeech-1.1" ]; then
                                     --params_name params_v1 \
                                     --device cuda \
                                     --batch_size 1 \
-                                    --use_align False
+                                    --use_align 0
 else
     if [ "$DATASET" = "MNGU0" ]; then
         SPEAKERS=(s1)
@@ -78,7 +78,7 @@ else
                                         --params_name params_v1 \
                                         --device cuda \
                                         --batch_size 1 \
-                                        --use_align False
+                                        --use_align 0
 fi
 
 
