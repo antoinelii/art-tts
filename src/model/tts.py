@@ -122,7 +122,7 @@ class ArtTTS(BaseModule):
         if not isinstance(x_durations, type(None)):
             # `x_durations` is a tensor of shape (B, T_x) with durations for each phoneme
             ## PB WITH GETTING EXACTLY THE SAME SIZE AS PHNM EMB... (diphtongues, phnm with various emb lengths...)
-            x_durations = self.relocate_input([x_durations])
+            x_durations = self.relocate_input([x_durations])[0]
             w = x_durations.unsqueeze(1) * x_mask  # (B, 1, T_x)
         else:
             w = torch.exp(logw) * x_mask  # (B, 1, T_x)
