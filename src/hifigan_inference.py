@@ -98,9 +98,28 @@ if __name__ == "__main__":
                 try:
                     # load generated articulatory data
                     art = np.load(data_dir / f"{sample_id}.npy")
-                    if len(art.shape) == 2:  # (T, 14) single sample
-                        art = art[:, :14].T  # from sparc shape (T, 14) to (14, T)
+                    if len(art.shape) == 2:
+                        if art.shape[1] == 15:  # (T, 14) single sample
+                            art = art[:, :14].T  # from sparc shape (T, 14) to (14, T)
+                        elif art.shape[0] == 29:  # (29, T) enc/dec/phnm_map
+                            if src_art == "encoder":
+                                art = art[:14, :]
+                            elif src_art == "decoder":
+                                art = art[14:28, :]
+                            else:
+                                mylogger.warning(
+                                    "Articulatory data has 29 features, but src_art is not specified. \
+                                    Using first 14 features (encoder)."
+                                )
+                                art = art[:14, :]
+                        else:
+                            mylogger.error(
+                                f"Unexpected shape for articulatory data: {art.shape}. "
+                                "Expected (T, 14) or (29, T) for enc/dec/phnm_map."
+                            )
+                            continue
 
+                    # old arttts_inference method handling
                     elif len(art.shape) == 3:  # (2, 14, T)  enc/dec
                         if src_art_idx is None:
                             mylogger.warning(
