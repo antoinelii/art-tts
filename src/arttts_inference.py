@@ -47,8 +47,8 @@ parser.add_argument(
 )
 parser.add_argument(
     "--use_align",
-    type=bool,
-    default=False,
+    type=int,  # bool
+    default=0,
     help="Whether to use alignment for inference. If True, will create x_durations from dataset phoneme alignment",
 )
 
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     params_name = args.params_name
     device = args.device
     batch_size = args.batch_size
-    use_align = args.use_align
+    use_align = int(args.use_align)  # bool
 
     save_dir.mkdir(parents=True, exist_ok=True)
     params = importlib.import_module(f"configs.{params_name}")
