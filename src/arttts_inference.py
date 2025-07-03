@@ -172,7 +172,7 @@ if __name__ == "__main__":
                     )  # last row, last value=1 index (binary attn)
                     sample_id = filepath[0].split("/")[-1][:-4]
                     save_path = save_dir / f"{sample_id}.npy"
-                    y_enc_dec_j = np.array(
+                    y_enc_dec_j = np.vstack(
                         [
                             y_enc_j[:, : y_len + 1].numpy(),
                             y_dec_j[:, : y_len + 1].numpy(),
