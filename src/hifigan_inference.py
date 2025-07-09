@@ -133,11 +133,14 @@ if __name__ == "__main__":
                     sparc_ema = np.load(
                         encoded_audio_dir / "emasrc" / f"{sample_id}.npy"
                     )
+                    # spk_emb = np.load(
+                    #    encoded_audio_dir / "spk_emb" / f"{sample_id}.npy"
+                    # )
                     spk_emb = np.load(
-                        encoded_audio_dir / "spk_emb" / f"{sample_id}.npy"
+                        encoded_audio_dir / "spk_emb" / "mean_spk_emb.npy"
                     )
                     if src_art:
-                        save_path = save_dir / f"{sample_id}_{src_art}.wav"
+                        save_path = save_dir / f"{sample_id}_{src_art}_mean_spk_emb.wav"
                         pitch_mu, pitch_std = (
                             sparc_ema[:, 12].mean(),
                             sparc_ema[:, 12].std(),
