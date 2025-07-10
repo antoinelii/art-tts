@@ -275,6 +275,42 @@ class ArtTTS(BaseModule):
 
         return dur_loss, prior_loss, diff_loss
 
+    @torch.no_grad()
+    def lengths_pred(
+        self,
+        x,
+        x_lengths,
+        spk=None,
+    ):
+        """
+        Generates mel-spectrogram from text. Returns:
+            1. encoder outputs
+            2. decoder outputs
+            3. generated alignment
+
+        Args:
+            x (torch.Tensor): batch of texts, converted to a tensor with phoneme embedding ids.
+            x_lengths (torch.Tensor): lengths of texts in batch.
+            n_timesteps (int): number of steps to use for reverse diffusion in decoder.
+            temperature (float, optional): controls variance of terminal distribution.
+            stoc (bool, optional): flag that adds stochastic term to the decoder sampler.
+                Usually, does not provide synthesis improvements.
+            length_scale (float, optional): controls speech pace.
+                Increase value to slow down generated speech and vice versa.
+        """
+        x, x_lengths = self.relocate_input([x, x_lengths])
+
+        if self.n_spks > 1:
+            # Get speaker embedding
+            spk = self.spk_emb(spk)
+
+        # Get encoder_outputs `mu_x` and log-scaled token durations `logw`
+        mu_x, logw, x_mask = self.encoder(
+            x, x_lengths, spk
+        )  # (B, n_feats, T_x), (B, 1, T_x), (B, 1, T_x)
+        w = torch.exp(logw) * x_mask  # (B, 1, T_x)
+        return w
+
 
 class GradTTS(BaseModule):
     def __init__(
@@ -519,3 +555,39 @@ class GradTTS(BaseModule):
         prior_loss = prior_loss / (torch.sum(y_mask) * self.n_feats)
 
         return dur_loss, prior_loss, diff_loss
+
+    @torch.no_grad()
+    def lengths_pred(
+        self,
+        x,
+        x_lengths,
+        spk=None,
+    ):
+        """
+        Generates mel-spectrogram from text. Returns:
+            1. encoder outputs
+            2. decoder outputs
+            3. generated alignment
+
+        Args:
+            x (torch.Tensor): batch of texts, converted to a tensor with phoneme embedding ids.
+            x_lengths (torch.Tensor): lengths of texts in batch.
+            n_timesteps (int): number of steps to use for reverse diffusion in decoder.
+            temperature (float, optional): controls variance of terminal distribution.
+            stoc (bool, optional): flag that adds stochastic term to the decoder sampler.
+                Usually, does not provide synthesis improvements.
+            length_scale (float, optional): controls speech pace.
+                Increase value to slow down generated speech and vice versa.
+        """
+        x, x_lengths = self.relocate_input([x, x_lengths])
+
+        if self.n_spks > 1:
+            # Get speaker embedding
+            spk = self.spk_emb(spk)
+
+        # Get encoder_outputs `mu_x` and log-scaled token durations `logw`
+        mu_x, logw, x_mask = self.encoder(
+            x, x_lengths, spk
+        )  # (B, n_feats, T_x), (B, 1, T_x), (B, 1, T_x)
+        w = torch.exp(logw) * x_mask  # (B, 1, T_x)
+        return w
