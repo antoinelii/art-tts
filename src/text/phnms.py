@@ -68,3 +68,19 @@ def get_pred_phnm3(phnm3, phnm_map, merge_diphtongues=False):
 
     phnm3_ada = build_phnm3(phnms, t_boundaries)
     return phnm3_ada
+
+
+def get_lengths_from_phnm3(phnm3, merge_diphtongues: bool = False) -> np.ndarray:
+    if merge_diphtongues:
+        durations = [e[1] - e[0] for e in phnm3]
+    else:
+        durations = []
+        for start, end, phone in phnm3:
+            if phone in diphtongues_ipa:
+                mid = (end + start) / 2
+                durations.append(mid - start)
+                durations.append(end - mid)
+            else:
+                durations.append(end - start)
+    durations = np.array(durations, dtype=np.float32)
+    return durations
