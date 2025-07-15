@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=train_v1     # Job name
+#SBATCH --job-name=train_v4     # Job name
 #SBATCH --partition=gpu_p6             # Take a node from the 'gpu' partition
 # #SBATCH --export=ALL                  # Export your environment to the compute node
 #SBATCH -C h100
@@ -37,6 +37,6 @@ echo "computation start $(date)"
 export CUDA_LAUNCH_BLOCKING=1
 echo "CUDA_LAUNCH_BLOCKING=$CUDA_LAUNCH_BLOCKING"
 
-srun python -u ./train_v1.py
+srun python -u ./train_v4.py
 
 echo "computation end : $(date)"
