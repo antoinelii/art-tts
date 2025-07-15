@@ -141,12 +141,12 @@ class TextArtDataset(torch.utils.data.Dataset):
         return text_norm
 
     def __getitem__(self, index):
-        text, art = self.get_pair(self.filepaths_and_text[index])
+        text, art = self.get_pair(self.filepaths_list[index])
         item = {"y": art, "x": text}
         return item
 
     def __len__(self):
-        return len(self.filepaths_and_text)
+        return len(self.filepaths_list)
 
     def sample_test_batch(self, size):
         idx = np.random.choice(range(len(self)), size=size, replace=False)
