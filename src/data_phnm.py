@@ -17,7 +17,7 @@ from pathlib import Path
 from sparc import load_model
 
 from text.converters import ipa_to_ternary, diphtongues_ipa
-from utils import parse_filelist, normalize_pitch_channel
+from utils import parse_filelist, normalize_channel
 
 # from model.utils import fix_len_compatibility
 from configs.params_v1 import random_seed
@@ -26,6 +26,7 @@ from configs.params_v1 import (
     sparc_ckpt_path,
     reorder_feats,
     pitch_idx,
+    loudness_idx,
 )
 from model.utils import fix_len_compatibility
 
@@ -37,6 +38,7 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         data_root_dir=data_root_dir,
         reorder_feats=reorder_feats,
         pitch_idx=pitch_idx,
+        loudness_idx=loudness_idx,
         merge_diphtongues=False,
         load_coder=False,
         sparc_ckpt_path=sparc_ckpt_path,
@@ -51,6 +53,7 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         self.sparc_ckpt_path = sparc_ckpt_path
         self.reorder_feats = reorder_feats
         self.pitch_idx = pitch_idx
+        self.loudness_idx = loudness_idx
         self.merge_diphtongues = (
             merge_diphtongues  # whether to merge diphthongs in IPA embedding
         )
@@ -108,7 +111,10 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         return ternary_phnm_emb
 
     def get_art(
-        self, filepaths: str, from_preprocessed: bool = True
+        self,
+        filepaths: str,
+        from_preprocessed: bool = True,
+        normalize_loudness: bool = False,
     ) -> torch.FloatTensor:  # shape: (n_art_feats, T)
         """
         Get articulatory features from filepaths.
@@ -162,7 +168,9 @@ class PhnmArticDataset(torch.utils.data.Dataset):
                 )
         # pad n_art_feats to 16
         art = reorder_art_feats(art)
-        art = normalize_pitch_channel(art, pitch_idx=self.pitch_idx)
+        art = normalize_channel(art, channel_idx=self.pitch_idx)
+        if normalize_loudness:
+            art = normalize_channel(art, channel_idx=self.loudness_idx)
         return torch.FloatTensor(art).T  # shape: (n_art_feats, T)
 
     def get_x_durations(

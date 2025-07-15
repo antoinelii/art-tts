@@ -240,19 +240,19 @@ def save_plot_art_14(tensor_list, savepath, title="Tensor", figsize=(8, 5), sr=5
     return
 
 
-def normalize_pitch_channel(art: np.ndarray, pitch_idx=12) -> np.ndarray:
+def normalize_channel(art: np.ndarray, channel_idx=12) -> np.ndarray:
     """
-    Normalize the pitch channel to have zero mean and unit variance.
+    Normalize the specified channel to have zero mean and unit variance.
     must be called after reordering the features.
     """
-    std = np.std(art[:, pitch_idx])
+    std = np.std(art[:, channel_idx])
     if std > 0:
-        art[:, pitch_idx] = (art[:, pitch_idx] - np.mean(art[:, pitch_idx])) / np.std(
-            art[:, pitch_idx]
-        )
+        art[:, channel_idx] = (
+            art[:, channel_idx] - np.mean(art[:, channel_idx])
+        ) / np.std(art[:, channel_idx])
     else:
         print("Zero variance in pitch channel. Centering to zero mean.")
-        art[:, pitch_idx] = art[:, pitch_idx] - np.mean(art[:, pitch_idx])
+        art[:, channel_idx] = art[:, channel_idx] - np.mean(art[:, channel_idx])
     return art
 
 
