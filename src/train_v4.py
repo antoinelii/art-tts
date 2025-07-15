@@ -333,7 +333,7 @@ if __name__ == "__main__":
                 gt_dec_dtw_scores = []
                 with torch.no_grad():
                     for i, item in enumerate(valid_batch):
-                        x = item["x"].to(torch.float32).unsqueeze(0).cuda()
+                        x = item["x"].to(torch.long).unsqueeze(0).cuda()
                         x_lengths = torch.LongTensor([x.shape[-1]]).cuda()
                         y_enc, y_dec, attn = model(x, x_lengths, n_timesteps=50)
 
