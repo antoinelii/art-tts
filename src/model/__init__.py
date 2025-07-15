@@ -7,3 +7,4 @@
 # MIT License for more details.
 
 from .tts import ArtTTS as ArtTTS
+from .tts import GradTTS as GradTTS
