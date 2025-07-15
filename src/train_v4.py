@@ -59,6 +59,7 @@ if __name__ == "__main__":
     train_dataset = TextArtDataset(
         params_v4.train_filelist_path,
         cmudict_path=params_v4.cmudict_path,
+        add_blank=params_v4.add_blank,
         data_root_dir=params_v4.data_root_dir,
         reorder_feats=params_v4.reorder_feats,
         pitch_idx=params_v4.pitch_idx,
@@ -79,6 +80,7 @@ if __name__ == "__main__":
     valid_dataset = TextArtDataset(
         params_v4.valid_filelist_path,
         cmudict_path=params_v4.cmudict_path,
+        add_blank=params_v4.add_blank,
         data_root_dir=params_v4.data_root_dir,
         reorder_feats=params_v4.reorder_feats,
         pitch_idx=params_v4.pitch_idx,

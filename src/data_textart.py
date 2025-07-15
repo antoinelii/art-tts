@@ -39,6 +39,7 @@ class TextArtDataset(torch.utils.data.Dataset):
         self,
         filelist_path,
         cmudict_path=cmudict_path,
+        add_blank=add_blank,
         data_root_dir=data_root_dir,
         reorder_feats=reorder_feats,
         pitch_idx=pitch_idx,
