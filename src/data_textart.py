@@ -60,7 +60,7 @@ class TextArtDataset(torch.utils.data.Dataset):
         self.sparc_ckpt_path = sparc_ckpt_path
         self.reorder_feats = reorder_feats
         self.pitch_idx = pitch_idx
-        normalize_loudness = normalize_loudness
+        self.normalize_loudness = normalize_loudness
         self.loudness_idx = loudness_idx
 
         random.seed(random_seed)
@@ -117,6 +117,7 @@ class TextArtDataset(torch.utils.data.Dataset):
             return art16
 
         art_fp = filepath.replace("DUMMY/", str(self.data_root_dir) + "/")
+        art_fp = Path(art_fp)
         if art_fp.exists():
             art = np.load(art_fp)[
                 :, :14
