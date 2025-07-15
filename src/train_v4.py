@@ -41,7 +41,7 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 mylogger.addHandler(handler)
 
-start_epoch = 0
+start_epoch = 1
 end_epoch = 5000
 custom_patience = 5000
 val_every = params_v4.val_every
