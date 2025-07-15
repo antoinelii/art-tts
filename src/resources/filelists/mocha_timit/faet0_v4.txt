@@ -1,0 +1,453 @@
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_001.npy|This was easy for us.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_002.npy|Is this seesaw safe?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_003.npy|Those thieves stole thirty jewels.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_004.npy|Jane may earn more money by working hard.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_005.npy|She is thinner than I am.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_006.npy|Bright sunshine shimmers on the ocean.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_007.npy|Nothing is as offensive as innocence.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_008.npy|Why yell or worry over silly items?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_009.npy|Where were you while we were away?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_010.npy|Are your grades higher or lower than Nancy's?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_011.npy|He will allow a rare lie.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_012.npy|Will Robin wear a yellow lily?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_013.npy|Swing your arm as high as you can.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_014.npy|Before Thursday's exam, review every formula.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_015.npy|The museum hires musicians every evening.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_016.npy|A roll of wire lay near the wall.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_017.npy|Carl lives in a lively home.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_018.npy|Alimony harms a divorced man's wealth.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_019.npy|Aluminium cutlery can often be flimsy.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_020.npy|She wore warm, fleecy, woolen overalls.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_021.npy|Alfalfa is healthy for you.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_022.npy|When all else fails, use force.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_023.npy|Those musicians harmonize marvellously.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_024.npy|Although always alone, we survive.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_025.npy|Only lawyers love millionaires.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_026.npy|Most young rabbits rise early every morning.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_027.npy|Did dad do academic bidding?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_028.npy|Beg that guard for one gallon of petrol.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_029.npy|Help Greg to pick a peck of potatoes.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_030.npy|Get a calico cat to keep the rodents away.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_031.npy|A good attitude is unbeatable.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_032.npy|Tina Turner is a pop singer.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_033.npy|Coconut cream pie makes a nice dessert.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_034.npy|Don't do Charlie's dirty dishes.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_035.npy|Help celebrate your brother's success.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_036.npy|Only the most accomplished artists obtain popularity.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_037.npy|Critical equipment needs proper maintenance.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_038.npy|Young people participate in athletic activities.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_039.npy|Barb's gold bracelet was a graduation present.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_040.npy|Stimulating discussions keep students' attention.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_041.npy|Etiquette mandates compliance with existing regulations.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_042.npy|Biblical scholars argue history.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_043.npy|Elderly people are often excluded.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_044.npy|Basketball can be an entertaining sport.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_045.npy|Addition and subtraction are learned skills.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_046.npy|That pickpocket was caught red-handed.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_047.npy|Mum strongly dislikes appetizers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_048.npy|Grandmother outgrew her upbringing in petticoats.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_049.npy|At twilight on the twelfth day we'll have Chablis.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_050.npy|Catastrophic economic cutbacks neglect the poor.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_051.npy|Ambidextrous pickpockets accomplish more.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_052.npy|Her classical repertoire gained critical acclaim.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_053.npy|Even a simple vocabulary contains symbols.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_054.npy|The eastern coast is a place for pure pleasure and excitement.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_055.npy|The lack of heat compounded the tenant's grievances.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_056.npy|Academic aptitude guarantees your diploma.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_057.npy|The prowler wore a ski mask for disguise.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_058.npy|We experience distress and frustration obtaining our degrees.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_059.npy|The singer's finger had a splinter.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_060.npy|The legislature met to judge the state of public education.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_061.npy|Chocolate and roses never fail as a romantic gift.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_062.npy|Any contributions will be greatly appreciated.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_063.npy|Continental drift is a geological theory.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_065.npy|Challenge each general's intelligence.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_066.npy|We got drenched from the uninterrupted rain.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_067.npy|Last year's gas shortage caused steep price increases.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_068.npy|Upgrade your status to reflect your wealth.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_069.npy|Eat your raisins outdoors on the porch steps.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_070.npy|Did you eat lunch yesterday?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_071.npy|Porcupines resemble sea urchins.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_072.npy|Spring Street is straight ahead.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_073.npy|Cliff's display was misplaced on the screen.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_074.npy|An official deadline cannot be postponed.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_075.npy|Fill that canteen with fresh spring water.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_076.npy|Gently place Jim's foam sculpture in the box.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_077.npy|Bagpipes and bongos are musical instruments.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_078.npy|Doctors prescribe drugs too freely.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_079.npy|Will you please describe the idiotic predicament.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_080.npy|It's illegal to postdate a cheque.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_081.npy|It's impossible to deal with bureaucracy.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_082.npy|Good service should be rewarded by big tips.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_083.npy|My instructions desperately need updating.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_084.npy|Cooperation along with understanding alleviate dispute.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_085.npy|Cement is measured in cubic yards.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_086.npy|Hispanic costumes are quite colourful.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_087.npy|Primitive tribes have an upbeat attitude.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_088.npy|Flying standby can be practical if you want to save money.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_089.npy|It's hard to tell an original from a forgery.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_090.npy|The Thinker is a famous sculpture.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_091.npy|The misprint provoked an immediate disclaimer.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_092.npy|A large household needs lots of appliances.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_093.npy|Cut a small corner off each edge.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_094.npy|Youngsters love corn candy as a treat.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_095.npy|Iguanas and alligators are tropical reptiles.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_096.npy|Masquerade parties tax one's imagination.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_097.npy|Glucose and fructose are natural sugars found in fruit.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_098.npy|Penguins live near the icy Antarctic.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_099.npy|Guess the question from the answer.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_100.npy|Medieval society was based on hierarchies.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_101.npy|Project development was proceeding too slowly.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_102.npy|Kindergarten children decorate their classrooms for all holidays.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_103.npy|Special task forces rescue hostages from kidnappers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_104.npy|Call an ambulance for medical assistance.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_105.npy|He stole a dime from a beggar.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_106.npy|Few people live to be a hundred.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_107.npy|You must explicitly delete files.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_108.npy|A huge tapestry hung in her hallway.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_109.npy|Birthday parties have cupcakes and ice cream.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_110.npy|His scalp was blistered from today's hot sun.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_111.npy|She slipped and sprained her ankle on the steep slope.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_112.npy|The best way to learn is to solve extra problems.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_113.npy|His sudden departure shocked the cast.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_114.npy|Tugboats are capable of hauling huge loads.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_115.npy|A muscular abdomen is good for your back.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_116.npy|The cartoon features a muskrat and a tadpole.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_117.npy|The emblem depicts the Acropolis all aglow.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_118.npy|Clasp the screw in your left hand.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_119.npy|The mango and the papaya are in a bowl.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_120.npy|Combine all the ingredients in a large bowl.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_121.npy|The misquote was retracted with an apology.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_122.npy|The coyote, bobcat, and hyena are wild animals.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_123.npy|Trespassing is forbidden and subject to penalty.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_124.npy|Encyclopedias seldom present anecdotal evidence.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_125.npy|A screwdriver is made from vodka and orange juice.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_126.npy|Objects made of pewter are beautiful.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_127.npy|Westchester is a county in New York.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_128.npy|Artificial intelligence is for real.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_130.npy|Lots of foreign movies have subtitles.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_131.npy|Angora cats are furrier than Siamese.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_132.npy|He ate four extra eggs for breakfast.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_133.npy|We plan to build a new beverage plant.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_134.npy|Publicity and notoriety go hand in hand.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_135.npy|Pizzerias are convenient for a quick lunch.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_136.npy|December and January are nice months to spend in Miami.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_137.npy|Technical writers can abbreviate in bibliographies.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_138.npy|Scientific progress comes from the development of new techniques.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_139.npy|Tradition requires parental approval for under-age marriage.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_140.npy|The clumsy customer spilled some expensive perfume.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_141.npy|The bungalow was pleasantly situated near the shore.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_142.npy|Agricultural products are unevenly distributed.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_143.npy|Pledge to participate in Nevada's aquatic competition.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_144.npy|Which long article was opaque and needed clarification?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_145.npy|The sound of Jennifer's bugle scared the antelope.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_146.npy|The willowy woman wore a muskrat coat.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_147.npy|Too much curiosity can get you into trouble.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_148.npy|Cyclical programs will never compile.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_149.npy|Correct execution of my instructions is crucial.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_150.npy|Most precincts had a third of the votes counted.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_151.npy|While waiting for Chipper she crisscrossed the square many times.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_152.npy|Vietnamese cuisine is exquisite.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_153.npy|The previous speaker presented ambiguous results.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_154.npy|Mosquitoes exist in warm, humid climates.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_155.npy|Scholastic aptitude is judged by standardized tests.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_156.npy|Orange juice tastes funny after toothpaste.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_157.npy|The water contained too much chlorine and stung his eyes.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_158.npy|Our experiment's positive outcome was unexpected.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_159.npy|Remove the splinter with a pair of tweezers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_161.npy|The government sought authorization of his citizenship.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_162.npy|As co-authors, we presented our new book to the haughty audience.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_163.npy|As a precaution, the outlaws bought gunpowder for their stronghold.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_164.npy|Her auburn hair reminded him of autumn leaves.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_165.npy|They remained lifelong friends and companions.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_166.npy|Curiosity and mediocrity seldom co-exist.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_167.npy|The easy going zoologist relaxed throughout the voyage.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_168.npy|Biologists use radioactive isotopes to study microorganisms. 
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_169.npy|Employee layoffs coincided with the company's reorganization.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_170.npy|Who took the kayak down the bayou?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_171.npy|How would you evaluate this algebraic expression?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_172.npy|The Mayan neoclassic scholar disappeared while surveying ancient ruins.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_173.npy|The diagnosis was discouraging; however, he was not overly worried.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_174.npy|The altruistic dowager helped many malnourished vagrants.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_175.npy|The triumphant warrior exhibited naive heroism.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_176.npy|Whoever cooperates in finding Nan's cameo will be rewarded.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_177.npy|The haunted house was a hit due to outstanding audiovisual effects.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_178.npy|Severe myopia contributed to Ron's inferiority complex.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_179.npy|Buying a thoroughbred horse requires intuition and expertise.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_180.npy|Does creole cooking use curry? 
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_181.npy|She encouraged her children to make their own Halloween costumes.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_182.npy|We could barely see the fjords through the snow flurries.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_183.npy|Almost all colleges are now co-educational.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_184.npy|Rich looked for spotted hyenas and jaguars on the safari.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_185.npy|Thick glue oozed out of the tube.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_186.npy|They all enjoy ice cream sundaes.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_187.npy|Why else would Danny allow others to go?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_188.npy|The cat's meow always hurts my ears.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_189.npy|Did you buy any corduroy overalls?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_190.npy|Would a tomboy often play outdoors?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_191.npy|They often go out in the evening.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_192.npy|Who authorized the unlimited expense account?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_193.npy|Destroy every file related to my audits.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_194.npy|Serve the coleslaw after I add the oil.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_195.npy|Withdraw all phony accusations at once.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_196.npy|Straw hats are out of fashion this year.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_197.npy|Why buy oil when you always use mine?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_198.npy|They enjoy it when I audition.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_199.npy|Would you allow acts of violence?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_200.npy|How do oysters make pearls?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_201.npy|Draw each graph on a new axis.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_202.npy|Norwegian sweaters are made of lamb's wool.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_203.npy|Young children should avoid exposure to contagious diseases.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_204.npy|Ralph controlled the stopwatch from the bleachers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_205.npy|Approach your interview with statuesque composure.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_206.npy|How much allowance do you get?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_207.npy|The causeway ended abruptly at the shore.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_208.npy|Even I occasionally get the Monday blues!
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_209.npy|Military personnel are expected to obey government orders.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_210.npy|When peeling an orange, it is hard not to spray juice.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_211.npy|Do you hear the sleigh bells ringing?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_212.npy|Rob sat by the pond and sketched the stray geese.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_213.npy|Michael colored the bedroom wall with crayons.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_214.npy|Jeff's toy go-cart never worked!
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_215.npy|Only the best players enjoy popularity.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_216.npy|I gave them several choices and let them set the priorities.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_217.npy|The news agency hired a great journalist.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_218.npy|The morning dew on the spider web glistened in the sun.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_219.npy|The sermon emphasized the need for affirmative action.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_220.npy|The small boy put the worm on the hook.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_221.npy|How permanent are their records?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_222.npy|Try to recall the events in chronological order.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_223.npy|Non-profit organizations have frequent fundraisers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_224.npy|The most recent geological survey found seismic activity.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_225.npy|Cory attacked the project with extra determination.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_226.npy|You always come up with pathological examples.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_227.npy|Put the butcher block table in the garage.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_228.npy|How good is your endurance?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_229.npy|Keep the thermometer under your tongue!
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_230.npy|Steph could barely handle the psychological trauma.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_231.npy|It's healthier to cook without sugar.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_232.npy|The viewpoint overlooked the ocean.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_234.npy|Allow leeway here.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_235.npy|I honour my mum.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_236.npy|His failure to open the store by eight cost him his job.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_237.npy|Rationalize all errors.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_238.npy|Highway and freeway mean the same thing.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_239.npy|The paper boy bought two apples and three ices.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_240.npy|I itemize all accounts in my agency.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_241.npy|Clear pronunciation is appreciated.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_242.npy|The courier was a dwarf.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_243.npy|A doctor was in the ambulance with the patient.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_244.npy|Puree some fruit before preparing the skewers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_245.npy|It's not easy to create illuminating examples.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_246.npy|The hallway opens into a huge chamber.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_247.npy|May I order a parfait after I eat dinner?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_248.npy|They all agree that the essay is barely intelligible.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_249.npy|Herb's birthday frequently occurs on Thanksgiving.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_250.npy|Does Hindu ideology honour cows?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_251.npy|How ancient is this subway escalator?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_252.npy|The cigarettes in the clay ashtray overflowed onto the oak table.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_253.npy|Reading in poor light gives you eyestrain.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_254.npy|I ate every oyster on Nora's plate.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_255.npy|The Boston Ballet overcame their funding shortage.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_256.npy|We apply auditory modelling to computer speech recognition.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_257.npy|The gorgeous butterfly ate a lot of nectar.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_258.npy|By eating yogurt, you may live longer.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_259.npy|Do they allow atheists in church?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_260.npy|My ideal morning begins with hot coffee.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_261.npy|The irate actor stomped away idiotically.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_262.npy|We are open every Monday evening.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_263.npy|The essay undeniably reflects our view ably.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_264.npy|Tornados often destroy aviaries.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_265.npy|Remember to allow identical twins to enter freely.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_266.npy|Do you have the yellow ointment ready?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_267.npy|Can the agency overthrow alien forces?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_268.npy|How oily do you like your salad dressing?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_269.npy|We saw eight tiny icicles below our roof.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_270.npy|The saw is broken, so chop the wood instead.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_271.npy|Withdraw only as much money as you need.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_272.npy|Draw every outer line first, then fill in the interior.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_273.npy|The jaw operates by using antagonistic muscles.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_274.npy|Do atypical farmers grow oats?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_275.npy|Are holiday aprons available to us?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_276.npy|Be careful not to plow over the flower beds.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_277.npy|Allow each child to have an ice pop.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_278.npy|The angry boy answered but didn't look up.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_279.npy|Cliff was soothed by the luxurious massage.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_280.npy|Steve wore a bright red cashmere sweater.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_281.npy|John's brother repainted the garage door.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_282.npy|The rose corsage smelled sweet.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_283.npy|To further his prestige, he occasionally reads the Wall Street Journal.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_284.npy|Alice's ability to work without supervision is noteworthy.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_285.npy|The oasis was a mirage.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_286.npy|Cory and Trish played tag with beach balls for hours.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_287.npy|The tooth fairy forgot to come when Roger's tooth fell out.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_288.npy|Planned parenthood organizations promote birth control.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_289.npy|Jeff thought you argued in favour of a centrifuge purchase.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_290.npy|Rich purchased several signed lithographs.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_291.npy|In every major cloverleaf, traffic sometimes gets backed up.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_292.npy|In the long run, it pays to buy quality clothing.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_293.npy|Brush fires are common in the dry underbrush of Nevada.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_294.npy|Weatherproof galoshes are very useful in Seattle.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_295.npy|This brochure is particularly informative for a prospective buyer.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_296.npy|The avalanche triggered a minor earthquake.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_297.npy|These exclusive documents must be locked up at all times.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_298.npy|Please take this dirty table cloth to the cleaners for me.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_299.npy|Should giraffes be kept in small zoos?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_300.npy|If Carol comes tomorrow, have her arrange for a meeting at two.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_301.npy|The two artists exchanged autographs.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_302.npy|Rock-and-roll music has a great rhythm.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_303.npy|I'd rather not buy these shoes than be overcharged.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_304.npy|Shaving cream is a popular item on Halloween.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_305.npy|Amoebas change shape constantly.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_306.npy|We like blue cheese but Victor likes brie.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_307.npy|Tofu is made from processed soybeans.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_308.npy|The bluejay flew over the high building.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_309.npy|Cheap stockings run the first time they're worn.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_310.npy|Cottage cheese with chives is delicious.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_311.npy|A chosen few will become Generals.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_312.npy|The meeting is now adjourned.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_313.npy|Shipbuilding is a most fascinating process.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_314.npy|The proof that you are seeking is not available in books.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_315.npy|The hood of the jeep was steaming in the hot sun.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_316.npy|My desires are simple: give me one informative paragraph on the subject.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_317.npy|Those answers will be straightforward if you think them through carefully first.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_318.npy|Drop five forms in the box before you go out.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_319.npy|If people were more generous, there would be no need for welfare.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_320.npy|Bob found more clams at the ocean's edge.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_321.npy|That dog chases cats mercilessly.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_322.npy|The cranberry bog gets very pretty in Autumn.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_323.npy|Please dig my potatoes up before the frost.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_324.npy|A big goat idly ambled through the farmyard.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_325.npy|The nearest synagogue may not be within walking distance.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_326.npy|The groundhog clearly saw his shadow, but stayed out only a moment.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_327.npy|A leather handbag would be a suitable gift.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_328.npy|The fog prevented them from arriving on time.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_329.npy|The local drugstore was charged with illegally dispensing tranquilizers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_330.npy|The full moon shone brightly that night.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_331.npy|Steve collects rare and novel coins.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_332.npy|Al received a joint appointment in the biology and the engineering departments.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_333.npy|Gregory and Tom chose to watch cartoons in the afternoon.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_334.npy|Chip postponed alimony payments until the latest possible date.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_335.npy|Count the number of teaspoons of soysauce that you add.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_336.npy|The big dog loved to chew on the old rag doll.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_337.npy|Todd placed top priority on getting his bike fixed.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_338.npy|An adult male baboon's teeth are not suitable for eating shellfish.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_339.npy|Often you'll get back more than you put in.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_340.npy|Gus saw pine trees and redwoods on his walk through Sequoia National Forest.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_341.npy|Rob made Hungarian goulash for dinner and gooseberry pie for desert.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_342.npy|Bob bandaged both wounds with the skill of a doctor.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_343.npy|The dark, murky lagoon wound around for miles.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_344.npy|Did Shawn catch that big goose without help?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_345.npy|Ducks have webbed feet and colorful feathers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_346.npy|The high security prison was surrounded by barbed wire.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_347.npy|Take charge of choosing her bride's maids' gowns.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_348.npy|The frightened child was gently subdued by his big brother.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_349.npy|I know I didn't meet her early enough.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_350.npy|Trish saw hours and hours of movies this Saturday.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_352.npy|The patient and the surgeon are both recuperating from the lengthy operation.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_353.npy|I'll have a scoop of that exotic purple and turquoise sherbet.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_354.npy|The preschooler couldn't verbalize her feelings about the emergency conditions.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_355.npy|Many wealthy tycoons splurged and bought both a yacht and a schooner.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_356.npy|The new suburbanites worked hard on refurbishing their older home.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_357.npy|According to my interpretation of the problem, two lines must be perpendicular.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_358.npy|A connoisseur will enjoy this shellfish dish.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_359.npy|A lawyer was appointed to execute her will.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_360.npy|Dolphins are intelligent marine mammals.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_361.npy|Diane may splurge and buy a turquoise necklace.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_362.npy|The moisture in my eyes is from eyedrops, not from tears.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_363.npy|George seldom watches daytime movies.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_364.npy|The system may break down soon, so save your files frequently.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_365.npy|I assume moisture will damage this ship's hull.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_366.npy|The speech symposium might begin on Monday.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_367.npy|The annoying raccoons slipped into Phil's garden every night.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_368.npy|The cow wandered from the farmland and became lost.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_369.npy|Each untimely income loss coincided with the breakdown of a heating system part.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_370.npy|The gunman kept his victim cornered at gunpoint for three hours.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_371.npy|Will you please confirm government policy regarding waste removal?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_372.npy|The surplus shoes were sold at a discount price.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_373.npy|Lori's costume needed black gloves to be completely elegant.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_374.npy|Bob papered over the living room murals.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_375.npy|That noise problem grows more annoying each day.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_376.npy|Right now may not be the best time for business mergers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_377.npy|That diagram makes sense only after much study.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_378.npy|Gremlins is yet another exciting movie by Steven Spielberg.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_379.npy|A boring novel is a superb sleeping pill.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_380.npy|John cleans shellfish for a living.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_381.npy|Growing well-kept gardens is very time consuming.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_382.npy|Women may never become completely equal to men.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_383.npy|She always jokes about too much garlic in his food.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_384.npy|I just saw Jim near the new archeological museum.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_385.npy|Pam gives driving lessons on Thursdays.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_386.npy|Why charge money for such garbage?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_387.npy|We welcome many new students each year.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_388.npy|George is paranoid about a future gas shortage.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_389.npy|The carpet cleaners shampooed our oriental rug.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_390.npy|Please shorten this skirt for Joyce.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_391.npy|His shoulder felt as if it were broken.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_392.npy|Which church do the Smiths worship in?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_393.npy|The giant redwoods shimmered in the glistening sun.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_394.npy|Is she going with you?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_395.npy|Her right hand aches whenever the barometric pressure changes.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_396.npy|They own a big house in the remote countryside.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_397.npy|He picked up nine pairs of socks for each brother.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_398.npy|They all like long hot showers.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_399.npy|A young mouse scampered across the field and disappeared.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_400.npy|She uses both names interchangeably.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_401.npy|Calcium makes bones and teeth strong.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_402.npy|I took her word for it.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_403.npy|The fish began to leap frantically on the surface of the small lake.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_404.npy|Tim takes Sheila to see movies twice a week.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_405.npy|Children can consume many fruit roll-ups in one sitting.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_406.npy|They assume no burglar will ever enter here.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_407.npy|Just drop notices in any suggestion box.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_408.npy|The taxicab broke down and caused a traffic jam.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_409.npy|We'll serve rhubarb pie after Rachel's talk.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_410.npy|Her wardrobe consists of only skirts and blouses.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_411.npy|Barb burned paper and leaves in a big bonfire.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_412.npy|Of course you can have another tunafish sandwich.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_413.npy|There was a gigantic wasp next to Irving's big top hat.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_414.npy|Laugh, dance, and sing if fortune smiles upon you.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_415.npy|I'd ride the subway, but I haven't enough change.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_416.npy|Eating spinach nightly increases strength miraculously.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_417.npy|People drink much water with horseradish relish.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_418.npy|Butterscotch fudge goes well with vanilla ice cream.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_419.npy|Gwen grows green beans in her vegetable garden.	
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_420.npy|Daphne's Swedish needlepoint scarf matched her skirt.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_421.npy|Irish youngsters eat fresh kippers for breakfast.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_422.npy|Move the garbage nearer to the large window.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_423.npy|A huge power outage rarely occurs.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_424.npy|Valley lodge yearly celebrates the first calf born.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_425.npy|Iris thinks this zoo has eleven Spanish zebras.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_426.npy|The football team coach has a watch as thin as a dime.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_427.npy|Seamstresses attach zips with a thimble, needle, and thread.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_428.npy|Those who teach values first abolish cheating.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_429.npy|Once you finish greasing your chain, be sure to wash thoroughly.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_430.npy|Smash lightbulbs and their cash value will diminish to nothing.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_431.npy|Top zinnias rarely have crooked stems.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_432.npy|Movies never have enough villains.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_434.npy|Every cab needs repainting often.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_435.npy|A crab challenged me, but a quick stab vanquished him.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_436.npy|A toothpaste tube should be squeezed from the bottom.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_437.npy|Those who are not purists use canned vegetables when making stew.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_438.npy|The fifth jar contains big, juicy peaches.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_439.npy|Coffee is grown on steep, jungle-like slopes in temperate zones.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_440.npy|The overweight charmer could slip poison into anyone's tea.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_441.npy|Each stag surely finds a big fawn.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_442.npy|The rich should invest in black zircons instead of stylish shoes.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_443.npy|Please sing just the club theme.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_444.npy|They used an aggressive policeman to flag thoughtless motorists.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_446.npy|That stinging vapour was caused by chloride vaporization.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_447.npy|The advertising verse of Plymouth Variety Store never changes.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_448.npy|Don't look for cheap valuables in a bank vault.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_449.npy|Suburban housewives often suffer from the gab habit.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_450.npy|A lone star shone in the early evening sky.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_451.npy|The toddler found a clamshell near the camp site.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_452.npy|What is this large thing by the ironing board?
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_453.npy|Thomas thinks a larger clamp solves the problem.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_454.npy|First add milk to the shredded cheese.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_455.npy|Spherical gifts are difficult to wrap.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_456.npy|Ralph prepared red snapper with fresh lemon sauce for dinner.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_457.npy|Roy ignored the spurious data points in drawing the graph.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_458.npy|The thick elm forest was nearly overwhelmed by Dutch Elm Disease.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_459.npy|In developing film, many toxic chemicals are used.
+DUMMY/mocha_timit/arttts/faet0/encoded_audio_en/emasrc/faet0_460.npy|Which theatre shows "Mother Goose"?
