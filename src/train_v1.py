@@ -196,8 +196,8 @@ if __name__ == "__main__":
                 prior_losses.append(prior_loss.item())
                 diff_losses.append(diff_loss.item())
                 losses.append(loss.item())
-                enc_grad_norms.append(enc_grad_norm)
-                dec_grad_norms.append(dec_grad_norm)
+                enc_grad_norms.append(enc_grad_norm.cpu().numpy())
+                dec_grad_norms.append(dec_grad_norm.cpu().numpy())
 
                 # if batch_idx % 10 == 0:
                 #    msg = f"Epoch: {epoch}, iteration: {iteration} | dur_loss: {dur_loss.item()}, prior_loss: {prior_loss.item()}, diff_loss: {diff_loss.item()}"
@@ -209,8 +209,8 @@ if __name__ == "__main__":
             mean_train_prior_loss = np.mean(prior_losses)
             mean_train_diff_loss = np.mean(diff_losses)
             mean_train_loss = np.mean(losses)
-            mean_enc_grad_norm = np.mean(enc_grad_norms)
-            mean_dec_grad_norm = np.mean(dec_grad_norms)
+            max_enc_grad_norm = np.max(enc_grad_norms)
+            max_dec_grad_norm = np.max(dec_grad_norms)
 
             logger.add_scalar(
                 "training/duration_loss", mean_train_dur_loss, global_step=epoch
@@ -223,10 +223,10 @@ if __name__ == "__main__":
             )
             logger.add_scalar("training/loss", mean_train_loss, global_step=epoch)
             logger.add_scalar(
-                "training/encoder_grad_norm", mean_enc_grad_norm, global_step=epoch
+                "training/encoder_grad_norm", max_enc_grad_norm, global_step=epoch
             )
             logger.add_scalar(
-                "training/decoder_grad_norm", mean_dec_grad_norm, global_step=epoch
+                "training/decoder_grad_norm", max_dec_grad_norm, global_step=epoch
             )
 
             log_msg = "Epoch %d: duration loss = %.3f " % (epoch, np.mean(dur_losses))

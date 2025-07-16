@@ -17,6 +17,7 @@
 #SBATCH --account=rec@v100 # comptabilite V100
 
 module purge
+module load cuda/12.6.3
 
 source ../.venv/bin/activate
 
@@ -26,8 +27,9 @@ echo "python: $(which python)"
 echo "python-version $(python -V)"
 echo "CUDA_DEVICE: $CUDA_VISIBLE_DEVICES"
 
-#python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
-#python -c "import torch; print(f'cuda device: {torch.cuda.current_device()}')"
+python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
+python -c "import torch; print(f'cuda device: {torch.cuda.current_device()}')"
+python -c "import torch; print(f'device_count: {torch.cuda.device_count()}')"
 
 set -x # activer l’echo des commandes
 
