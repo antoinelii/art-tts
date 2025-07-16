@@ -125,7 +125,7 @@ if __name__ == "__main__":
     mylogger.info("Model initialized.")
 
     # Check if we are continuing from a checkpoint or starting from scratch
-    if start_epoch == 0:  # start training from scratch
+    if start_epoch == 1:  # start training from scratch
         early_stopping = EarlyStopping(
             patience=custom_patience,
             step_size=params_v4.val_every,
@@ -190,6 +190,7 @@ if __name__ == "__main__":
             diff_losses = []
             losses = []
             for batch_idx, batch in enumerate(loader):
+                optimizer.zero_grad()
                 x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
                 y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
                 dur_loss, prior_loss, diff_loss = model.compute_loss(

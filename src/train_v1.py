@@ -141,6 +141,7 @@ if __name__ == "__main__":
             diff_losses = []
             losses = []
             for batch_idx, batch in enumerate(loader):
+                optimizer.zero_grad()
                 x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
                 y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
                 dur_loss, prior_loss, diff_loss = model.compute_loss(
