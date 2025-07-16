@@ -15,8 +15,6 @@ from tqdm import tqdm
 
 import torch
 
-from configs.params_v0 import pitch_idx, plot_norm_pitch
-
 channel_names = [
     "xul",
     "zul",
@@ -72,12 +70,8 @@ def save_figure_to_numpy(fig):
     return data
 
 
-def plot_tensor(tensor, norm_pitch=plot_norm_pitch):
+def plot_tensor(tensor):
     tensor_ = tensor.detach().numpy().copy()
-    if norm_pitch:
-        tensor_[pitch_idx] = (tensor_[pitch_idx] - tensor_[pitch_idx].mean()) / tensor_[
-            pitch_idx
-        ].std()
     plt.style.use("default")
     fig, ax = plt.subplots(figsize=(12, 3))
     im = ax.imshow(tensor_, aspect="auto", origin="lower", interpolation="none")
@@ -89,12 +83,8 @@ def plot_tensor(tensor, norm_pitch=plot_norm_pitch):
     return data
 
 
-def save_plot(tensor, savepath, norm_pitch=plot_norm_pitch):
+def save_plot(tensor, savepath):
     tensor_ = tensor.detach().numpy().copy()
-    if norm_pitch:
-        tensor_[pitch_idx] = (tensor_[pitch_idx] - tensor_[pitch_idx].mean()) / tensor_[
-            pitch_idx
-        ].std()
     plt.style.use("default")
     fig, ax = plt.subplots(figsize=(12, 3))
     im = ax.imshow(tensor_, aspect="auto", origin="lower", interpolation="none")
