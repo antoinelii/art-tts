@@ -19,7 +19,6 @@ from configs import params_v3
 from data_phnmmel import PhnmMelBatchCollate, PhnmMelDataset
 from metrics import normalized_dtw_score
 from model import ArtTTS
-from text.symbols import symbols
 from utils import (
     EarlyStopping,
     TqdmLoggingHandler,
@@ -96,9 +95,6 @@ if __name__ == "__main__":
     )
 
     mylogger.info("Initializing model...")
-
-    add_blank = params_v3.add_blank
-    nsymbols = len(symbols) + 1 if add_blank else len(symbols)
 
     model = ArtTTS(
         params_v3.n_ipa_feats,
