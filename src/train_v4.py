@@ -128,7 +128,7 @@ if __name__ == "__main__":
     if start_epoch == 1:  # start training from scratch
         early_stopping = EarlyStopping(
             patience=custom_patience,
-            step_size=params_v4.val_every,
+            step_size=val_every,
         )
 
     else:  # continue training from a checkpoint
@@ -189,6 +189,8 @@ if __name__ == "__main__":
             prior_losses = []
             diff_losses = []
             losses = []
+            enc_grad_norms = []
+            dec_grad_norms = []
             for batch_idx, batch in enumerate(loader):
                 optimizer.zero_grad()
                 x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
@@ -207,33 +209,42 @@ if __name__ == "__main__":
                 )
                 optimizer.step()
 
-                logger.add_scalar(
-                    "training/duration_loss", dur_loss.item(), global_step=epoch
-                )
-                logger.add_scalar(
-                    "training/prior_loss", prior_loss.item(), global_step=epoch
-                )
-                logger.add_scalar(
-                    "training/diffusion_loss", diff_loss.item(), global_step=epoch
-                )
-                logger.add_scalar("training/loss", loss.item(), global_step=epoch)
-                logger.add_scalar(
-                    "training/encoder_grad_norm", enc_grad_norm, global_step=epoch
-                )
-                logger.add_scalar(
-                    "training/decoder_grad_norm", dec_grad_norm, global_step=epoch
-                )
-
                 dur_losses.append(dur_loss.item())
                 prior_losses.append(prior_loss.item())
                 diff_losses.append(diff_loss.item())
                 losses.append(loss.item())
+                enc_grad_norms.append(enc_grad_norm)
+                dec_grad_norms.append(dec_grad_norm)
 
                 # if batch_idx % 10 == 0:
                 #    msg = f"Epoch: {epoch}, iteration: {iteration} | dur_loss: {dur_loss.item()}, prior_loss: {prior_loss.item()}, diff_loss: {diff_loss.item()}"
                 #    progress_bar.set_description(msg)
 
                 iteration += 1
+
+            mean_train_dur_loss = np.mean(dur_losses)
+            mean_train_prior_loss = np.mean(prior_losses)
+            mean_train_diff_loss = np.mean(diff_losses)
+            mean_train_loss = np.mean(losses)
+            mean_enc_grad_norm = np.mean(enc_grad_norms)
+            mean_dec_grad_norm = np.mean(dec_grad_norms)
+
+            logger.add_scalar(
+                "training/duration_loss", mean_train_dur_loss, global_step=epoch
+            )
+            logger.add_scalar(
+                "training/prior_loss", mean_train_prior_loss, global_step=epoch
+            )
+            logger.add_scalar(
+                "training/diffusion_loss", mean_train_diff_loss, global_step=epoch
+            )
+            logger.add_scalar("training/loss", mean_train_loss, global_step=epoch)
+            logger.add_scalar(
+                "training/encoder_grad_norm", mean_enc_grad_norm, global_step=epoch
+            )
+            logger.add_scalar(
+                "training/decoder_grad_norm", mean_dec_grad_norm, global_step=epoch
+            )
 
             log_msg = "Epoch %d: duration loss = %.3f " % (epoch, np.mean(dur_losses))
             log_msg += "| prior loss = %.3f " % np.mean(prior_losses)
@@ -251,7 +262,7 @@ if __name__ == "__main__":
                 val_prior_losses = []
                 val_diff_losses = []
                 val_losses = []
-                for batch_idx, batch in enumerate(loader):
+                for batch_idx, batch in enumerate(val_loader):
                     with torch.no_grad():
                         x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
                         y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
@@ -259,24 +270,7 @@ if __name__ == "__main__":
                             x, x_lengths, y, y_lengths, out_size=params_v4.out_size
                         )
                         val_loss = sum([dur_loss, prior_loss, diff_loss])
-                        logger.add_scalar(
-                            "validation/duration_loss",
-                            dur_loss.item(),
-                            global_step=epoch,
-                        )
-                        logger.add_scalar(
-                            "validation/prior_loss",
-                            prior_loss.item(),
-                            global_step=epoch,
-                        )
-                        logger.add_scalar(
-                            "validation/diffusion_loss",
-                            diff_loss.item(),
-                            global_step=epoch,
-                        )
-                        logger.add_scalar(
-                            "validation/loss", val_loss.item(), global_step=epoch
-                        )
+
                         val_dur_losses.append(dur_loss.item())
                         val_prior_losses.append(prior_loss.item())
                         val_diff_losses.append(diff_loss.item())
@@ -286,6 +280,23 @@ if __name__ == "__main__":
                 mean_val_prior_loss = np.mean(val_prior_losses)
                 mean_val_diff_loss = np.mean(val_diff_losses)
                 mean_val_loss = np.mean(val_losses)
+
+                logger.add_scalar(
+                    "validation/duration_loss",
+                    mean_val_dur_loss,
+                    global_step=epoch,
+                )
+                logger.add_scalar(
+                    "validation/prior_loss",
+                    mean_val_prior_loss,
+                    global_step=epoch,
+                )
+                logger.add_scalar(
+                    "validation/diffusion_loss",
+                    mean_val_diff_loss,
+                    global_step=epoch,
+                )
+                logger.add_scalar("validation/loss", mean_val_loss, global_step=epoch)
                 log_msg = "Epoch %d: duration loss = %.3f " % (
                     epoch,
                     mean_val_dur_loss,
@@ -323,7 +334,7 @@ if __name__ == "__main__":
                 # elif patience_counter >= params_v4.patience:
                 elif patience_counter >= custom_patience:
                     mylogger.info(
-                        f"Early stopping at epoch {epoch} after {early_stopping.counter} times {params_v4.save_every} epochs without \
+                        f"Early stopping at epoch {epoch} after {early_stopping.counter} times {save_every} epochs without \
                             any subloss improvement. Best model epoch: {best_epoch}"
                     )
                     break
@@ -378,9 +389,7 @@ if __name__ == "__main__":
                         )
                         logger.add_image(
                             f"image_{i}/alignment",
-                            plot_tensor(attn.squeeze().cpu(), norm_pitch=False)[
-                                :, :, 1:
-                            ],
+                            plot_tensor(attn.squeeze().cpu())[:, :, 1:],
                             global_step=epoch,
                             dataformats="HWC",
                         )
@@ -395,7 +404,6 @@ if __name__ == "__main__":
                         save_plot(
                             attn.squeeze().cpu(),
                             f"{log_dir}/alignment_{i}.png",
-                            norm_pitch=False,
                         )
                     logger.add_scalar(
                         "valid_batch/dtw_enc_score",

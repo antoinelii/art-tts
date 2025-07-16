@@ -13,6 +13,7 @@ from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
+from pathlib import Path
 
 from configs import params_v1
 from model import ArtTTS
@@ -39,11 +40,12 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 mylogger.addHandler(handler)
 
-# Setup early stopping
-early_stopping = EarlyStopping(
-    patience=params_v1.patience,
-    step_size=params_v1.val_every,
-)
+start_epoch = 1
+end_epoch = 5000
+custom_patience = 5000
+val_every = params_v1.val_every
+save_every = params_v1.save_every
+
 
 if __name__ == "__main__":
     torch.manual_seed(params_v1.random_seed)
@@ -102,6 +104,29 @@ if __name__ == "__main__":
         params_v1.beta_max,
         params_v1.pe_scale,
     ).cuda()
+
+    mylogger.info("Model initialized.")
+
+    # Check if we are continuing from a checkpoint or starting from scratch
+    if start_epoch == 1:  # start training from scratch
+        early_stopping = EarlyStopping(
+            patience=custom_patience,
+            step_size=val_every,
+        )
+
+    else:  # continue training from a checkpoint
+        mylogger.info(f"Loading Early stopping from ckpt grad_{start_epoch - 1}.pt ...")
+        early_stopping = torch.load(
+            Path(params_v1.log_dir) / "early_stopping.pt", weights_only=False
+        )
+
+        mylogger.info(
+            f"Loading model state dict from ckpt grad_{start_epoch - 1}.pt ..."
+        )
+        ckpt_grad = torch.load(Path(params_v1.log_dir) / f"grad_{start_epoch - 1}.pt")
+        model.load_state_dict(ckpt_grad)
+        mylogger.info("Model state dict loaded.")
+
     mylogger.info(
         "Number of encoder + duration predictor parameters: %.2fm"
         % (model.encoder.nparams / 1e6)
@@ -127,9 +152,16 @@ if __name__ == "__main__":
     mylogger.info("Start training...")
     iteration = 0
     best_epoch = 0
+    # with tqdm(
+    #    range(1, params_v1.n_epochs + 1),
+    #    total=params_v1.n_epochs,
+    #    desc="Training",
+    #    position=1,
+    #    dynamic_ncols=True,
+    # ) as progress_bar:
     with tqdm(
-        range(1, params_v1.n_epochs + 1),
-        total=params_v1.n_epochs,
+        range(start_epoch, end_epoch + 1),
+        total=end_epoch - start_epoch + 1,
         desc="Training",
         position=1,
         dynamic_ncols=True,
@@ -140,6 +172,8 @@ if __name__ == "__main__":
             prior_losses = []
             diff_losses = []
             losses = []
+            enc_grad_norms = []
+            dec_grad_norms = []
             for batch_idx, batch in enumerate(loader):
                 optimizer.zero_grad()
                 x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
@@ -158,33 +192,42 @@ if __name__ == "__main__":
                 )
                 optimizer.step()
 
-                logger.add_scalar(
-                    "training/duration_loss", dur_loss.item(), global_step=epoch
-                )
-                logger.add_scalar(
-                    "training/prior_loss", prior_loss.item(), global_step=epoch
-                )
-                logger.add_scalar(
-                    "training/diffusion_loss", diff_loss.item(), global_step=epoch
-                )
-                logger.add_scalar("training/loss", loss.item(), global_step=epoch)
-                logger.add_scalar(
-                    "training/encoder_grad_norm", enc_grad_norm, global_step=epoch
-                )
-                logger.add_scalar(
-                    "training/decoder_grad_norm", dec_grad_norm, global_step=epoch
-                )
-
                 dur_losses.append(dur_loss.item())
                 prior_losses.append(prior_loss.item())
                 diff_losses.append(diff_loss.item())
                 losses.append(loss.item())
+                enc_grad_norms.append(enc_grad_norm)
+                dec_grad_norms.append(dec_grad_norm)
 
                 # if batch_idx % 10 == 0:
                 #    msg = f"Epoch: {epoch}, iteration: {iteration} | dur_loss: {dur_loss.item()}, prior_loss: {prior_loss.item()}, diff_loss: {diff_loss.item()}"
                 #    progress_bar.set_description(msg)
 
                 iteration += 1
+
+            mean_train_dur_loss = np.mean(dur_losses)
+            mean_train_prior_loss = np.mean(prior_losses)
+            mean_train_diff_loss = np.mean(diff_losses)
+            mean_train_loss = np.mean(losses)
+            mean_enc_grad_norm = np.mean(enc_grad_norms)
+            mean_dec_grad_norm = np.mean(dec_grad_norms)
+
+            logger.add_scalar(
+                "training/duration_loss", mean_train_dur_loss, global_step=epoch
+            )
+            logger.add_scalar(
+                "training/prior_loss", mean_train_prior_loss, global_step=epoch
+            )
+            logger.add_scalar(
+                "training/diffusion_loss", mean_train_diff_loss, global_step=epoch
+            )
+            logger.add_scalar("training/loss", mean_train_loss, global_step=epoch)
+            logger.add_scalar(
+                "training/encoder_grad_norm", mean_enc_grad_norm, global_step=epoch
+            )
+            logger.add_scalar(
+                "training/decoder_grad_norm", mean_dec_grad_norm, global_step=epoch
+            )
 
             log_msg = "Epoch %d: duration loss = %.3f " % (epoch, np.mean(dur_losses))
             log_msg += "| prior loss = %.3f " % np.mean(prior_losses)
@@ -195,14 +238,14 @@ if __name__ == "__main__":
             mylogger.info(f"Train : {log_msg}")
 
             # Evaluate validation loss
-            if epoch % params_v1.val_every == 0:
+            if epoch % val_every == 0:
                 mylogger.info(f"Validation loss at epoch {epoch}...")
                 model.eval()
                 val_dur_losses = []
                 val_prior_losses = []
                 val_diff_losses = []
                 val_losses = []
-                for batch_idx, batch in enumerate(loader):
+                for batch_idx, batch in enumerate(val_loader):
                     with torch.no_grad():
                         x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
                         y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
@@ -210,24 +253,7 @@ if __name__ == "__main__":
                             x, x_lengths, y, y_lengths, out_size=params_v1.out_size
                         )
                         val_loss = sum([dur_loss, prior_loss, diff_loss])
-                        logger.add_scalar(
-                            "validation/duration_loss",
-                            dur_loss.item(),
-                            global_step=epoch,
-                        )
-                        logger.add_scalar(
-                            "validation/prior_loss",
-                            prior_loss.item(),
-                            global_step=epoch,
-                        )
-                        logger.add_scalar(
-                            "validation/diffusion_loss",
-                            diff_loss.item(),
-                            global_step=epoch,
-                        )
-                        logger.add_scalar(
-                            "validation/loss", val_loss.item(), global_step=epoch
-                        )
+
                         val_dur_losses.append(dur_loss.item())
                         val_prior_losses.append(prior_loss.item())
                         val_diff_losses.append(diff_loss.item())
@@ -237,6 +263,23 @@ if __name__ == "__main__":
                 mean_val_prior_loss = np.mean(val_prior_losses)
                 mean_val_diff_loss = np.mean(val_diff_losses)
                 mean_val_loss = np.mean(val_losses)
+
+                logger.add_scalar(
+                    "validation/duration_loss",
+                    mean_val_dur_loss,
+                    global_step=epoch,
+                )
+                logger.add_scalar(
+                    "validation/prior_loss",
+                    mean_val_prior_loss,
+                    global_step=epoch,
+                )
+                logger.add_scalar(
+                    "validation/diffusion_loss",
+                    mean_val_diff_loss,
+                    global_step=epoch,
+                )
+                logger.add_scalar("validation/loss", mean_val_loss, global_step=epoch)
                 log_msg = "Epoch %d: duration loss = %.3f " % (
                     epoch,
                     mean_val_dur_loss,
@@ -271,15 +314,16 @@ if __name__ == "__main__":
                     mylogger.info(
                         f"Best model saved at epoch {best_epoch} with validation loss {mean_val_loss:.3f}"
                     )
-                elif patience_counter >= params_v1.patience:
+                # elif patience_counter >= params_v1.patience:
+                elif patience_counter >= custom_patience:
                     mylogger.info(
-                        f"Early stopping at epoch {epoch} after {early_stopping.counter} times {params_v1.save_every} epochs without \
+                        f"Early stopping at epoch {epoch} after {early_stopping.counter} times {save_every} epochs without \
                             any subloss improvement. Best model epoch: {best_epoch}"
                     )
                     break
 
             # Save model every `save_every` epochs
-            if epoch % params_v1.save_every == 0:
+            if epoch % save_every == 0:
                 model.eval()
                 mylogger.info("Synthesis...")
                 gt_enc_dtw_scores = []
@@ -328,9 +372,7 @@ if __name__ == "__main__":
                         )
                         logger.add_image(
                             f"image_{i}/alignment",
-                            plot_tensor(attn.squeeze().cpu(), norm_pitch=False)[
-                                :, :, 1:
-                            ],
+                            plot_tensor(attn.squeeze().cpu())[:, :, 1:],
                             global_step=epoch,
                             dataformats="HWC",
                         )
@@ -345,7 +387,6 @@ if __name__ == "__main__":
                         save_plot(
                             attn.squeeze().cpu(),
                             f"{log_dir}/alignment_{i}.png",
-                            norm_pitch=False,
                         )
                     logger.add_scalar(
                         "valid_batch/dtw_enc_score",
