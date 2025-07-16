@@ -10,6 +10,7 @@ from model.utils import fix_len_compatibility
 
 # data parameters
 data_root_dir = "../../data"  # for jean-zay relative to src
+data_root_dir = "/lustre/fsn1/projects/rech/rec/commun/data"  # for jean-zay scratch
 # data_root_dir = "../../../../scratch2/ali/data" #for oberon2 relative to src
 
 train_filelist_path = "resources/filelists/ljspeech/train_v1.txt"
@@ -21,12 +22,14 @@ sparc_ckpt_path = "ckpt/sparc_en.ckpt"
 n_feats = 16  # 14 to 16, actually need n_feats // 2**2 fot compatibility with U-Net
 n_spks = 1  # 247 for Libri-TTS filelist and 1 for LJSpeech
 spk_emb_dim = 64
-# SPARC features order
+# SPARC features order (according to paper prob false)
 # "ULX", "ULY", "LLX", "LLY", "LIX", "LIY",
 # "TTX", "TTY", "TBX", "TBY", "TDX", "TDY"
 # "pitch", "loudness"
 reorder_feats = [0, 3, 1, 4, 2, 5, 6, 9, 7, 10, 8, 11, 15, 13]
 pitch_idx = reorder_feats[12]  # pitch channel index among n_feats
+normalize_loudness = False
+loudness_idx = reorder_feats[13]  # loudness channel index among n_feats
 non_pitch_idx = [
     i for i in range(n_feats) if i != pitch_idx
 ]  # non-pitch channels indices
@@ -51,7 +54,7 @@ beta_max = 20.0
 pe_scale = 1000  # 1 for `grad-tts-old.pt` checkpoint
 
 # training parameters
-log_dir = "logs/new_exp"
+log_dir = "logs/v1"
 test_size = 4
 n_epochs = 10000  # 10000 normally
 batch_size = 16
