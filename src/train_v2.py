@@ -343,7 +343,7 @@ if __name__ == "__main__":
                         x_lengths = torch.LongTensor([x.shape[-1]]).cuda()
                         y_enc, y_dec, attn = model(x, x_lengths, n_timesteps=50)
 
-                        y_gt = item["y"].T.cpu()  # (n_frames, n_feats)
+                        y_gt = item["y"].T.cpu().numpy()  # (n_frames, n_feats)
                         y_enc_ = y_enc[0, :, :].T.cpu()  # (n_frames, n_feats)
                         y_dec_ = y_dec[0, :, :].T.cpu()  # (n_frames, n_feats)
 
