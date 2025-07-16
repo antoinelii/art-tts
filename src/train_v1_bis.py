@@ -24,6 +24,7 @@ from utils import (
     plot_art_14,
     save_plot_art_14,
     TqdmLoggingHandler,
+    EarlyStopping,
 )
 from metrics import normalized_dtw_score
 
@@ -39,14 +40,12 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 mylogger.addHandler(handler)
 
-start_epoch = 611
+start_epoch = 1
 end_epoch = 5000
-custom_patience = 1000
-# Setup early stopping
+custom_patience = 5000
+val_every = params_v1.val_every
+save_every = params_v1.save_every
 
-early_stopping = torch.load(
-    Path(params_v1.log_dir) / "early_stopping.pt", weights_only=False
-)
 
 if __name__ == "__main__":
     torch.manual_seed(params_v1.random_seed)
@@ -107,11 +106,26 @@ if __name__ == "__main__":
     ).cuda()
 
     mylogger.info("Model initialized.")
-    mylogger.info(f"Loading model state dict from ckpt grad_{start_epoch - 1}.pt ...")
 
-    ckpt_grad = torch.load(Path(params_v1.log_dir) / f"grad_{start_epoch - 1}.pt")
-    model.load_state_dict(ckpt_grad)
-    mylogger.info("Model state dict loaded.")
+    # Check if we are continuing from a checkpoint or starting from scratch
+    if start_epoch == 1:  # start training from scratch
+        early_stopping = EarlyStopping(
+            patience=custom_patience,
+            step_size=params_v1.val_every,
+        )
+
+    else:  # continue training from a checkpoint
+        mylogger.info(f"Loading Early stopping from ckpt grad_{start_epoch - 1}.pt ...")
+        early_stopping = torch.load(
+            Path(params_v1.log_dir) / "early_stopping.pt", weights_only=False
+        )
+
+        mylogger.info(
+            f"Loading model state dict from ckpt grad_{start_epoch - 1}.pt ..."
+        )
+        ckpt_grad = torch.load(Path(params_v1.log_dir) / f"grad_{start_epoch - 1}.pt")
+        model.load_state_dict(ckpt_grad)
+        mylogger.info("Model state dict loaded.")
 
     mylogger.info(
         "Number of encoder + duration predictor parameters: %.2fm"
