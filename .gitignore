@@ -17,6 +17,7 @@ data/
 
 # checkpoints
 src/ckpt
+src/checkpts/*.pt
 
 # original filelist
 src/resources/filelists/ljspeech/test.txt
