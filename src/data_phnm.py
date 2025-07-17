@@ -27,6 +27,7 @@ from configs.params_v1 import (
     reorder_feats,
     pitch_idx,
     loudness_idx,
+    log_normalize_loudness,
 )
 from model.utils import fix_len_compatibility
 
@@ -39,6 +40,7 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         reorder_feats=reorder_feats,
         pitch_idx=pitch_idx,
         loudness_idx=loudness_idx,
+        log_normalize_loudness=log_normalize_loudness,
         merge_diphtongues=False,
         load_coder=False,
         sparc_ckpt_path=sparc_ckpt_path,
@@ -54,6 +56,7 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         self.reorder_feats = reorder_feats
         self.pitch_idx = pitch_idx
         self.loudness_idx = loudness_idx
+        self.log_normalize_loudness = log_normalize_loudness
         self.merge_diphtongues = (
             merge_diphtongues  # whether to merge diphthongs in IPA embedding
         )
@@ -114,7 +117,6 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         self,
         filepaths: str,
         from_preprocessed: bool = True,
-        normalize_loudness: bool = False,
     ) -> torch.FloatTensor:  # shape: (n_art_feats, T)
         """
         Get articulatory features from filepaths.
@@ -169,7 +171,8 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         # pad n_art_feats to 16
         art = reorder_art_feats(art)
         art = normalize_channel(art, channel_idx=self.pitch_idx)
-        if normalize_loudness:
+        if self.log_normalize_loudness:
+            art[:, self.loudness_idx] = np.log(art[:, self.loudness_idx] + 1e-9)
             art = normalize_channel(art, channel_idx=self.loudness_idx)
         return torch.FloatTensor(art).T  # shape: (n_art_feats, T)
 

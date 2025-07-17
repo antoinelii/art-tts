@@ -27,7 +27,7 @@ from configs.params_v4 import (
     sparc_ckpt_path,
     reorder_feats,
     pitch_idx,
-    normalize_loudness,
+    log_normalize_loudness,
     loudness_idx,
     cmudict_path,
     add_blank,
@@ -43,7 +43,7 @@ class TextArtDataset(torch.utils.data.Dataset):
         data_root_dir=data_root_dir,
         reorder_feats=reorder_feats,
         pitch_idx=pitch_idx,
-        normalize_loudness=normalize_loudness,
+        log_normalize_loudness=log_normalize_loudness,
         loudness_idx=loudness_idx,
         load_coder=False,
         sparc_ckpt_path=sparc_ckpt_path,
@@ -61,7 +61,7 @@ class TextArtDataset(torch.utils.data.Dataset):
         self.sparc_ckpt_path = sparc_ckpt_path
         self.reorder_feats = reorder_feats
         self.pitch_idx = pitch_idx
-        self.normalize_loudness = normalize_loudness
+        self.log_normalize_loudness = log_normalize_loudness
         self.loudness_idx = loudness_idx
 
         random.seed(random_seed)
@@ -128,7 +128,8 @@ class TextArtDataset(torch.utils.data.Dataset):
         # pad n_art_feats to 16
         art = reorder_art_feats(art)
         art = normalize_channel(art, channel_idx=self.pitch_idx)
-        if self.normalize_loudness:
+        if self.log_normalize_loudness:
+            art[:, self.loudness_idx] = np.log(art[:, self.loudness_idx] + 1e-9)
             art = normalize_channel(art, channel_idx=self.loudness_idx)
         return torch.FloatTensor(art).T  # shape: (n_art_feats, T)
 

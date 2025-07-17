@@ -60,6 +60,7 @@ if __name__ == "__main__":
         data_root_dir=params_v1.data_root_dir,
         load_coder=False,
         merge_diphtongues=params_v1.merge_diphtongues,
+        log_normalize_loudness=params_v1.log_normalize_loudness,
     )
     batch_collate = PhnmArticBatchCollate()
     loader = DataLoader(
@@ -75,6 +76,7 @@ if __name__ == "__main__":
         data_root_dir=params_v1.data_root_dir,
         load_coder=False,
         merge_diphtongues=params_v1.merge_diphtongues,
+        log_normalize_loudness=params_v1.log_normalize_loudness,
     )
     val_loader = DataLoader(
         dataset=valid_dataset,

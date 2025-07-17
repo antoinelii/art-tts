@@ -30,7 +30,7 @@ spk_emb_dim = 64
 # "pitch", "loudness"
 reorder_feats = [0, 3, 1, 4, 2, 5, 6, 9, 7, 10, 8, 11, 15, 13]
 pitch_idx = reorder_feats[12]  # pitch channel index among n_feats
-normalize_loudness = False
+log_normalize_loudness = False
 loudness_idx = reorder_feats[13]  # loudness channel index among n_feats
 non_pitch_idx = [
     i for i in range(n_feats) if i != pitch_idx
