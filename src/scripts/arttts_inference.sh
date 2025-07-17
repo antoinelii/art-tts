@@ -39,17 +39,19 @@ echo "computation start $(date)"
 
 DATASET=MSPKA_EMA_ita # MNGU0, mocha_timit, MSPKA_EMA_ita, pb2007
 CKPT_NAME=grad_4750
+MODEL_VERSION=v1
+FILELIST_VERSION=v1
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 
 # Define speakers conditionally
 if [ "$DATASET" = "LJSpeech-1.1" ]; then
     echo "Running inference for dataset: $DATASET"
     srun python -u arttts_inference.py  --data_dir ${MAIN_DATA_DIR}/ \
-                                    --save_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/arttts_pred/v1/${CKPT_NAME} \
-                                    --filelist_path resources/filelists/ljspeech/valid_v1.txt \
-                                    --version v1 \
+                                    --save_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                    --filelist_path resources/filelists/ljspeech/valid_${FILELIST_VERSION}.txt \
+                                    --version ${MODEL_VERSION} \
                                     --ckpt_name ${CKPT_NAME}.pt \
-                                    --params_name params_v1 \
+                                    --params_name params_${MODEL_VERSION} \
                                     --device cuda \
                                     --batch_size 1 \
                                     --use_align 0
@@ -71,11 +73,11 @@ else
     echo "Running inference for dataset: $DATASET, speaker: $SPK"
 
     srun python -u ./arttts_inference.py  --data_dir ${MAIN_DATA_DIR} \
-                                        --save_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/arttts_pred/v1/${CKPT_NAME} \
-                                        --filelist_path resources/filelists/$DATASET/${SPK}_v1.txt \
-                                        --version v1 \
+                                        --save_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                        --filelist_path resources/filelists/$DATASET/${SPK}_${FILELIST_VERSION}.txt \
+                                        --version ${MODEL_VERSION} \
                                         --ckpt_name ${CKPT_NAME}.pt \
-                                        --params_name params_v1 \
+                                        --params_name params_${MODEL_VERSION} \
                                         --device cuda \
                                         --batch_size 1 \
                                         --use_align 0

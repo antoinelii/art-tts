@@ -39,6 +39,8 @@ echo "computation start $(date)"
 
 DATASET=MSPKA_EMA_ita # MNGU0, mocha_timit, MSPKA_EMA_ita, pb2007
 CKPT_NAME=grad_4750
+MODEL_VERSION=v1
+FILELIST_VERSION=v1
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 
 # Define speakers conditionally
@@ -47,23 +49,23 @@ if [ "$DATASET" = "LJSpeech-1.1" ]; then
     #echo "Running hifigan inference for dataset: $DATASET, from SPARC encoded"
     #srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/encoded_audio_en/emasrc \
     #                                --save_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/hifigan_pred/sparc \
-    #                                --filelist_path resources/filelists/ljspeech/valid_v1.txt \
+    #                                --filelist_path resources/filelists/ljspeech/valid_${FILELIST_VERSION}.txt \
     #                                --main_dir ${MAIN_DATA_DIR} \
     #                                --device cuda \
 
     SRC_ART=decoder
     echo "Running hifigan inference for dataset: $DATASET, from : $SRC_ART"
-    srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/arttts_pred/v1/${CKPT_NAME} \
-                                    --save_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/hifigan_pred/v1/${CKPT_NAME} \
-                                    --filelist_path resources/filelists/ljspeech/valid_v1.txt \
+    srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                    --save_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                    --filelist_path resources/filelists/ljspeech/valid_${FILELIST_VERSION}.txt \
                                     --main_dir ${MAIN_DATA_DIR} \
                                     --device cuda \
                                     --src_art $SRC_ART
     SRC_ART=encoder
     echo "Running hifigan inference for dataset: $DATASET, from : $SRC_ART"
-    srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/arttts_pred/v1/${CKPT_NAME} \
-                                    --save_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/hifigan_pred/v1/${CKPT_NAME} \
-                                    --filelist_path resources/filelists/ljspeech/valid_v1.txt \
+    srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                    --save_dir ${MAIN_DATA_DIR}/LJSpeech-1.1/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                    --filelist_path resources/filelists/ljspeech/valid_${FILELIST_VERSION}.txt \
                                     --main_dir ${MAIN_DATA_DIR} \
                                     --device cuda \
                                     --src_art $SRC_ART
@@ -85,23 +87,23 @@ else
     #echo "Running hifigan inference for dataset: $DATASET, from SPARC encoded"
     #srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/encoded_audio_en/emasrc \
     #                                    --save_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/hifigan_pred/sparc \
-    #                                    --filelist_path resources/filelists/$DATASET/${SPK}_v1.txt \
+    #                                    --filelist_path resources/filelists/$DATASET/${SPK}_${FILELIST_VERSION}.txt \
     #                                    --main_dir ${MAIN_DATA_DIR} \
     #                                    --device cuda \
 
     SRC_ART=decoder
     echo "Running hifigan inference for dataset: $DATASET, speaker: $SPK, from : $SRC_ART"
-    srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/arttts_pred/v1/${CKPT_NAME} \
-                                        --save_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/hifigan_pred/v1/${CKPT_NAME} \
-                                        --filelist_path resources/filelists/$DATASET/${SPK}_v1.txt \
+    srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                        --save_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                        --filelist_path resources/filelists/$DATASET/${SPK}_${FILELIST_VERSION}.txt \
                                         --main_dir ${MAIN_DATA_DIR} \
                                         --device cuda \
                                         --src_art $SRC_ART
     SRC_ART=encoder
     echo "Running hifigan inference for dataset: $DATASET, speaker: $SPK, from : $SRC_ART"
-    srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/arttts_pred/v1/${CKPT_NAME} \
-                                        --save_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/hifigan_pred/v1/${CKPT_NAME} \
-                                        --filelist_path resources/filelists/$DATASET/${SPK}_v1.txt \
+    srun python -u ./hifigan_inference.py  --data_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                        --save_dir ${MAIN_DATA_DIR}/$DATASET/arttts/$SPK/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME} \
+                                        --filelist_path resources/filelists/$DATASET/${SPK}_${FILELIST_VERSION}.txt \
                                         --main_dir ${MAIN_DATA_DIR} \
                                         --device cuda \
                                         --src_art $SRC_ART
