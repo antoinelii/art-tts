@@ -250,10 +250,12 @@ class ArtTTS(BaseModule):
                 attn_cut[i, :, :y_cut_length] = attn[i, :, cut_lower:cut_upper]
             y_cut_lengths = torch.LongTensor(y_cut_lengths)  # (B,)
             ########## modif ##########
+            # y_cut_mask = (
+            #    sequence_mask(y_cut_lengths).unsqueeze(1).to(y_mask)
+            # )  # (B, 1, max_y_cut_length)
             y_cut_mask = (
-                sequence_mask(y_cut_lengths).unsqueeze(1).to(y_mask)
-            )  # (B, 1, max_y_cut_length)
-            # y_cut_mask = sequence_mask(y_cut_lengths, out_size).unsqueeze(1).to(y_mask)   # (B, 1, out_size)
+                sequence_mask(y_cut_lengths, out_size).unsqueeze(1).to(y_mask)
+            )  # (B, 1, out_size)
 
             attn = attn_cut  # (B, T_x, out_size)
             y = y_cut  # (B, n_feats, out_size)
@@ -531,10 +533,12 @@ class GradTTS(BaseModule):
                 attn_cut[i, :, :y_cut_length] = attn[i, :, cut_lower:cut_upper]
             y_cut_lengths = torch.LongTensor(y_cut_lengths)  # (B,)
 
+            # y_cut_mask = (
+            #    sequence_mask(y_cut_lengths).unsqueeze(1).to(y_mask)
+            # )  # (B, 1, max_y_cut_length)
             y_cut_mask = (
-                sequence_mask(y_cut_lengths).unsqueeze(1).to(y_mask)
-            )  # (B, 1, max_y_cut_length)
-            # y_cut_mask = sequence_mask(y_cut_lengths, out_size).unsqueeze(1).to(y_mask)   # (B, 1, out_size)
+                sequence_mask(y_cut_lengths, out_size).unsqueeze(1).to(y_mask)
+            )  # (B, 1, out_size)
 
             attn = attn_cut  # (B, T_x, out_size)
             y = y_cut  # (B, n_feats, out_size)
