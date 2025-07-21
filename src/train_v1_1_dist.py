@@ -51,7 +51,6 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 mylogger.addHandler(handler)
 
-mylogger.info("Initializing logger...")  # TensorBoard logger
 logger = SummaryWriter(log_dir=params_v1_1.log_dir)
 
 start_epoch = 1
@@ -79,7 +78,8 @@ def ddp_setup(rank: int, world_size: int):
     """
     os.environ["MASTER_ADDR"] = "localhost"
     os.environ["MASTER_PORT"] = "12355"
-    torch.cuda.set_device(rank)
+    print(rank)
+    # torch.cuda.set_device(rank)
     dist.init_process_group(backend="nccl", rank=rank, world_size=world_size)
 
 
@@ -625,6 +625,10 @@ parser.add_argument(
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    world_size = args.world_size
+    assert world_size == torch.cuda.device_count(), (
+        "world_size must match the number of available GPUs"
+    )
 
     torch.manual_seed(params_v1_1.random_seed)
     np.random.seed(params_v1_1.random_seed)
@@ -633,8 +637,8 @@ if __name__ == "__main__":
 
     mp.spawn(
         train,
-        args=(args.world_size,),
-        nprocs=args.world_size,
+        args=(world_size,),
+        nprocs=world_size,
         join=True,
     )
     mylogger.info("Training script finished.")
