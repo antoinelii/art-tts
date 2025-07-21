@@ -491,6 +491,7 @@ def train(rank, world_size):
         rank: Unique identifier of each process
         world_size: Total number of processes
     """
+    ddp_setup(rank, world_size)
 
     device = torch.device(f"cuda:{rank}")
 
