@@ -19,6 +19,8 @@ under the License.
 
 import torch
 from torch.utils.data import Sampler
+import math
+import torch.distributed as dist
 
 
 def get_length_grouped_indices(
@@ -94,3 +96,62 @@ class LengthGroupedSampler(Sampler):  # CHANGES:
             self.lengths, self.batch_size, generator=self.generator
         )
         return iter(indices)
+
+
+class DistLengthGroupedSampler(Sampler):
+    """
+    Distributed version of LengthGroupedSampler.
+    Ensures that samples are grouped by length and distributed across multiple processes.
+    """
+
+    def __init__(
+        self, lengths, batch_size, num_replicas=None, rank=None, generator=None
+    ):
+        """
+        Args:
+            lengths (list[int]): List of lengths of the dataset samples.
+            batch_size (int): Batch size.
+            num_replicas (int, optional): Number of processes participating in distributed training.
+            rank (int, optional): Rank of the current process within num_replicas.
+            shuffle (bool, optional): Whether to shuffle the data. Default is True.
+            seed (int, optional): Random seed for shuffling. Default is 0.
+        """
+        if not dist.is_available():
+            raise RuntimeError("Requires distributed package to be available")
+
+        self.lengths = lengths
+        self.batch_size = batch_size
+        self.num_replicas = num_replicas or dist.get_world_size()
+        self.rank = rank or dist.get_rank()
+        self.generator = generator
+        self.epoch = 0
+
+        # Calculate the number of samples per replica
+        self.num_samples = self.batch_size * int(
+            math.ceil(len(self.lengths) / (self.num_replicas * self.batch_size))
+        )
+        self.total_size = self.num_samples * self.num_replicas
+
+    def __iter__(self):
+        """
+        Returns an iterator over the indices for the current process.
+        """
+        # Generate indices grouped by length
+        indices = get_length_grouped_indices(
+            self.lengths, self.batch_size, generator=self.generator
+        )
+        # Pad indices to make them evenly divisible
+        indices += indices[: (self.total_size - len(indices))]
+
+        # Subsample for the current process
+        # indices = indices[self.rank : self.total_size : self.num_replicas]
+        indices = indices[
+            self.rank * self.num_samples : (self.rank + 1) * self.num_samples
+        ]
+        return iter(indices)
+
+    def __len__(self):
+        """
+        Returns the number of samples for the current process.
+        """
+        return self.num_samples
