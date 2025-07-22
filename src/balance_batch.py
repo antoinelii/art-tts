@@ -155,3 +155,68 @@ class DistLengthGroupedSampler(Sampler):
         Returns the number of samples for the current process.
         """
         return self.num_samples
+
+
+class DistDefaultSampler(Sampler):
+    """
+    A default distributed sampler that evenly splits the dataset indices across multiple processes.
+    """
+
+    def __init__(
+        self, dataset_size, num_replicas=None, rank=None, shuffle=True, seed=0
+    ):
+        """
+        Args:
+            dataset_size (int): Total size of the dataset.
+            num_replicas (int, optional): Number of processes participating in distributed training.
+            rank (int, optional): Rank of the current process within num_replicas.
+            shuffle (bool, optional): Whether to shuffle the data. Default is True.
+            seed (int, optional): Random seed for shuffling. Default is 0.
+        """
+        if not dist.is_available():
+            raise RuntimeError("Requires distributed package to be available")
+
+        self.dataset_size = dataset_size
+        self.num_replicas = num_replicas or dist.get_world_size()
+        self.rank = rank or dist.get_rank()
+        self.shuffle = shuffle
+        self.seed = seed
+        self.epoch = 0
+
+        # Calculate the number of samples per replica
+        self.num_samples = int(math.ceil(self.dataset_size / self.num_replicas))
+        self.total_size = self.num_samples * self.num_replicas
+
+    def set_epoch(self, epoch):
+        """
+        Sets the epoch for deterministic shuffling.
+        """
+        self.epoch = epoch
+
+    def __iter__(self):
+        """
+        Returns an iterator over the indices for the current process.
+        """
+        # Generate a list of all indices
+        indices = list(range(self.dataset_size))
+
+        # Shuffle indices if required
+        if self.shuffle:
+            g = torch.Generator()
+            g.manual_seed(self.seed + self.epoch)
+            indices = torch.randperm(self.dataset_size, generator=g).tolist()
+
+        # Pad indices to make them evenly divisible
+        indices += indices[: (self.total_size - len(indices))]
+
+        # Subsample for the current process
+        indices = indices[
+            self.rank * self.num_samples : (self.rank + 1) * self.num_samples
+        ]
+        return iter(indices)
+
+    def __len__(self):
+        """
+        Returns the number of samples for the current process.
+        """
+        return self.num_samples
