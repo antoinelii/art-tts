@@ -23,8 +23,8 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
 from balance_batch import DistLengthGroupedSampler
+from torch.utils.data.distributed import DistributedSampler
 
-# from torch.profiler import profile, record_function, ProfilerActivity, schedule
 from configs import params_v1_1
 from data_phnm import PhnmArticBatchCollate, PhnmArticDataset
 from metrics import normalized_dtw_score
@@ -39,7 +39,6 @@ from utils import (
 )
 
 log_dir = params_v1_1.log_dir
-# profile_log_dir = log_dir + "_profiler"
 reorder_feats = params_v1_1.reorder_feats
 
 # Setup logger
@@ -50,8 +49,6 @@ handler = TqdmLoggingHandler()
 formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 mylogger.addHandler(handler)
-
-logger = SummaryWriter(log_dir=params_v1_1.log_dir)
 
 start_epoch = 1
 end_epoch = 200
@@ -70,7 +67,7 @@ def get_lengths(dataset):
 
 
 # DDP
-def ddp_setup(rank: int, world_size: int):
+def ddp_setup(rank: int, local_rank, world_size: int):
     """
     Args:
         rank: Unique identifier of each process
@@ -78,8 +75,8 @@ def ddp_setup(rank: int, world_size: int):
     """
     os.environ["MASTER_ADDR"] = "localhost"
     os.environ["MASTER_PORT"] = "12355"
-    print(rank)
-    # torch.cuda.set_device(rank)
+    print(f"Set up rank {rank} local_rank {local_rank}")
+    torch.cuda.set_device(local_rank)
     dist.init_process_group(backend="nccl", rank=rank, world_size=world_size)
 
 
@@ -123,30 +120,52 @@ def get_valid_dataset():
     return valid_dataset
 
 
-def init_data_loader(dataset):
-    lengths = get_lengths(dataset)
-    sampler = DistLengthGroupedSampler(
-        lengths=lengths,
-        batch_size=params_v1_1.batch_size,
-        generator=torch.manual_seed(params_v1_1.random_seed),
-    )
-
+def init_data_loader(
+    dataset,
+    validation: bool,
+    balance_batch=False,
+):
     batch_collate = PhnmArticBatchCollate()
+    if validation:
+        loader = DataLoader(
+            dataset=dataset,
+            batch_size=params_v1_1.batch_size,
+            collate_fn=batch_collate,
+            drop_last=False,
+            num_workers=3,
+            shuffle=False,
+            pin_memory=True,
+        )
+        return loader
+    elif balance_batch:
+        lengths = get_lengths(dataset)
+        sampler = DistLengthGroupedSampler(
+            lengths=lengths,
+            batch_size=params_v1_1.batch_size,
+            generator=torch.manual_seed(params_v1_1.random_seed),
+        )
+    else:
+        sampler = DistributedSampler(
+            dataset,
+            num_replicas=dist.get_world_size(),
+            rank=dist.get_rank(),
+            shuffle=True,
+            seed=params_v1_1.random_seed,
+        )
     loader = DataLoader(
         dataset=dataset,
+        sampler=sampler,
         batch_size=params_v1_1.batch_size,
         collate_fn=batch_collate,
         drop_last=True,
         num_workers=3,
         shuffle=False,
-        sampler=sampler,  # Use custom sampler for balanced batches
         pin_memory=True,
     )
-
     return loader
 
 
-def log_valid_batch(valid_dataset):
+def log_valid_batch(logger, valid_dataset):
     """done only on rank 0"""
     valid_batch = valid_dataset.sample_test_batch(size=params_v1_1.test_size)
     for i, item in enumerate(valid_batch):
@@ -161,7 +180,7 @@ def log_valid_batch(valid_dataset):
     return valid_batch
 
 
-def init_model(rank, device):
+def init_model(rank, local_rank, device):
     """Initialize the model on the specified device."""
 
     model = ArtTTS(
@@ -183,13 +202,13 @@ def init_model(rank, device):
         params_v1_1.pe_scale,
     ).to(device)
 
-    DDP(model, device_ids=[rank])
+    model = DDP(model, device_ids=[local_rank])
 
-    mylogger.info("DDP Model initialized on rank %d", rank)
+    mylogger.info(f"DDP Model initialized on rank {rank} and local_rank {local_rank}")
     return model
 
 
-def load_model(model, start_epoch, version, rank):
+def load_model(model, start_epoch, local_rank):
     """Check if we are continuing from a checkpoint or starting from scratch"""
     if start_epoch == 1:  # start training from scratch
         early_stopping = EarlyStopping(
@@ -198,7 +217,7 @@ def load_model(model, start_epoch, version, rank):
         )
 
     else:  # continue training from a checkpoint
-        map_location = {"cuda:%d" % 0: "cuda:%d" % rank}
+        map_location = {"cuda:%d" % 0: "cuda:%d" % local_rank}
         early_stopping = torch.load(
             Path(params_v1_1.log_dir) / "early_stopping.pt",
             map_location=map_location,
@@ -209,7 +228,7 @@ def load_model(model, start_epoch, version, rank):
             map_location=map_location,
             weights_only=True,
         )
-        model.load_state_dict(ckpt_grad)
+        model.module.load_state_dict(ckpt_grad)
         mylogger.info("Model state dict loaded.")
     return model, early_stopping
 
@@ -227,17 +246,17 @@ def train_loop(model, train_loader, optimizer, epoch, device):
         optimizer.zero_grad()
         x, x_lengths = batch["x"].to(device), batch["x_lengths"].to(device)
         y, y_lengths = batch["y"].to(device), batch["y_lengths"].to(device)
-        dur_loss, prior_loss, diff_loss = model.compute_loss(
+        dur_loss, prior_loss, diff_loss = model.module.compute_loss(
             x, x_lengths, y, y_lengths, out_size=params_v1_1.out_size
         )
         loss = sum([dur_loss, prior_loss, diff_loss])
         loss.backward()
 
         enc_grad_norm = torch.nn.utils.clip_grad_norm_(
-            model.encoder.parameters(), max_norm=1
+            model.module.encoder.parameters(), max_norm=1
         )
         dec_grad_norm = torch.nn.utils.clip_grad_norm_(
-            model.decoder.parameters(), max_norm=1
+            model.module.decoder.parameters(), max_norm=1
         )
         optimizer.step()
 
@@ -350,7 +369,7 @@ def validation_loop(model, val_loader, device):
         with torch.no_grad():
             x, x_lengths = batch["x"].to(device), batch["x_lengths"].to(device)
             y, y_lengths = batch["y"].to(device), batch["y_lengths"].to(device)
-            dur_loss, prior_loss, diff_loss = model.compute_loss(
+            dur_loss, prior_loss, diff_loss = model.module.compute_loss(
                 x, x_lengths, y, y_lengths, out_size=params_v1_1.out_size
             )
             val_loss = sum([dur_loss, prior_loss, diff_loss])
@@ -411,7 +430,7 @@ def save_val_scalars(logger, epoch, val_losses):
     return log_msg
 
 
-def save_synthesis(model, device, epoch, valid_batch):
+def save_synthesis(logger, model, device, epoch, valid_batch):
     """Run inference on a list of filepaths and save the results.
     Args:
         model: Trained model for inference
@@ -485,33 +504,46 @@ def save_synthesis(model, device, epoch, valid_batch):
         )
 
 
-def train(rank, world_size):
+def train(local_rank, world_size, balance_batch, node_rank=0, gpus_per_node=4):
     """Main training function for distributed training.
     Args:
         rank: Unique identifier of each process
         world_size: Total number of processes
     """
-    ddp_setup(rank, world_size)
+    mylogger.info(
+        f"Starting training on node {node_rank} with local rank {local_rank} and world size {world_size}..."
+    )
+    rank = node_rank * gpus_per_node + local_rank
+    os.environ["RANK"] = str(rank)
+    os.environ["WORLD_SIZE"] = str(world_size)
+    os.environ["LOCAL_RANK"] = str(local_rank)
 
-    device = torch.device(f"cuda:{rank}")
+    ddp_setup(rank, local_rank, world_size)
+
+    device = torch.device(f"cuda:{local_rank}")
+
+    if rank == 0:
+        logger = SummaryWriter(log_dir=params_v1_1.log_dir)
 
     train_dataset = get_train_dataset()
     valid_dataset = get_valid_dataset()
-    train_loader = init_data_loader(train_dataset)
-    val_loader = init_data_loader(valid_dataset)
+    train_loader = init_data_loader(
+        train_dataset, validation=False, balance_batch=balance_batch
+    )
+
+    if rank == 0:
+        val_loader = init_data_loader(
+            valid_dataset, validation=True, balance_batch=False
+        )
 
     if rank == 0:
         mylogger.info("Train dataset initialized with %d samples", len(train_dataset))
         mylogger.info("Valid dataset initialized with %d samples", len(valid_dataset))
-        mylogger.info("Defininf and logging valid batch...")
-        valid_batch = log_valid_batch()
+        mylogger.info("Defining and logging valid batch...")
+        valid_batch = log_valid_batch(logger, valid_dataset)
         mylogger.info("Initializing models...")
 
-    model = init_model(rank, device)
-    mylogger.info("Initializing optimizer on rank %d...", rank)
-    optimizer = torch.optim.Adam(
-        params=model.parameters(), lr=params_v1_1.learning_rate
-    )
+    model = init_model(rank, local_rank, device)
 
     # wait for all processes to finish model initialization
     dist.barrier()
@@ -519,12 +551,12 @@ def train(rank, world_size):
     if rank == 0:
         mylogger.info(
             "Number of encoder + duration predictor parameters: %.2fm"
-            % (model.encoder.nparams / 1e6)
+            % (model.module.encoder.nparams / 1e6)
         )
         mylogger.info(
-            "Number of decoder parameters: %.2fm" % (model.decoder.nparams / 1e6)
+            "Number of decoder parameters: %.2fm" % (model.module.decoder.nparams / 1e6)
         )
-        mylogger.info("Total parameters: %.2fm" % (model.nparams / 1e6))
+        mylogger.info("Total parameters: %.2fm" % (model.module.nparams / 1e6))
 
         if start_epoch == 1:
             mylogger.info(
@@ -534,86 +566,94 @@ def train(rank, world_size):
                 f"Loading model state dict from ckpt grad_{start_epoch - 1}.pt ..."
             )
 
-    model, early_stopping = load_model(model, start_epoch, params_v1_1.version, rank)
+    model, early_stopping = load_model(model, start_epoch, local_rank)
+
+    mylogger.info("Initializing optimizer on rank %d...", rank)
+    optimizer = torch.optim.Adam(
+        params=model.module.parameters(), lr=params_v1_1.learning_rate
+    )
 
     # wait for all processes to finish loading model and early stopping
     dist.barrier()
 
     mylogger.info("Start training on device %d...", rank)
     best_epoch = 0
-    with tqdm(
-        range(start_epoch, end_epoch + 1),
-        total=end_epoch - start_epoch + 1,
-        desc="Training",
-        position=1,
-        dynamic_ncols=True,
-    ) as progress_bar:
-        for epoch in progress_bar:
-            means_tensor, maxs_tensor = train_loop(
-                model, train_loader, optimizer, epoch, device
-            )
+    if rank == 0:
+        progress_bar = tqdm(
+            range(start_epoch, end_epoch + 1),
+            total=end_epoch - start_epoch + 1,
+            desc="Training",
+            position=1,
+            dynamic_ncols=True,
+        )
+    for epoch in range(start_epoch, end_epoch + 1):
+        if rank == 0:
+            progress_bar.set_description(f"Training Epoch {epoch}")
+        means_tensor, maxs_tensor = train_loop(
+            model, train_loader, optimizer, epoch, device
+        )
 
-            dist.barrier()  # Ensure all processes complete the training step before logging
+        dist.barrier()  # Ensure all processes complete the training step before logging
 
-            avg_losses = reduce_mean(means_tensor, world_size)
-            max_grad_norms = reduce_max(maxs_tensor, world_size)
+        avg_losses = reduce_mean(means_tensor, world_size)
+        max_grad_norms = reduce_max(maxs_tensor, world_size)
 
-            if rank == 0:
-                mylogger.info(f"Epoch {epoch} finished")
-                # Save epoch training losses to TensorBoard
-                log_msg = save_train_scalars(logger, epoch, avg_losses, max_grad_norms)
-                mylogger.info(f"Train : {log_msg}")
+        if rank == 0:
+            mylogger.info(f"Epoch {epoch} finished")
+            # Save epoch training losses to TensorBoard
+            log_msg = save_train_scalars(logger, epoch, avg_losses, max_grad_norms)
+            mylogger.info(f"Train : {log_msg}")
 
-                # Evaluate validation loss
-                if epoch % val_every == 0:
-                    mylogger.info(f"Validation loss at epoch {epoch}...")
-                    model.eval()
-                    val_losses = validation_loop(model, val_loader, device)
-                    log_msg = save_val_scalars(logger, epoch, val_losses)
-                    mylogger.info(f"Val : {log_msg}")
+            # Evaluate validation loss
+            if epoch % val_every == 0:
+                mylogger.info(f"Validation loss at epoch {epoch}...")
+                model.eval()
+                val_losses = validation_loop(model, val_loader, device)
+                log_msg = save_val_scalars(logger, epoch, val_losses)
+                mylogger.info(f"Val : {log_msg}")
 
-                    patience_counter, glob_improv = early_stopping.step(
-                        val_losses,
+                patience_counter, glob_improv = early_stopping.step(
+                    val_losses,
+                )
+
+                mylogger.info(f"patience_counter: {patience_counter}")
+
+                # save early stopping object
+                torch.save(
+                    early_stopping,
+                    f=f"{log_dir}/early_stopping.pt",
+                )
+
+                if glob_improv:
+                    torch.save(model.module.state_dict(), f=f"{log_dir}/grad_best.pt")
+                    best_epoch = epoch
+                    mylogger.info(
+                        f"Best model saved at epoch {best_epoch} with validation loss {val_losses[-1]:.3f}"
                     )
-
-                    mylogger.info(f"patience_counter: {patience_counter}")
-
-                    # save early stopping object
-                    torch.save(
-                        early_stopping,
-                        f=f"{log_dir}/early_stopping.pt",
+                elif patience_counter >= custom_patience:
+                    mylogger.info(
+                        f"Early stopping at epoch {epoch} after {early_stopping.counter} times {save_every} epochs without \
+                                any subloss improvement. Best model epoch: {best_epoch}"
                     )
+                    break
 
-                    if glob_improv:
-                        torch.save(
-                            model.module.state_dict(), f=f"{log_dir}/grad_best.pt"
-                        )
-                        best_epoch = epoch
-                        mylogger.info(
-                            f"Best model saved at epoch {best_epoch} with validation loss {val_losses[-1]:.3f}"
-                        )
-                    elif patience_counter >= custom_patience:
-                        mylogger.info(
-                            f"Early stopping at epoch {epoch} after {early_stopping.counter} times {save_every} epochs without \
-                                    any subloss improvement. Best model epoch: {best_epoch}"
-                        )
-                        break
+            # Save model every `save_every` epochs
+            if epoch % save_every == 0:
+                model.eval()
+                mylogger.info("Synthesis...")
+                save_synthesis(logger, model, device, epoch, valid_batch)
+                mylogger.info("Synthesis finished.")
 
-                # Save model every `save_every` epochs
-                if epoch % save_every == 0:
-                    model.eval()
-                    mylogger.info("Synthesis...")
-                    save_synthesis(model, device, epoch, valid_batch)
-                    mylogger.info("Synthesis finished.")
-
-                    ckpt = model.module.state_dict()
-                    torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")
+                ckpt = model.module.state_dict()
+                torch.save(ckpt, f=f"{log_dir}/grad_{epoch}.pt")
+            # manually update the progress bar
+            progress_bar.update(1)
 
     cleanup()  # Clean up DDP resources
     if rank == 0:
         mylogger.info(f"Training finished. Best epoch: {best_epoch}")
         mylogger.info("Saving final model...")
-        torch.save(model.state_dict(), f=f"{log_dir}/grad_final.pt")
+        torch.save(model.module.state_dict(), f=f"{log_dir}/grad_final.pt")
         mylogger.info("Final model saved.")
 
 
@@ -622,23 +662,29 @@ parser.add_argument(
     "--world_size",  # Number of processes to run in parallel
     type=int,
 )
+parser.add_argument(
+    "--balance_batch",  # Whether to use balanced batch sampler
+    type=int,  # bool
+    default=0,
+)
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    world_size = args.world_size
-    assert world_size == torch.cuda.device_count(), (
-        "world_size must match the number of available GPUs"
-    )
-
+    world_size = int(args.world_size)
+    balance_batch = bool(int(args.balance_batch))
     torch.manual_seed(params_v1_1.random_seed)
     np.random.seed(params_v1_1.random_seed)
 
     Path(log_dir).mkdir(parents=True, exist_ok=True)
-
-    mp.spawn(
-        train,
-        args=(world_size,),
-        nprocs=world_size,
-        join=True,
-    )
-    mylogger.info("Training script finished.")
+    try:
+        mp.spawn(
+            train,
+            args=(world_size, balance_batch),
+            nprocs=world_size,
+            join=True,
+        )
+        mylogger.info("Training script finished.")
+    except Exception as e:
+        mylogger.error(f"An error occurred during training: {e}")
+        cleanup()  # Ensure DDP resources are cleaned up
+        raise e
