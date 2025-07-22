@@ -37,6 +37,10 @@ parser.add_argument(
     "--main_dir",  # ex: ../../checkpoints/sparc_en.ckpt
     type=str,
 )
+parser.add_argument(
+    "--version",
+    type=str,  # bool
+)
 parser.add_argument("--device", type=str, default="cuda")
 parser.add_argument(
     "--src_art",
@@ -52,6 +56,12 @@ if __name__ == "__main__":
     main_dir = Path(args.main_dir)
     device = args.device
     src_art = args.src_art
+    version = args.version
+
+    if version == "v1_1":
+        unnorm_loudness = True  # whether to use unnormalized loudness
+    else:
+        unnorm_loudness = False
 
     save_dir.mkdir(parents=True, exist_ok=True)
 
@@ -133,18 +143,27 @@ if __name__ == "__main__":
                     sparc_ema = np.load(
                         encoded_audio_dir / "emasrc" / f"{sample_id}.npy"
                     )
-                    # spk_emb = np.load(
-                    #    encoded_audio_dir / "spk_emb" / f"{sample_id}.npy"
-                    # )
                     spk_emb = np.load(
-                        encoded_audio_dir / "spk_emb" / "mean_spk_emb.npy"
+                        encoded_audio_dir / "spk_emb" / f"{sample_id}.npy"
                     )
-                    if src_art:
+                    # spk_emb = np.load(
+                    #     encoded_audio_dir / "spk_emb" / "mean_spk_emb.npy"
+                    # )
+                    if src_art:  # from arttts_pred
                         save_path = save_dir / f"{sample_id}_{src_art}_mean_spk_emb.wav"
                         pitch_mu, pitch_std = (
                             sparc_ema[:, 12].mean(),
                             sparc_ema[:, 12].std(),
                         )
+                        if unnorm_loudness:
+                            loudness_mu, loudness_std = (
+                                sparc_ema[:, 13].mean(),
+                                sparc_ema[:, 13].std(),
+                            )
+                            art[13, :] = (
+                                art[13, :] * loudness_std + loudness_mu
+                            )  # denormalize log-loudness
+                            art[13, :] = np.exp(art[13, :])  # delog log-loudness
                         code_art = {
                             "ema": art[:12, :].T,  # (T, 12)
                             "loudness": art[13, :],
@@ -154,7 +173,7 @@ if __name__ == "__main__":
                             "spk_emb": spk_emb,
                         }
 
-                    else:
+                    else:  # from sparc generation
                         save_path = save_dir / f"{sample_id}.wav"
                         code_art = {
                             "ema": art[:12, :].T,  # (T, 12)
