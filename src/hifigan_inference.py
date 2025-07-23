@@ -47,6 +47,11 @@ parser.add_argument(
     type=str,
     default="",  # , choices=["encoder", "decoder"],
 )
+parser.add_argument(
+    "--mean_spk_emb",
+    type=int,  # bool
+    default=0,  # whether to use mean speaker embedding (0 or 1)
+)
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -57,6 +62,7 @@ if __name__ == "__main__":
     device = args.device
     src_art = args.src_art
     version = args.version
+    mean_spk_emb = args.mean_spk_emb
 
     if version == "v1_1":
         unnorm_loudness = True  # whether to use unnormalized loudness
@@ -143,14 +149,23 @@ if __name__ == "__main__":
                     sparc_ema = np.load(
                         encoded_audio_dir / "emasrc" / f"{sample_id}.npy"
                     )
-                    spk_emb = np.load(
-                        encoded_audio_dir / "spk_emb" / f"{sample_id}.npy"
-                    )
-                    # spk_emb = np.load(
-                    #     encoded_audio_dir / "spk_emb" / "mean_spk_emb.npy"
-                    # )
+
+                    if mean_spk_emb:
+                        # Use mean speaker embedding if specified
+                        spk_emb = np.load(
+                            encoded_audio_dir / "spk_emb" / "mean_spk_emb.npy"
+                        )
+                    else:
+                        spk_emb = np.load(
+                            encoded_audio_dir / "spk_emb" / f"{sample_id}.npy"
+                        )
                     if src_art:  # from arttts_pred
-                        save_path = save_dir / f"{sample_id}_{src_art}_mean_spk_emb.wav"
+                        if mean_spk_emb:
+                            save_path = (
+                                save_dir / f"{sample_id}_{src_art}_mean_spk_emb.wav"
+                            )
+                        else:
+                            save_path = save_dir / f"{sample_id}_{src_art}.wav"
                         pitch_mu, pitch_std = (
                             sparc_ema[:, 12].mean(),
                             sparc_ema[:, 12].std(),
