@@ -97,8 +97,19 @@ if __name__ == "__main__":
 
     mylogger.info("Processing articulatory data from : %s", src_art)
 
-    phnm3_filepath = filepaths_list[0][1].replace("DUMMY/", str(main_dir) + "/")
-    encoded_audio_dir = Path(phnm3_filepath).parents[1] / "encoded_audio_en"
+    if version in ["v1", "v1_1"]:
+        phnm3_filepath = filepaths_list[0][1].replace("DUMMY/", str(main_dir) + "/")
+        encoded_audio_dir = Path(phnm3_filepath).parents[1] / "encoded_audio_en"
+    elif version == "v4":
+        # for v4 we use the same directory as the data_dir
+        emasrc_filepath = filepaths_list[0][0].replace("DUMMY/", str(main_dir) + "/")
+        encoded_audio_dir = Path(emasrc_filepath).parents[1]
+    else:
+        mylogger.error(
+            f"Unsupported version: {version}. Supported versions are: v1, v1_1, v4."
+        )
+        exit(1)
+
     mylogger.info("Encoded audio directory: %s", encoded_audio_dir)
 
     with torch.no_grad():
@@ -172,8 +183,8 @@ if __name__ == "__main__":
                         )
                         if unnorm_loudness:
                             loudness_mu, loudness_std = (
-                                sparc_ema[:, 13].mean(),
-                                sparc_ema[:, 13].std(),
+                                np.log(sparc_ema[:, 13] + 1e-9).mean(),
+                                np.log(sparc_ema[:, 13] + 1e-9).std(),
                             )
                             art[13, :] = (
                                 art[13, :] * loudness_std + loudness_mu
