@@ -38,7 +38,7 @@ echo "computation start $(date)"
 # launch your computation
 
 DATASET=MSPKA_EMA_ita # MNGU0, mocha_timit, MSPKA_EMA_ita, pb2007
-CKPT_NAME=grad_4750
+CKPT_NAME=grad_5000
 MODEL_VERSION=v1
 FILELIST_VERSION=v1
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
@@ -60,6 +60,7 @@ if [ "$DATASET" = "LJSpeech-1.1" ]; then
                                     --filelist_path resources/filelists/ljspeech/valid_${FILELIST_VERSION}.txt \
                                     --main_dir ${MAIN_DATA_DIR} \
                                     --device cuda \
+                                    --version ${MODEL_VERSION} \
                                     --src_art $SRC_ART
     SRC_ART=encoder
     echo "Running hifigan inference for dataset: $DATASET, from : $SRC_ART"
@@ -68,6 +69,7 @@ if [ "$DATASET" = "LJSpeech-1.1" ]; then
                                     --filelist_path resources/filelists/ljspeech/valid_${FILELIST_VERSION}.txt \
                                     --main_dir ${MAIN_DATA_DIR} \
                                     --device cuda \
+                                    --version ${MODEL_VERSION} \
                                     --src_art $SRC_ART
 else
     if [ "$DATASET" = "MNGU0" ]; then
@@ -98,6 +100,7 @@ else
                                         --filelist_path resources/filelists/$DATASET/${SPK}_${FILELIST_VERSION}.txt \
                                         --main_dir ${MAIN_DATA_DIR} \
                                         --device cuda \
+                                        --version ${MODEL_VERSION} \
                                         --src_art $SRC_ART
     SRC_ART=encoder
     echo "Running hifigan inference for dataset: $DATASET, speaker: $SPK, from : $SRC_ART"
@@ -106,6 +109,7 @@ else
                                         --filelist_path resources/filelists/$DATASET/${SPK}_${FILELIST_VERSION}.txt \
                                         --main_dir ${MAIN_DATA_DIR} \
                                         --device cuda \
+                                        --version ${MODEL_VERSION} \
                                         --src_art $SRC_ART
 fi
 

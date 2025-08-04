@@ -34,8 +34,13 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument(
-    "--main_dir",  # ex: ../../checkpoints/sparc_en.ckpt
+    "--main_dir",  # ex: ../../data
     type=str,
+)
+parser.add_argument(
+    "--sparc_ckpt",
+    type=str,
+    default="ckpt/sparc_en.ckpt",  # or "ckpt/sparc_multi.ckpt"
 )
 parser.add_argument(
     "--version",

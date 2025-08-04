@@ -17,7 +17,11 @@ parser.add_argument(
     "--save_dir",
     type=str,
 )
-parser.add_argument("--ckpt_path", type=str, default="ckpt/sparc_en.ckpt")
+parser.add_argument(
+    "--ckpt_path",
+    type=str,
+    default="ckpt/sparc_en.ckpt",  # or "ckpt/sparc_multi.ckpt"
+)
 
 """
 Do it as array jobs instead of multiprocessing
