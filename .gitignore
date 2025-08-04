@@ -30,3 +30,4 @@ src/model/monotonic_align/*.so
 
 # logs
 logs/
+logs_trash/
