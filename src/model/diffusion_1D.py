@@ -54,8 +54,9 @@ class Block(BaseModule):
         super(Block, self).__init__()
         self.block = torch.nn.Sequential(
             torch.nn.Conv2d(
-                dim, dim_out, 3, padding=1
+                dim, dim_out, (1, 3), padding=(0, 1)
             ),  # (dim, h, w) -> (dim_out, h, w)
+            LinearAttention(dim_out, heads=4, dim_head=32),
             torch.nn.GroupNorm(groups, dim_out),  # (dim_out, h, w) -> (dim_out, h, w)
             Mish(),
         )
@@ -260,7 +261,7 @@ def get_noise(t, beta_init, beta_term, cumulative=False):
     return noise
 
 
-class Diffusion(BaseModule):
+class Diffusion1D(BaseModule):
     def __init__(
         self,
         n_feats,
@@ -271,7 +272,7 @@ class Diffusion(BaseModule):
         beta_max=20,
         pe_scale=1000,
     ):
-        super(Diffusion, self).__init__()
+        super(Diffusion1D, self).__init__()
         self.n_feats = n_feats
         self.dim = dim
         self.n_spks = n_spks
