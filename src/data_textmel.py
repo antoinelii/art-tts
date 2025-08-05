@@ -14,6 +14,7 @@ import torch
 import torchaudio as ta
 
 from text import text_to_sequence, cmudict
+from text.converters import text_to_arpabet
 from text.symbols import symbols
 from utils import parse_filelist, intersperse
 from model.utils import fix_len_compatibility
@@ -90,7 +91,14 @@ class TextMelDataset(torch.utils.data.Dataset):
         return mel
 
     def get_text(self, text, add_blank=True):
-        text_norm = text_to_sequence(text, dictionary=self.cmudict)
+        text_norm = text_to_arpabet(
+            text, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
+        )
+        text_norm = " ".join(text_norm)
+        text_norm = text_to_sequence(
+            text_norm, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
+        )
+        # text_norm = text_to_sequence(text, dictionary=self.cmudict)
         if self.add_blank:
             text_norm = intersperse(
                 text_norm, len(symbols)
@@ -207,7 +215,14 @@ class TextMelSpeakerDataset(torch.utils.data.Dataset):
         return mel
 
     def get_text(self, text, add_blank=True):
-        text_norm = text_to_sequence(text, dictionary=self.cmudict)
+        text_norm = text_to_arpabet(
+            text, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
+        )
+        text_norm = " ".join(text_norm)
+        text_norm = text_to_sequence(
+            text_norm, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
+        )
+        # text_norm = text_to_sequence(text, dictionary=self.cmudict)
         if self.add_blank:
             text_norm = intersperse(
                 text_norm, len(symbols)
