@@ -56,7 +56,23 @@ class Block(BaseModule):
             torch.nn.Conv2d(
                 dim, dim_out, (1, 3), padding=(0, 1)
             ),  # (dim, h, w) -> (dim_out, h, w)
-            LinearAttention(dim_out, heads=4, dim_head=32),
+            ArtChannelsAttention(dim_out, heads=4, dim_head=32),
+            torch.nn.GroupNorm(groups, dim_out),  # (dim_out, h, w) -> (dim_out, h, w)
+            Mish(),
+        )
+
+    def forward(self, x, mask):
+        output = self.block(x * mask)
+        return output * mask  # (dim, h, w) -> (dim_out, h, w)
+
+
+class OldBlock(BaseModule):
+    def __init__(self, dim, dim_out, groups=8):
+        super(OldBlock, self).__init__()
+        self.block = torch.nn.Sequential(
+            torch.nn.Conv2d(
+                dim, dim_out, 3, padding=1
+            ),  # (dim, h, w) -> (dim_out, h, w)
             torch.nn.GroupNorm(groups, dim_out),  # (dim_out, h, w) -> (dim_out, h, w)
             Mish(),
         )
@@ -84,6 +100,56 @@ class ResnetBlock(BaseModule):
         h = self.block2(h, mask)
         output = h + self.res_conv(x * mask)
         return output
+
+
+class ArtChannelsAttention(BaseModule):
+    def __init__(self, dim, heads=4, dim_head=32):
+        """
+        We have a 2D input tensor with shape (b, dim, n_feats, T)
+        where n_feats is 16 art features and T is the sequence length (100 for 2 seconds
+        but not always 100... can be shorter in inference).
+        We want to apply attention across the channels n_feats.
+        Here dim is the sequence length, we want
+        """
+        super(ArtChannelsAttention, self).__init__()
+        self.heads = heads
+        self.dim_head = dim_head
+        self.hidden_dim = dim_head * heads
+        # return
+        self.to_qkv = torch.nn.Conv2d(
+            dim, self.hidden_dim * 3, (1, 3), padding=(0, 1), bias=False
+        )  # each row processed independently
+        self.to_out = torch.nn.Conv2d(self.hidden_dim, dim, 1)
+
+    def forward(self, x):
+        b, c, h, w = x.shape
+        qkv = self.to_qkv(x)  # (b, hidden_dim * 3, n_feats, T)
+        # q, k, v = rearrange(
+        #    qkv, "b (qkv heads c) h w -> qkv b heads c (h w)", heads=self.heads, qkv=3
+        # )  # (b, heads, dim_head, h*w) * 3
+        # k = k.softmax(dim=-1)  # (b, heads, dim_head, h*w)
+        # context = torch.einsum(
+        #    "bhdn,bhen->bhde", k, v
+        # )  # (b, heads, dim_head, dim_head)
+        # out = torch.einsum("bhde,bhdn->bhen", context, q)  # (b, heads, dim_head, h*w)
+        # out = rearrange(
+        #    out, "b heads c (h w) -> b (heads c) h w", heads=self.heads, h=h, w=w
+        # )  # (b, heads * dim_heads, h, w)
+        # return self.to_out(out)  # (b, heads * dim_heads, h, w) -> (b, dim_in, h, w)
+        q, k, v = rearrange(
+            qkv, "b (qkv heads c) h w -> qkv b heads w h c", heads=self.heads, qkv=3
+        )  # (b, heads, T, n_feats, dim_head) * 3
+        context = torch.einsum("bhtnd,bhtmd->bhtnm", q, k)  # (b, heads, T, h, h)
+        context = torch.softmax(
+            context / (self.dim_head**0.5), dim=-1
+        )  # (b, heads, T, h, h)
+        out = torch.einsum(
+            "bhtnm,bhtmd->bhtnd", context, v
+        )  # (b, heads, T, h, dim_head)
+        out = rearrange(
+            out, "b heads w h c -> b (heads c) h w", heads=self.heads, h=h, w=w
+        )  # (b, hidden_dim, h, w)
+        return self.to_out(out)
 
 
 class LinearAttention(BaseModule):
