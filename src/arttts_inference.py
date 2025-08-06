@@ -6,7 +6,7 @@ from pathlib import Path
 
 import torch
 
-from model import ArtTTS, GradTTS
+from model import ArtTTS, GradTTS, AttentionTTS
 from data_phnm import PhnmArticDataset, PhnmBatchCollate
 from data_textmel import TextMelDataset, TextBatchCollate
 from data_textart import TextArtDataset
@@ -27,7 +27,8 @@ mylogger.addHandler(handler)
 
 phnm_versions = ["v1", "v1_", "v1_1", "v3"]
 text_versions = ["v2", "v4"]
-artic_versions = ["v1", "v1_", "v1_1", "v4"]
+attention_versions = ["v5", "v5_preblock"]
+artic_versions = ["v1", "v1_", "v1_1", "v4", "v5", "v5_preblock"]
 mel_versions = ["v2", "v3"]
 
 
@@ -72,6 +73,26 @@ def init_model(version, params, device):
             params.beta_max,
             params.pe_scale,
         ).to(device)
+    elif version in attention_versions:
+        model = AttentionTTS(
+            params.n_ipa_feats,
+            params.n_spks,
+            None if params.n_spks == 1 else params.spk_embed_dim,
+            params.n_enc_channels,
+            params.filter_channels,
+            params.filter_channels_dp,
+            params.n_heads,
+            params.n_enc_layers,
+            params.enc_kernel,
+            params.enc_dropout,
+            params.window_size,
+            params.n_feats,
+            params.dec_dim,
+            params.beta_min,
+            params.beta_max,
+            params.pe_scale,
+        ).to(device)
+
     else:
         raise ValueError(f"Unsupported version: {version}")
     return model
@@ -85,7 +106,7 @@ def init_dataset(version, params, data_dir, filelist_path):
             load_coder=False,
             merge_diphtongues=params.merge_diphtongues,
         )
-    elif version in ["v1_1"]:
+    elif version in ["v1_1", "v5", "v5_preblock"]:
         dataset = PhnmArticDataset(
             filelist_path,
             data_root_dir=data_dir,
@@ -100,6 +121,7 @@ def init_dataset(version, params, data_dir, filelist_path):
             data_root_dir=data_dir,
             cmudict_path=params.cmudict_path,
             add_blank=params.add_blank,
+            gradtts_text_conv=params.gradtts_text_conv,
         )
     elif version in ["v3"]:
         dataset = PhnmMelDataset(
@@ -112,6 +134,7 @@ def init_dataset(version, params, data_dir, filelist_path):
             data_root_dir=data_dir,
             cmudict_path=params.cmudict_path,
             add_blank=params.add_blank,
+            gradtts_text_conv=params.gradtts_text_conv,
         )
     else:
         raise ValueError(f"Unsupported version: {version}")
@@ -263,7 +286,7 @@ if __name__ == "__main__":
                         n_timesteps=50,
                         x_durations=x_durations,
                     )  # (B, 16, T) x 2 , (B,1,T0,T)
-                elif version in phnm_versions:
+                elif (version in phnm_versions) or (version in attention_versions):
                     x, x_lengths = get_phnm_inputs(batch_filepaths, dataset, collator)
                     y_enc, y_dec, attn = model(
                         x, x_lengths, n_timesteps=50
