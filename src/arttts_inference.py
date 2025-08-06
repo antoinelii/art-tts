@@ -162,7 +162,7 @@ def init_dataset(version, params, data_dir, filelist_path):
 
 
 def get_collator(version, params):
-    if version in phnm_versions:
+    if (version in phnm_versions) or (version in attention_versions):
         collator = PhnmBatchCollate()
     elif version in text_versions:
         collator = TextBatchCollate()
