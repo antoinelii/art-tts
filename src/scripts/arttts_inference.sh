@@ -11,7 +11,7 @@
 #SBATCH --ntasks-per-node=1 # nombre de tache MPI par noeud (= nombre de GPU par noeud)
 #SBATCH --gres=gpu:1 # reserver 4 GPU
 #SBATCH --cpus-per-task=3 # reserver 10 CPU par tache (et memoire associee)
-#SBATCH --time=1:00:00 # temps maximal d’allocation "(HH:MM:SS)"
+#SBATCH --time=4:00:00 # temps maximal d’allocation "(HH:MM:SS)"
 # #SBATCH --qos=qos_gpu-dev # QoS
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
 #SBATCH --account=rec@v100 # comptabilite V100
@@ -38,7 +38,7 @@ echo "computation start $(date)"
 # launch your computation
 
 DATASET=MSPKA_EMA_ita # MNGU0, mocha_timit, MSPKA_EMA_ita, pb2007
-CKPT_NAME=grad_4750
+CKPT_NAME=grad_5000
 MODEL_VERSION=v1
 FILELIST_VERSION=v1
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data

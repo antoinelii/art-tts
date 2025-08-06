@@ -19,7 +19,7 @@ valid_filelist_path = "resources/filelists/ljspeech/valid_v2.txt"
 test_filelist_path = "resources/filelists/ljspeech/test_v2.txt"
 cmudict_path = "resources/cmu_dictionary"
 add_blank = True  # keep it? unfair to test datasets
-gradtts_text_conv = True  # Wether to use grad-tts text to symbol conversion (imperfect
+gradtts_text_conv = False  # Wether to use grad-tts text to symbol conversion (imperfect
 # and lacunary) or mine
 
 n_feats = 80
@@ -49,7 +49,7 @@ beta_max = 20.0
 pe_scale = 1000  # 1 for `grad-tts-old.pt` checkpoint
 
 # training parameters
-log_dir = "logs/v2"
+log_dir = "logs/v2_phnmtext"
 test_size = 4
 n_epochs = 10000
 batch_size = 16

@@ -20,7 +20,7 @@ test_filelist_path = "resources/filelists/ljspeech/test_v4.txt"
 cmudict_path = "resources/cmu_dictionary"
 add_blank = True  # keep it? unfair to Phnm datasets
 sparc_ckpt_path = "ckpt/sparc_en.ckpt"
-gradtts_text_conv = True  # Wether to use grad-tts text to symbol conversion (imperfect
+gradtts_text_conv = False  # Wether to use grad-tts text to symbol conversion (imperfect
 # and lacunary) or mine
 
 n_feats = 16  # 14 to 16, actually need n_feats // 2**2 fot compatibility with U-Net
@@ -57,7 +57,7 @@ beta_max = 20.0
 pe_scale = 1000  # 1 for `grad-tts-old.pt` checkpoint
 
 # training parameters
-log_dir = "logs/v4"
+log_dir = "logs/v4_phnmtext"
 test_size = 4
 n_epochs = 10000
 batch_size = 16

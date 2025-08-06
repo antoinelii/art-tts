@@ -50,6 +50,7 @@ class TextArtDataset(torch.utils.data.Dataset):
         sparc_ckpt_path=sparc_ckpt_path,
         shuffle=True,
         random_seed=random_seed,
+        gradtts_text_conv=True,  # Wether to use grad-tts text to symbol conversion (imperfect
     ):
         self.filepaths_list = parse_filelist(
             filelist_path
@@ -58,6 +59,7 @@ class TextArtDataset(torch.utils.data.Dataset):
         self.data_root_dir = Path(data_root_dir)
         self.cmudict = cmudict.CMUDict(cmudict_path)
         self.add_blank = add_blank
+        self.gradtts_text_conv = gradtts_text_conv  # Wether to use grad-tts text to symbol conversion (imperfect
         # artic
         self.sparc_ckpt_path = sparc_ckpt_path
         self.reorder_feats = reorder_feats
@@ -135,14 +137,18 @@ class TextArtDataset(torch.utils.data.Dataset):
         return torch.FloatTensor(art).T  # shape: (n_art_feats, T)
 
     def get_text(self, text, add_blank=True):
-        text_norm = text_to_arpabet(
-            text, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
-        )
-        text_norm = " ".join(text_norm)
-        text_norm = text_to_sequence(
-            text_norm, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
-        )
-        # text_norm = text_to_sequence(text, dictionary=self.cmudict)
+        if self.gradtts_text_conv:
+            text_norm = text_to_sequence(text, dictionary=self.cmudict)
+        else:
+            text_norm = text_to_arpabet(
+                text, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
+            )
+            text_norm = " ".join(text_norm)
+            text_norm = text_to_sequence(
+                text_norm,
+                dictionary=self.cmudict,
+                cleaner_names=["english_cleaners_v2"],
+            )
         if self.add_blank:
             text_norm = intersperse(
                 text_norm, len(symbols)

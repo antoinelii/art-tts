@@ -8,6 +8,8 @@
 
 import logging
 from pathlib import Path
+import importlib
+import argparse
 
 import numpy as np
 import torch
@@ -15,7 +17,6 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from configs import params_v2
 from data_textmel import TextMelBatchCollate, TextMelDataset
 from metrics import normalized_dtw_score
 from model import GradTTS
@@ -27,8 +28,6 @@ from utils import (
     save_plot,
 )
 
-log_dir = params_v2.log_dir
-
 # Setup logger
 mylogger = logging.getLogger(__name__)
 mylogger.setLevel(logging.INFO)
@@ -38,59 +37,73 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 handler.setFormatter(formatter)
 mylogger.addHandler(handler)
 
-start_epoch = 1
-end_epoch = 5000
-custom_patience = 5000
-val_every = params_v2.val_every
-save_every = params_v2.save_every
-
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--params_name",
+    type=str,
+    default="params_v2",  # or "params_v2_phnmtext",
+)
 
 if __name__ == "__main__":
-    torch.manual_seed(params_v2.random_seed)
-    np.random.seed(params_v2.random_seed)
+    args = parser.parse_args()
+    params_name = args.params_name
+    params = importlib.import_module(f"configs.{params_name}")
+
+    start_epoch = 1
+    end_epoch = 5000
+    custom_patience = 5000
+    val_every = params.val_every
+    save_every = params.save_every
+
+    log_dir = params.log_dir
+
+    torch.manual_seed(params.random_seed)
+    np.random.seed(params.random_seed)
 
     mylogger.info("Initializing logger...")
-    logger = SummaryWriter(log_dir=params_v2.log_dir)
+    logger = SummaryWriter(log_dir=params.log_dir)
 
     mylogger.info("Initializing data loaders...")
     train_dataset = TextMelDataset(
-        params_v2.train_filelist_path,
-        cmudict_path=params_v2.cmudict_path,
-        data_root_dir=params_v2.data_root_dir,
-        add_blank=params_v2.add_blank,
-        n_fft=params_v2.n_fft,
-        n_mels=params_v2.n_feats,
-        sample_rate=params_v2.sample_rate,
-        hop_length=params_v2.hop_length,
-        win_length=params_v2.win_length,
-        f_min=params_v2.f_min,
-        f_max=params_v2.f_max,
+        params.train_filelist_path,
+        cmudict_path=params.cmudict_path,
+        data_root_dir=params.data_root_dir,
+        add_blank=params.add_blank,
+        n_fft=params.n_fft,
+        n_mels=params.n_feats,
+        sample_rate=params.sample_rate,
+        hop_length=params.hop_length,
+        win_length=params.win_length,
+        f_min=params.f_min,
+        f_max=params.f_max,
+        gradtts_text_conv=params.gradtts_text_conv,
     )
     batch_collate = TextMelBatchCollate()
     loader = DataLoader(
         dataset=train_dataset,
-        batch_size=params_v2.batch_size,
+        batch_size=params.batch_size,
         collate_fn=batch_collate,
         drop_last=True,
         num_workers=3,
         shuffle=False,
     )
     valid_dataset = TextMelDataset(
-        params_v2.valid_filelist_path,
-        cmudict_path=params_v2.cmudict_path,
-        data_root_dir=params_v2.data_root_dir,
-        add_blank=params_v2.add_blank,
-        n_fft=params_v2.n_fft,
-        n_mels=params_v2.n_feats,
-        sample_rate=params_v2.sample_rate,
-        hop_length=params_v2.hop_length,
-        win_length=params_v2.win_length,
-        f_min=params_v2.f_min,
-        f_max=params_v2.f_max,
+        params.valid_filelist_path,
+        cmudict_path=params.cmudict_path,
+        data_root_dir=params.data_root_dir,
+        add_blank=params.add_blank,
+        n_fft=params.n_fft,
+        n_mels=params.n_feats,
+        sample_rate=params.sample_rate,
+        hop_length=params.hop_length,
+        win_length=params.win_length,
+        f_min=params.f_min,
+        f_max=params.f_max,
+        gradtts_text_conv=params.gradtts_text_conv,
     )
     val_loader = DataLoader(
         dataset=valid_dataset,
-        batch_size=params_v2.batch_size,
+        batch_size=params.batch_size,
         collate_fn=batch_collate,
         drop_last=False,
         num_workers=3,
@@ -99,26 +112,26 @@ if __name__ == "__main__":
 
     mylogger.info("Initializing model...")
 
-    add_blank = params_v2.add_blank
+    add_blank = params.add_blank
     nsymbols = len(symbols) + 1 if add_blank else len(symbols)
 
     model = GradTTS(
         nsymbols,
-        params_v2.n_spks,
-        None if params_v2.n_spks == 1 else params_v2.spk_embed_dim,
-        params_v2.n_enc_channels,
-        params_v2.filter_channels,
-        params_v2.filter_channels_dp,
-        params_v2.n_heads,
-        params_v2.n_enc_layers,
-        params_v2.enc_kernel,
-        params_v2.enc_dropout,
-        params_v2.window_size,
-        params_v2.n_feats,
-        params_v2.dec_dim,
-        params_v2.beta_min,
-        params_v2.beta_max,
-        params_v2.pe_scale,
+        params.n_spks,
+        None if params.n_spks == 1 else params.spk_embed_dim,
+        params.n_enc_channels,
+        params.filter_channels,
+        params.filter_channels_dp,
+        params.n_heads,
+        params.n_enc_layers,
+        params.enc_kernel,
+        params.enc_dropout,
+        params.window_size,
+        params.n_feats,
+        params.dec_dim,
+        params.beta_min,
+        params.beta_max,
+        params.pe_scale,
     ).cuda()
 
     mylogger.info("Model initialized.")
@@ -133,13 +146,13 @@ if __name__ == "__main__":
     else:  # continue training from a checkpoint
         mylogger.info(f"Loading Early stopping from ckpt grad_{start_epoch - 1}.pt ...")
         early_stopping = torch.load(
-            Path(params_v2.log_dir) / "early_stopping.pt", weights_only=False
+            Path(params.log_dir) / "early_stopping.pt", weights_only=False
         )
 
         mylogger.info(
             f"Loading model state dict from ckpt grad_{start_epoch - 1}.pt ..."
         )
-        ckpt_grad = torch.load(Path(params_v2.log_dir) / f"grad_{start_epoch - 1}.pt")
+        ckpt_grad = torch.load(Path(params.log_dir) / f"grad_{start_epoch - 1}.pt")
         model.load_state_dict(ckpt_grad)
         mylogger.info("Model state dict loaded.")
 
@@ -151,10 +164,10 @@ if __name__ == "__main__":
     mylogger.info("Total parameters: %.2fm" % (model.nparams / 1e6))
 
     mylogger.info("Initializing optimizer...")
-    optimizer = torch.optim.Adam(params=model.parameters(), lr=params_v2.learning_rate)
+    optimizer = torch.optim.Adam(params=model.parameters(), lr=params.learning_rate)
 
     mylogger.info("Logging valid batch...")
-    valid_batch = valid_dataset.sample_test_batch(size=params_v2.test_size)
+    valid_batch = valid_dataset.sample_test_batch(size=params.test_size)
     for i, item in enumerate(valid_batch):
         mel = item["y"].cpu()
         logger.add_image(
@@ -163,7 +176,7 @@ if __name__ == "__main__":
             global_step=0,
             dataformats="HWC",
         )
-        save_plot(mel.squeeze(), f"{params_v2.log_dir}/original_{i}.png")
+        save_plot(mel.squeeze(), f"{params.log_dir}/original_{i}.png")
 
     mylogger.info("Start training...")
     iteration = 0
@@ -188,7 +201,7 @@ if __name__ == "__main__":
                 x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
                 y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
                 dur_loss, prior_loss, diff_loss = model.compute_loss(
-                    x, x_lengths, y, y_lengths, out_size=params_v2.out_size
+                    x, x_lengths, y, y_lengths, out_size=params.out_size
                 )
                 loss = sum([dur_loss, prior_loss, diff_loss])
                 loss.backward()
@@ -259,7 +272,7 @@ if __name__ == "__main__":
                         x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
                         y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
                         dur_loss, prior_loss, diff_loss = model.compute_loss(
-                            x, x_lengths, y, y_lengths, out_size=params_v2.out_size
+                            x, x_lengths, y, y_lengths, out_size=params.out_size
                         )
                         val_loss = sum([dur_loss, prior_loss, diff_loss])
 
@@ -323,7 +336,7 @@ if __name__ == "__main__":
                     mylogger.info(
                         f"Best model saved at epoch {best_epoch} with validation loss {mean_val_loss:.3f}"
                     )
-                # elif patience_counter >= params_v2.patience:
+                # elif patience_counter >= params.patience:
                 elif patience_counter >= custom_patience:
                     mylogger.info(
                         f"Early stopping at epoch {epoch} after {early_stopping.counter} times {save_every} epochs without \

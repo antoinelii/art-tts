@@ -39,6 +39,6 @@ echo "computation start $(date)"
 export CUDA_LAUNCH_BLOCKING=1
 echo "CUDA_LAUNCH_BLOCKING=$CUDA_LAUNCH_BLOCKING"
 
-srun python -u ./train_v2.py
+srun python -u ./train_v2.py --params_name params_v2  # or params_v2_text
 
 echo "computation end : $(date)"

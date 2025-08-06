@@ -28,6 +28,8 @@ echo "CUDA_DEVICE: $CUDA_VISIBLE_DEVICES"
 set -x # activer l’echo des commandes
 
 DATASET=MSPKA_EMA_ita # MNGU0, mocha_timit, MSPKA_EMA_ita, pb2007
+MODEL_VERSION=v1
+FILELIST_VERSION=v1
 
 # Define speakers conditionally
 if [ "$DATASET" = "MNGU0" ]; then
@@ -60,11 +62,11 @@ echo "computation start $(date)"
 # launch your computation
 
 srun python -u ./arttts_inference.py  --data_dir /scratch2/ali/data \
-                                    --save_dir /scratch2/ali/data/$DATASET/arttts/$SPK/arttts_pred/v1/grad_565 \
-                                    --filelist_path resources/filelists/$DATASET/${SPK}_v1.txt \
-                                    --version v1 \
+                                    --save_dir /scratch2/ali/data/$DATASET/arttts/$SPK/arttts_pred/${MODEL_VERSION}/grad_565 \
+                                    --filelist_path resources/filelists/$DATASET/${SPK}_${FILELIST_VERSION}.txt \
+                                    --version ${MODEL_VERSION} \
                                     --ckpt_name grad_565.pt \
-                                    --params_name params_v1 \
+                                    --params_name params_${MODEL_VERSION} \
                                     --device cuda \
                                     --batch_size 1 \
                                     --use_align 0

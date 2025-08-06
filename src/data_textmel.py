@@ -45,9 +45,11 @@ class TextMelDataset(torch.utils.data.Dataset):
         win_length=1024,
         f_min=0.0,
         f_max=8000,
+        gradtts_text_conv=True,  # Wether to use grad-tts text to symbol conversion (imperfect
     ):
         self.filepaths_list = parse_filelist(filelist_path)
         self.cmudict = cmudict.CMUDict(cmudict_path)
+        self.gradtts_text_conv = gradtts_text_conv  # Wether to use grad-tts text to symbol conversion (imperfect
         self.data_root_dir = Path(data_root_dir)
         self.add_blank = add_blank
         self.n_fft = n_fft
@@ -91,13 +93,18 @@ class TextMelDataset(torch.utils.data.Dataset):
         return mel
 
     def get_text(self, text, add_blank=True):
-        text_norm = text_to_arpabet(
-            text, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
-        )
-        text_norm = " ".join(text_norm)
-        text_norm = text_to_sequence(
-            text_norm, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
-        )
+        if self.gradtts_text_conv:
+            text_norm = text_to_sequence(text, dictionary=self.cmudict)
+        else:
+            text_norm = text_to_arpabet(
+                text, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
+            )
+            text_norm = " ".join(text_norm)
+            text_norm = text_to_sequence(
+                text_norm,
+                dictionary=self.cmudict,
+                cleaner_names=["english_cleaners_v2"],
+            )
         # text_norm = text_to_sequence(text, dictionary=self.cmudict)
         if self.add_blank:
             text_norm = intersperse(
@@ -176,10 +183,12 @@ class TextMelSpeakerDataset(torch.utils.data.Dataset):
         win_length=1024,
         f_min=0.0,
         f_max=8000,
+        gradtts_text_conv=True,  # Wether to use grad-tts text to symbol conversion (imperfect
     ):
         super().__init__()
         self.filelist = parse_filelist(filelist_path, split_char="|")
         self.cmudict = cmudict.CMUDict(cmudict_path)
+        self.gradtts_text_conv = gradtts_text_conv
         self.n_fft = n_fft
         self.n_mels = n_mels
         self.sample_rate = sample_rate
@@ -215,14 +224,18 @@ class TextMelSpeakerDataset(torch.utils.data.Dataset):
         return mel
 
     def get_text(self, text, add_blank=True):
-        text_norm = text_to_arpabet(
-            text, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
-        )
-        text_norm = " ".join(text_norm)
-        text_norm = text_to_sequence(
-            text_norm, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
-        )
-        # text_norm = text_to_sequence(text, dictionary=self.cmudict)
+        if self.gradtts_text_conv:
+            text_norm = text_to_sequence(text, dictionary=self.cmudict)
+        else:
+            text_norm = text_to_arpabet(
+                text, dictionary=self.cmudict, cleaner_names=["english_cleaners_v2"]
+            )
+            text_norm = " ".join(text_norm)
+            text_norm = text_to_sequence(
+                text_norm,
+                dictionary=self.cmudict,
+                cleaner_names=["english_cleaners_v2"],
+            )
         if self.add_blank:
             text_norm = intersperse(
                 text_norm, len(symbols)
