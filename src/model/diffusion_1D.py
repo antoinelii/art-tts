@@ -49,15 +49,32 @@ class Rezero(BaseModule):
         return self.fn(x) * self.g
 
 
-class Block(BaseModule):
+# class Block(BaseModule):
+#    def __init__(self, dim, dim_out, groups=8):
+#        super(Block, self).__init__()
+#        self.block = torch.nn.Sequential(
+#            torch.nn.Conv2d(
+#                dim, dim_out, (1, 3), padding=(0, 1)
+#            ),  # (dim, h, w) -> (dim_out, h, w)
+#            ArtChannelsAttention(dim_out, heads=4, dim_head=32),
+#            torch.nn.GroupNorm(groups, dim_out),  # (dim_out, h, w) -> (dim_out, h, w)
+#            Mish(),
+#        )
+#
+#    def forward(self, x, mask):
+#        output = self.block(x * mask)
+#        return output * mask  # (dim, h, w) -> (dim_out, h, w)
+
+
+class PreBlock(BaseModule):
     def __init__(self, dim, dim_out, groups=8):
-        super(Block, self).__init__()
+        super(PreBlock, self).__init__()
         self.block = torch.nn.Sequential(
             torch.nn.Conv2d(
-                dim, dim_out, (1, 3), padding=(0, 1)
+                dim, dim_out, (1, 9), padding=(0, 4)
             ),  # (dim, h, w) -> (dim_out, h, w)
             ArtChannelsAttention(dim_out, heads=4, dim_head=32),
-            torch.nn.GroupNorm(groups, dim_out),  # (dim_out, h, w) -> (dim_out, h, w)
+            # torch.nn.GroupNorm(groups, dim_out),  # (dim_out, h, w) -> (dim_out, h, w)
             Mish(),
         )
 
@@ -66,9 +83,9 @@ class Block(BaseModule):
         return output * mask  # (dim, h, w) -> (dim_out, h, w)
 
 
-class OldBlock(BaseModule):
+class Block(BaseModule):
     def __init__(self, dim, dim_out, groups=8):
-        super(OldBlock, self).__init__()
+        super(Block, self).__init__()
         self.block = torch.nn.Sequential(
             torch.nn.Conv2d(
                 dim, dim_out, 3, padding=1
@@ -142,13 +159,13 @@ class ArtChannelsAttention(BaseModule):
         context = torch.einsum("bhtnd,bhtmd->bhtnm", q, k)  # (b, heads, T, h, h)
         context = torch.softmax(
             context / (self.dim_head**0.5), dim=-1
-        )  # (b, heads, T, h, h)
+        )  # (b, heads, T, n_feats, n_feats)
         out = torch.einsum(
             "bhtnm,bhtmd->bhtnd", context, v
-        )  # (b, heads, T, h, dim_head)
+        )  # (b, heads, T, n_feats, dim_head)
         out = rearrange(
             out, "b heads w h c -> b (heads c) h w", heads=self.heads, h=h, w=w
-        )  # (b, hidden_dim, h, w)
+        )  # (b, hidden_dim, n_feats, T)
         return self.to_out(out)
 
 
@@ -235,6 +252,9 @@ class GradLogPEstimator2d(BaseModule):
         )
 
         dims = [2 + (1 if n_spks > 1 else 0), *map(lambda m: dim * m, dim_mults)]
+
+        self.preblock = PreBlock(dims[0], dims[0], groups=groups)
+
         in_out = list(zip(dims[:-1], dims[1:]))
         self.downs = torch.nn.ModuleList([])
         self.ups = torch.nn.ModuleList([])
@@ -285,6 +305,8 @@ class GradLogPEstimator2d(BaseModule):
             s = s.unsqueeze(-1).repeat(1, 1, x.shape[-1])  # (B, n_feats, T)
             x = torch.stack([mu, x, s], 1)  # (B, 3, n_feats, T)
         mask = mask.unsqueeze(1)  # (B, 1, 1, T)
+
+        x = self.preblock(x, mask)  # (B, dim, n_feats, T) -> (B, dim, n_feats, T)
 
         hiddens = []
         masks = [mask]
