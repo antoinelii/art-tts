@@ -6,7 +6,7 @@ from pathlib import Path
 
 import torch
 
-from model import ArtTTS, GradTTS, AttentionTTS
+from model import ArtTTS, GradTTS, AttentionTTS, AttentionTTSPreblock
 from data_phnm import PhnmArticDataset, PhnmBatchCollate
 from data_textmel import TextMelDataset, TextBatchCollate
 from data_textart import TextArtDataset
@@ -74,24 +74,44 @@ def init_model(version, params, device):
             params.pe_scale,
         ).to(device)
     elif version in attention_versions:
-        model = AttentionTTS(
-            params.n_ipa_feats,
-            params.n_spks,
-            None if params.n_spks == 1 else params.spk_embed_dim,
-            params.n_enc_channels,
-            params.filter_channels,
-            params.filter_channels_dp,
-            params.n_heads,
-            params.n_enc_layers,
-            params.enc_kernel,
-            params.enc_dropout,
-            params.window_size,
-            params.n_feats,
-            params.dec_dim,
-            params.beta_min,
-            params.beta_max,
-            params.pe_scale,
-        ).to(device)
+        if version == "v5":
+            model = AttentionTTS(
+                params.n_ipa_feats,
+                params.n_spks,
+                None if params.n_spks == 1 else params.spk_embed_dim,
+                params.n_enc_channels,
+                params.filter_channels,
+                params.filter_channels_dp,
+                params.n_heads,
+                params.n_enc_layers,
+                params.enc_kernel,
+                params.enc_dropout,
+                params.window_size,
+                params.n_feats,
+                params.dec_dim,
+                params.beta_min,
+                params.beta_max,
+                params.pe_scale,
+            ).to(device)
+        elif version == "v5_preblock":
+            model = AttentionTTSPreblock(
+                params.n_ipa_feats,
+                params.n_spks,
+                None if params.n_spks == 1 else params.spk_embed_dim,
+                params.n_enc_channels,
+                params.filter_channels,
+                params.filter_channels_dp,
+                params.n_heads,
+                params.n_enc_layers,
+                params.enc_kernel,
+                params.enc_dropout,
+                params.window_size,
+                params.n_feats,
+                params.dec_dim,
+                params.beta_min,
+                params.beta_max,
+                params.pe_scale,
+            ).to(device)
 
     else:
         raise ValueError(f"Unsupported version: {version}")

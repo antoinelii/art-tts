@@ -9,3 +9,4 @@
 from .tts import ArtTTS as ArtTTS
 from .tts import GradTTS as GradTTS
 from .tts import AttentionTTS as AttentionTTS
+from .tts import AttentionTTSPreblock as AttentionTTSPreblock
