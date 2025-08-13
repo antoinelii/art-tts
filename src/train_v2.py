@@ -50,8 +50,8 @@ if __name__ == "__main__":
     params = importlib.import_module(f"configs.{params_name}")
 
     start_epoch = 1
-    end_epoch = 5000
-    custom_patience = 5000
+    end_epoch = 10000
+    custom_patience = 10000
     val_every = params.val_every
     save_every = params.save_every
 
@@ -84,7 +84,7 @@ if __name__ == "__main__":
         batch_size=params.batch_size,
         collate_fn=batch_collate,
         drop_last=True,
-        num_workers=3,
+        num_workers=4,
         shuffle=False,
     )
     valid_dataset = TextMelDataset(

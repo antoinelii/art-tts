@@ -14,9 +14,9 @@ data_root_dir = "../../data"  # for jean-zay relative to src
 data_root_dir = "/lustre/fsn1/projects/rech/rec/commun/data"  # for jean-zay scratch
 # data_root_dir = "../../../../scratch2/ali/data" #for oberon2 relative to src
 
-train_filelist_path = "resources/filelists/ljspeech/train_v2.txt"
-valid_filelist_path = "resources/filelists/ljspeech/valid_v2.txt"
-test_filelist_path = "resources/filelists/ljspeech/test_v2.txt"
+train_filelist_path = "resources/filelists/ljspeech/train.txt"
+valid_filelist_path = "resources/filelists/ljspeech/valid.txt"
+test_filelist_path = "resources/filelists/ljspeech/test.txt"
 cmudict_path = "resources/cmu_dictionary"
 add_blank = True  # keep it? unfair to test datasets
 gradtts_text_conv = True  # Wether to use grad-tts text to symbol conversion (imperfect
@@ -49,13 +49,13 @@ beta_max = 20.0
 pe_scale = 1000  # 1 for `grad-tts-old.pt` checkpoint
 
 # training parameters
-log_dir = "logs/v2"
+log_dir = "logs/v2_full"
 test_size = 4
 n_epochs = 10000
 batch_size = 16
 learning_rate = 1e-4
 random_seed = 37
-val_every = 5
-save_every = 5
+val_every = 200
+save_every = 200
 patience = 10
 out_size = fix_len_compatibility(2 * 22050 // 256)
