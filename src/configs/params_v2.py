@@ -14,9 +14,9 @@ data_root_dir = "../../data"  # for jean-zay relative to src
 data_root_dir = "/lustre/fsn1/projects/rech/rec/commun/data"  # for jean-zay scratch
 # data_root_dir = "../../../../scratch2/ali/data" #for oberon2 relative to src
 
-train_filelist_path = "resources/filelists/ljspeech/train.txt"
-valid_filelist_path = "resources/filelists/ljspeech/valid.txt"
-test_filelist_path = "resources/filelists/ljspeech/test.txt"
+train_filelist_path = "resources/filelists/ljspeech/train_v2_full.txt"
+valid_filelist_path = "resources/filelists/ljspeech/valid_v2_full.txt"
+test_filelist_path = "resources/filelists/ljspeech/test_v2_full.txt"
 cmudict_path = "resources/cmu_dictionary"
 add_blank = True  # keep it? unfair to test datasets
 gradtts_text_conv = True  # Wether to use grad-tts text to symbol conversion (imperfect
