@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=encode_audio_en     # Job name
+#SBATCH --job-name=encode_audio_vc     # Job name
 #SBATCH --partition=gpu_p2             # Take a node from the 'gpu' partition
 # #SBATCH --export=ALL                  # Export your environment to the compute node
 
@@ -36,9 +36,11 @@ set -x # activer l’echo des commandes
 echo "computation start $(date)"
 # launch your computation
 
-LANG = "it"
-srun python -u voxcommunis/encode_audio.py --device cuda \
-                                    --manifest_path ../../data/VoxCommunis/train-20h/manifests/${LANG}.tsv \
+LANG=it
+MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
+
+srun python -u encode_audio_voxcom.py --device cuda \
+                                    --manifest_fp ${MAIN_DATA_DIR}/VoxCommunis/train-20h/manifests/${LANG}.tsv \
                                     --ckpt_path ckpt/sparc_multi.ckpt \
 
 echo "computation end : $(date)"

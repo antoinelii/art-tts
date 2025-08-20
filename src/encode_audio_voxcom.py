@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import torch
 import os
+
 from voxcommunis.io import read_manifest
 
 parser = argparse.ArgumentParser()
@@ -100,7 +101,8 @@ if __name__ == "__main__":
     manifest_fp = Path(args.manifest_fp)
     manifest = read_manifest(manifest_fp)
 
-    wav_files = sorted([e[0] for e in manifest.values()])
+    manifest_values = list(manifest.values())
+    wav_files = sorted([e[0] for e in manifest_values])
     logger.info(f"Found {len(wav_files)} audio files in {manifest_fp}")
 
     # split the work into nb_tasks subtasks and process the task_id one
