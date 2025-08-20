@@ -74,8 +74,7 @@ def process_files(task_id, args, task_wavfiles):
     for wav_file in tqdm(
         task_wavfiles, desc=f"GPU {task_id}", position=1, dynamic_ncols=True
     ):
-        save_fn = str(wav_file).replace(str(args.wav_dir), "")
-        save_fn = Path(save_fn).stem + ".npy"
+        save_fn = Path(wav_file).stem + ".npy"
         ft_save_path = ft_save_dir / save_fn
         spk_preemb_save_path = spk_preemb_save_dir / save_fn
 
