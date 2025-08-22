@@ -31,3 +31,7 @@ src/model/monotonic_align/*.so
 # logs
 logs/
 logs_trash/
+
+archive/*
+src/resources/filelists/*
+src/voxcommunis/correction_map.pickle
