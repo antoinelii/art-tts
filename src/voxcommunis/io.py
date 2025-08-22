@@ -31,11 +31,11 @@ def read_manifest(file_path: MyPathLike) -> dict[str, tuple[Path, int]]:
     return manifest
 
 
-def read_alignment(path: MyPathLike, sep: str = " ") -> dict[str, list[str]]:
+def read_alignment(path: MyPathLike, sep: str = " ") -> dict[str, str]:
     phones = {}
     with open(path, "r", newline="") as fp:
         reader = csv.reader(fp, delimiter="\t")
         for row in reader:
             assert len(row) == 2
-            phones[row[0]] = row[1].split(sep)
+            phones[row[0]] = row[1]  # .split(sep) remove list conversion (too heavy)
     return phones
