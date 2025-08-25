@@ -13,7 +13,7 @@
 #SBATCH --time=100:00:00 # temps maximal d’allocation "(HH:MM:SS)"
 #SBATCH --qos=qos_gpu_h100-t4
 # #SBATCH --time=2:00:00 # temps maximal d’allocation "(HH:MM:SS)"
-# #SBATCH --qos=qos_gpu-dev 
+# #SBATCH --qos=qos_gpu_h100-dev 
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
 #SBATCH --account=rec@h100 # comptabilite V100
 

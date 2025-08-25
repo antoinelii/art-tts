@@ -190,7 +190,7 @@ class GradTTArtic(BaseModule):
 
         x_durations = x[:, -1, :].long()  # (B, T_x) phoneme repetition counts
         w_ceil = x_durations.unsqueeze(1) * x_mask  # (B, 1, T_x)
-        y_lengths = torch.clamp_min(torch.sum(w_ceil, [1, 2]), 1).long()  # (B,)
+        # y_lengths = torch.clamp_min(torch.sum(w_ceil, [1, 2]), 1).long()  # (B,)
         y_max_length = y.shape[-1]  # T_y
 
         y_mask = (

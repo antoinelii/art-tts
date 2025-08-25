@@ -68,13 +68,13 @@ dataset_dir = f"{data_root_dir}/VoxCommunis"
 suffix = "-20h"  # "-1h" or "-20h"
 
 train_manifest = f"{dataset_dir}/train{suffix}/manifests"
-train_alignments = f"{dataset_dir}/train{suffix}/alignments"
+train_alignment = f"{dataset_dir}/train{suffix}/alignments"
 
 val_manifest = f"{dataset_dir}/dev{suffix}/manifests"
-val_alignments = f"{dataset_dir}/dev{suffix}/alignments"
+val_alignment = f"{dataset_dir}/dev{suffix}/alignments"
 
 test_manifest = f"{dataset_dir}/test{suffix}/manifests"
-test_alignments = f"{dataset_dir}/test{suffix}/alignments"
+test_alignment = f"{dataset_dir}/test{suffix}/alignments"
 
 separate_files = (
     False  # whether to use a directory of manifest files or a manifest file
@@ -84,6 +84,6 @@ if not separate_files:  # monolingual
     train_manifest += f"/{lang}.tsv"
     val_manifest += f"/{lang}.tsv"
     test_manifest += f"/{lang}.tsv"
-    train_alignments += f"/{lang}.align"
-    val_alignments += f"/{lang}.align"
-    test_alignments += f"/{lang}.align"
+    train_alignment += f"/{lang}.align"
+    val_alignment += f"/{lang}.align"
+    test_alignment += f"/{lang}.align"

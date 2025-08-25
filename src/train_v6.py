@@ -263,7 +263,7 @@ def validation_loop(model, val_loader):
             x, x_lengths = batch["x"].cuda(), batch["x_lengths"].cuda()
             y, y_lengths = batch["y"].cuda(), batch["y_lengths"].cuda()
             spk_ft = batch["spk_ft"].cuda()
-            prior_loss, diff_loss = model.module.compute_loss(
+            prior_loss, diff_loss = model.compute_loss(
                 x, x_lengths, y, y_lengths, spk_ft, out_size=params_v6.out_size
             )
             val_loss = sum([prior_loss, diff_loss])
@@ -423,7 +423,7 @@ def train():
     mylogger.info("Number of decoder parameters: %.2fm" % (model.decoder.nparams / 1e6))
     mylogger.info("Total parameters: %.2fm" % (model.nparams / 1e6))
 
-    if start_epoch != 1:
+    if start_epoch == 1:
         mylogger.info(
             f"Loading model state dict from ckpt grad_{start_epoch - 1}.pt ..."
         )
