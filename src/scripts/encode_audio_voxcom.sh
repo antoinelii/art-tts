@@ -39,9 +39,10 @@ echo "computation start $(date)"
 LANG=it
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 
-for LANG in ka ja ba ro hi uz tt el sr mt yo be uk hy-AM sk ckb ur tr vi sq bg ta sv-SE eu id sw tk kmr dv ha zh-HK bn mn zh-CN yue lij fr hsb cv ko nl ug mr ab it lt sl kk pa-IN ru cs gn ml nan-tw th pt ky pl ca myv hu rw am; do
+#for LANG in ka ja ba ro hi uz tt el sr mt yo be uk hy-AM sk ckb ur tr vi sq bg ta sv-SE eu id sw tk kmr dv ha zh-HK bn mn zh-CN yue lij fr hsb cv ko nl ug mr ab it lt sl kk pa-IN ru cs gn ml nan-tw th pt ky pl ca myv hu rw am; do
+for LANG in it fr eu sw hu zh-CN ru; do
     srun python -u encode_audio_voxcom.py --device cuda \
-                                    --manifest_fp ${MAIN_DATA_DIR}/VoxCommunis/train-1h/manifests/${LANG}.tsv \
+                                    --manifest_fp ${MAIN_DATA_DIR}/VoxCommunis/dev-20h/manifests/${LANG}.tsv \
                                     --ckpt_path ckpt/sparc_multi.ckpt
 done
 
