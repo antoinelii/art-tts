@@ -558,7 +558,7 @@ def train(local_rank, world_size, balance_batch, node_rank=0, gpus_per_node=4):
         )
         mylogger.info("Total parameters: %.2fm" % (model.module.nparams / 1e6))
 
-        if start_epoch == 1:
+        if start_epoch != 1:
             mylogger.info(
                 f"Loading Early stopping from ckpt grad_{start_epoch - 1}.pt ..."
             )
