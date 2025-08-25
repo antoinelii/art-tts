@@ -3,7 +3,6 @@ from typing import Iterable, Optional
 
 import numpy as np
 import panphon
-from jaxtyping import Bool
 
 PHON_FEAT_DIM = 24
 
@@ -127,7 +126,7 @@ class FeatureDecoder:
             )
 
         featuresT = self._features.T
-        feature_to_indices: list[dict[int, Bool[np.ndarray, "feats"]]] = []  # type: ignore  # noqa: F821
+        feature_to_indices: list[dict[int, np.ndarray]] = []  # type: ignore  # noqa: F821
         for d in range(featuresT.shape[0]):
             feature_to_indices.append({-1: featuresT[d] <= 0, 1: featuresT[d] >= 0})
         self.feature_to_indices = feature_to_indices
