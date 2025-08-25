@@ -454,9 +454,6 @@ def train():
         progress_bar.set_description(f"Training Epoch {epoch}")
         avg_losses, max_grad_norms = train_loop(model, train_loader, optimizer, epoch)
 
-        log_msg = save_train_scalars(logger, epoch, avg_losses, max_grad_norms)
-        mylogger.info(f"Train : {log_msg}")
-
         mylogger.info(f"Epoch {epoch} finished")
         # Save epoch training losses to TensorBoard
         log_msg = save_train_scalars(logger, epoch, avg_losses, max_grad_norms)
