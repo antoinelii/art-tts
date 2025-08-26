@@ -26,10 +26,10 @@ handler.setFormatter(formatter)
 mylogger.addHandler(handler)
 
 phnm_versions = ["v1", "v1_", "v1_1", "v3"]
-text_versions = ["v2", "v4", "v2_phnmtext", "v4_phnmtext"]
+text_versions = ["v2", "v4", "v2_phnmtext", "v4_phnmtext", "v2_full"]
 attention_versions = ["v5", "v5_preblock"]
 artic_versions = ["v1", "v1_", "v1_1", "v4", "v5", "v5_preblock", "v4_phnmtext"]
-mel_versions = ["v2", "v3", "v2_phnmtext"]
+mel_versions = ["v2", "v3", "v2_phnmtext", "v2_full"]
 
 
 def init_model(version, params, device):
@@ -135,7 +135,7 @@ def init_dataset(version, params, data_dir, filelist_path):
             # not necessary for inference to normalize loudness
             log_normalize_loudness=params.log_normalize_loudness,
         )
-    elif version in ["v2", "v2_phnmtext"]:
+    elif version in ["v2", "v2_phnmtext", "v2_full"]:
         dataset = TextMelDataset(
             filelist_path,
             data_root_dir=data_dir,
