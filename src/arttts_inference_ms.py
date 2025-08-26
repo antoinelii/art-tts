@@ -183,6 +183,9 @@ if __name__ == "__main__":
                 batch_file_ids = file_ids[i : i + batch_size]
                 # Run inference
                 x, x_lengths, spk_ft = get_inputs(batch_file_ids, dataset, collator)
+                x = x.to(device)
+                x_lengths = x_lengths.to(device)
+                spk_ft = spk_ft.to(device)
                 y_enc, y_dec, attn = model(
                     x, x_lengths, spk_ft, n_timesteps=50
                 )  # (B, 16, T) x 2 , (B,1,T0,T)
