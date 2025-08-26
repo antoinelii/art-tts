@@ -26,7 +26,7 @@ handler.setFormatter(formatter)
 mylogger.addHandler(handler)
 
 
-def init_model(params):
+def init_model(params, device):
     model = GradTTArtic(
         n_ipa_feats=params.n_ipa_feats,  # 26, 24 phonological traits + 1 silence dim + 1 phoneme repetition count
         spk_emb_dim=params.spk_emb_dim,  # 64
