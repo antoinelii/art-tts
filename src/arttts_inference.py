@@ -236,6 +236,12 @@ parser.add_argument(
     default=0,
     help="Whether to use alignment for inference. If True, will create x_durations from dataset phoneme alignment",
 )
+parser.add_argument(
+    "--max_samples",
+    type=int,
+    default=0,
+    help="Maximum number of samples to process. 0 means all samples (default: 0)",
+)
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -276,7 +282,12 @@ if __name__ == "__main__":
 
     if version in artic_versions:
         reorder_feats = params.reorder_feats
+
     filepaths_list = dataset.filepaths_list
+    if args.max_samples > 0:
+        filepaths_list = filepaths_list[: args.max_samples]
+        mylogger.info("Process only the first %d samples", args.max_samples)
+
     collator = get_collator(version, params)
 
     model.eval()
