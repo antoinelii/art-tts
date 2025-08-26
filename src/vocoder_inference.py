@@ -20,7 +20,7 @@ import argparse
 HIFIGAN_CONFIG = "./checkpts/hifigan-config.json"
 HIFIGAN_CHECKPT = "./checkpts/hifigan.pt"
 
-mel_versions = ["v2", "v3"]
+mel_versions = ["v2", "v3", "v2_full"]
 
 mylogger = logging.getLogger(__name__)
 mylogger.setLevel(logging.INFO)
