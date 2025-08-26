@@ -45,7 +45,7 @@ for E in 1000; do
     for MODEL_VERSION in v6; do
         for LANG in it sw zh-CN ; do
             echo "Running inference for dataset: $DATASET, speaker:"
-            srun python -u ./arttts_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET} \
+            srun python -u ./arttts_inference_ms.py  --dataset_dir ${MAIN_DATA_DIR}/${DATASET} \
                                                 --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
                                                 --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
                                                 --alignment_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/alignments/${LANG}.alignment \
