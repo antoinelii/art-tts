@@ -142,7 +142,7 @@ if __name__ == "__main__":
     ckpt_filepath = CKPT_DIR / version / ckpt_name
     ckpt_state_dict = torch.load(ckpt_filepath, map_location=torch.device(device))
 
-    model.load_state_dict(ckpt_state_dict, weight_only=True)
+    model.load_state_dict(ckpt_state_dict, weights_only=True)
 
     mylogger.info("Model loaded from %s", ckpt_filepath)
 
