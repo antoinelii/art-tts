@@ -48,7 +48,7 @@ for E in 1000; do
             srun python -u ./arttts_inference_ms.py  --dataset_dir ${MAIN_DATA_DIR}/${DATASET} \
                                                 --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
                                                 --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
-                                                --alignment_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/alignments/${LANG}.alignment \
+                                                --alignment_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/alignments/${LANG}.align \
                                                 --version ${MODEL_VERSION} \
                                                 --ckpt_name ${CKPT_NAME}.pt \
                                                 --params_name params_${MODEL_VERSION} \
