@@ -139,16 +139,16 @@ if __name__ == "__main__":
                 f"Unexpected shapes after length matching: {art.shape} != {sparc_art.shape}"
             )
 
-        pearson_ema, _ = pearsonr(art[:, :12], sparc_art[:, :12])
-        pearson_pitch, _ = pearsonr(art[:, 12], sparc_art[:, 12])
-        pearson_loudness, _ = pearsonr(art[:, 13], sparc_art[:, 13])
-        row.update(
-            {
-                "pcc_ema": np.mean(pearson_ema),
-                "pcc_pitch": pearson_pitch,
-                "pcc_loudness": pearson_loudness,
-            }
-        )
+            pearson_ema, _ = pearsonr(art[:, :12], sparc_art[:, :12])
+            pearson_pitch, _ = pearsonr(art[:, 12], sparc_art[:, 12])
+            pearson_loudness, _ = pearsonr(art[:, 13], sparc_art[:, 13])
+            row.update(
+                {
+                    "pcc_ema": np.mean(pearson_ema),
+                    "pcc_pitch": pearson_pitch,
+                    "pcc_loudness": pearson_loudness,
+                }
+            )
         data.append(row)
 
     res_df = pd.DataFrame(data)
