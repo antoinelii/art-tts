@@ -149,7 +149,7 @@ if __name__ == "__main__":
                     "pcc_loudness": pearson_loudness,
                 }
             )
-        data.append(row)
+            data.append(row)
 
     res_df = pd.DataFrame(data)
     res_df.to_csv(save_dir / f"quanti_art_comp_{version}_{ckpt_name}.csv", index=False)
