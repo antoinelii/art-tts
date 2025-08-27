@@ -101,7 +101,7 @@ if __name__ == "__main__":
     manifest_ids = set(manifest.keys())
     dir_files = list(data_dir.glob("*.npy"))
     dir_ids = set([f.stem for f in dir_files])
-    file_ids = manifest_ids.intersection(dir_ids)
+    file_ids = list(manifest_ids.intersection(dir_ids))
 
     mylogger.info("Found %d samples to process", len(file_ids))
 
@@ -128,7 +128,7 @@ if __name__ == "__main__":
                 sample_id = file_ids[i]
                 try:
                     # load generated articulatory data
-                    art = np.load(data_dir / f"{sample_id}_{src_art}.npy")
+                    art = np.load(data_dir / f"{sample_id}.npy")
                     assert len(art.shape) == 2, (
                         f"Unexpected shape for articulatory data: {art.shape} != 2"
                     )
