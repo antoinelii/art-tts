@@ -152,4 +152,9 @@ if __name__ == "__main__":
             data.append(row)
 
     res_df = pd.DataFrame(data)
-    res_df.to_csv(save_dir / f"quanti_art_comp_{version}_{ckpt_name}.csv", index=False)
+    save_path = save_dir / f"quanti_art_comp_{version}_{ckpt_name}.csv"
+    # add it to existing csv if exists
+    if save_path.exists():
+        res_df_old = pd.read_csv(save_path)
+        res_df = pd.concat([res_df_old, res_df], axis=0)
+    res_df.to_csv(save_path, index=False)
