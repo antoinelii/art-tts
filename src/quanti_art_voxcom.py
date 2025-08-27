@@ -63,6 +63,14 @@ parser.add_argument(
     help="Checkpoint name for the model used to generate data",
 )
 
+
+def match_arr_lens(arrs):
+    axis = 0
+    min_len = np.min([arr.shape[axis] for arr in arrs])
+    arrs = [arr[:min_len] for arr in arrs]
+    return arrs
+
+
 if __name__ == "__main__":
     args = parser.parse_args()
     data_dir = Path(args.data_dir)
@@ -126,6 +134,10 @@ if __name__ == "__main__":
             row = {
                 "sample_id": sample_id,
             }
+            art, sparc_art = match_arr_lens([art, sparc_art])
+            assert art.shape == sparc_art.shape, (
+                f"Unexpected shapes after length matching: {art.shape} != {sparc_art.shape}"
+            )
 
         pearson_ema, _ = pearsonr(art[:, :12], sparc_art[:, :12])
         pearson_pitch, _ = pearsonr(art[:, 12], sparc_art[:, 12])
