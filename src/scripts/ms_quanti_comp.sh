@@ -10,7 +10,7 @@
 #SBATCH --time=1:00:00 # temps maximal d’allocation "(HH:MM:SS)"
 # #SBATCH --qos=qos_cpu-dev # QoS
 #SBATCH --hint=nomultithread # desactiver l’hyperthreading
-#SBATCH --account=rec@v100 # comptabilite V100
+#SBATCH --account=rec@cpu # comptabilite V100
 #SBATCH --array=0 # job array with 4 tasks (0 to 3)
 
 
@@ -42,13 +42,13 @@ for E in 1000 2000; do
         for LANG in it sw zh-CN ; do
             echo "Computing PCCs for dataset: $DATASET, src_art : $MODEL_VERSION $CKPT_NAME decoder"
             srun python -u ./quanti_art_voxcom.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
-                                                --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME}/sparc_multi/ \
+                                                --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/analysis/ \
                                                 --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
                                                 --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
                                                 --version ${MODEL_VERSION} \
                                                 --params_name params_${MODEL_VERSION} \
                                                 --ckpt_name ${CKPT_NAME}
-            
+        done        
     done
 done
 echo "computation end : $(date)"
