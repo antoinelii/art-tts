@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=arttts_infer     # Job name
+#SBATCH --job-name=ms_hifigan_inf     # Job name
 #SBATCH --partition=gpu_p2             # Take a node from the 'gpu' partition
 # #SBATCH --export=ALL                  # Export your environment to the compute node
 
@@ -50,7 +50,7 @@ for E in 1000; do
                                                 --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
                                                 --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
                                                 --version ${MODEL_VERSION} \
-                                                --model_ckpt ckpt/sparc_multi.ckpt \
+                                                --generator_ckpt ckpt/sparc_multi.ckpt \
                                                 --params_name params_${MODEL_VERSION} \
                                                 --device cuda \
                                                 --src_art decoder
