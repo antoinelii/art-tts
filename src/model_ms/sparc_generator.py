@@ -13,6 +13,7 @@ import torch
 
 from .sparc_block import HiFiGANResidualBlock as ResidualBlock
 from .sparc_block import HiFiGANResidualFiLMBlock as ResidualFiLMBlock
+from .spk_encoder import SpeakerEncodingLayer
 
 
 class HiFiGANGenerator(torch.nn.Module):
@@ -293,3 +294,23 @@ class HiFiGANGenerator(torch.nn.Module):
                 logging.debug(f"Weight norm is applied to {m}.")
 
         self.apply(_apply_weight_norm)
+
+
+# create a class combining speaker encoder layer and HiFiGAN generator
+class SpkHiFiGANGenerator(torch.nn.Module):
+    """
+    create a class combining speaker encoding layer (from spk_ft to spk_emb)
+    and SPARC HiFiGAN generator. Such, that the model can be loaded from a
+    single checkpointcontaining both parts.
+    """
+
+    def __init__(self, spk_ft_size=1024, **generator_params):
+        super().__init__()
+        spk_emb_size = generator_params.get("spk_emb_size", 64)
+        self.spk_enc = SpeakerEncodingLayer(spk_ft_size, spk_emb_size)
+        self.generator = HiFiGANGenerator(**generator_params)
+
+    def forward(self, c, spk_ft):
+        spk_emb = self.spk_enc(spk_ft)
+        y = self.generator(c, spk_emb)
+        return y
