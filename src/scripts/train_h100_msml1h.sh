@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=train_v6     # Job name
+#SBATCH --job-name=train_msml1h     # Job name
 #SBATCH --partition=gpu_p6             # Take a node from the 'gpu' partition
 # #SBATCH --export=ALL                  # Export your environment to the compute node
 #SBATCH -C h100
