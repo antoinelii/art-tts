@@ -8,6 +8,7 @@
 
 import random
 import numpy as np
+from typing import List
 
 import torch
 
@@ -43,11 +44,15 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         loudness_idx=loudness_idx,
         log_normalize_loudness=log_normalize_loudness,
         random_seed=random_seed,
+        exclude_langs: List[str] = None,
     ):
         super().__init__()
         self.feature_tokenizer = feature_tokenizer
         self.init_manifest_and_alignments(
-            manifest_path, alignment_path, separate_files=separate_files
+            manifest_path,
+            alignment_path,
+            separate_files=separate_files,
+            exclude_langs=exclude_langs,
         )
         # articulatory settings
         self.dataset_dir = dataset_dir
@@ -63,10 +68,15 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         manifest_path: MyPathLike,
         alignment_path: MyPathLike,
         separate_files: bool = False,
+        exclude_langs: List[str] = None,
     ):
         panphon_inventory = PanPhonInventory()
         if separate_files:
             manifests_list = sorted(list(Path(manifest_path).glob("*.tsv")))
+            if exclude_langs is not None:
+                manifests_list = [
+                    fp for fp in manifests_list if fp.stem not in exclude_langs
+                ]
             self.langs = [fp.stem for fp in manifests_list]
             self.lang_sizes = []
             self.manifest = []
@@ -248,11 +258,15 @@ class PhnmDataset(torch.utils.data.Dataset):
         loudness_idx=loudness_idx,
         log_normalize_loudness=log_normalize_loudness,
         random_seed=random_seed,
+        exclude_langs: List[str] = None,
     ):
         super().__init__()
         self.feature_tokenizer = feature_tokenizer
         self.init_manifest_and_alignments(
-            manifest_path, alignment_path, separate_files=separate_files
+            manifest_path,
+            alignment_path,
+            separate_files=separate_files,
+            exclude_langs=exclude_langs,
         )
         # articulatory settings
         self.dataset_dir = dataset_dir
@@ -268,10 +282,15 @@ class PhnmDataset(torch.utils.data.Dataset):
         manifest_path: MyPathLike,
         alignment_path: MyPathLike,
         separate_files: bool = False,
+        exclude_langs: List[str] = None,
     ):
         panphon_inventory = PanPhonInventory()
         if separate_files:
             manifests_list = sorted(list(Path(manifest_path).glob("*.tsv")))
+            if exclude_langs is not None:
+                manifests_list = [
+                    fp for fp in manifests_list if fp.stem not in exclude_langs
+                ]
             self.langs = [fp.stem for fp in manifests_list]
             self.lang_sizes = []
             self.manifest = []
