@@ -35,7 +35,7 @@ echo "computation start $(date)"
 
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 
-for dataset in MNGU0 MSPKA_EMA_ita mocha_timit; do
+for DATASET in MNGU0 MSPKA_EMA_ita mocha_timit; do
     for MODEL_VERSION in v2_full; do
         for E in 2000 4000 6000 8000 10000 ; do
             CKPT_NAME=grad_${E}
