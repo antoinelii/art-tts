@@ -117,6 +117,12 @@ def get_sparc_summary_df_mngu0(src_data_dir, sparc_pred_dir):
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
+    "--main_data_dir",
+    type=str,
+    default=str(DATA_DIR),
+    help="Main data directory containing datasets",
+)
+parser.add_argument(
     "--dataset", type=str, default="MSPKA_EMA_ita", help="Dataset to process"
 )
 parser.add_argument(
@@ -134,13 +140,14 @@ parser.add_argument(
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    main_data_dir = Path(args.main_data_dir)
     dataset = args.dataset
     version = args.version
     ckpt_name = args.ckpt_name
     speakers = dataset_2_speakers[dataset]
 
     if dataset != "MNGU0":
-        processed_data_dir = DATA_DIR / dataset / "processed_data"
+        processed_data_dir = main_data_dir / dataset / "processed_data"
         spkmetadata_filename = dataset_2_spkmetadata[dataset]
         linearmodel_name = dataset_2_linear_model[dataset]
 
@@ -154,22 +161,31 @@ if __name__ == "__main__":
                 dataset, speaker, processed_data_dir, spkmetadata_filename
             )
             linearmodel_dir = (
-                DATA_DIR / dataset / "processed_data" / speaker / "linear_models"
+                main_data_dir / dataset / "processed_data" / speaker / "linear_models"
             )
             linearmodel = joblib.load(linearmodel_dir / linearmodel_name)
-            gt_ema_dir = DATA_DIR / dataset / "src_data" / speaker
+            gt_ema_dir = main_data_dir / dataset / "src_data" / speaker
         else:
-            src_data_dir = DATA_DIR / dataset / "src_data" / speaker / "ema_basic_data"
+            src_data_dir = (
+                main_data_dir / dataset / "src_data" / speaker / "ema_basic_data"
+            )
             sparc_pred_dir = (
-                DATA_DIR / dataset / "arttts" / speaker / "encoded_audio_en" / "emasrc"
+                main_data_dir
+                / dataset
+                / "arttts"
+                / speaker
+                / "encoded_audio_en"
+                / "emasrc"
             )
             summary_df = get_sparc_summary_df_mngu0(src_data_dir, sparc_pred_dir)
-            gt_ema_dir = DATA_DIR / dataset / "src_data" / speaker / "ema_basic_data"
+            gt_ema_dir = (
+                main_data_dir / dataset / "src_data" / speaker / "ema_basic_data"
+            )
 
         # get the predicted EMAs from ART-TTS and SPARC
         # and add them to the previous table
         arttts_pred_dir = (
-            DATA_DIR
+            main_data_dir
             / dataset
             / "arttts"
             / speaker
@@ -178,9 +194,9 @@ if __name__ == "__main__":
             / ckpt_name
         )
         sparc_pred_dir = (
-            DATA_DIR / dataset / "arttts" / speaker / "encoded_audio_en" / "emasrc"
+            main_data_dir / dataset / "arttts" / speaker / "encoded_audio_en" / "emasrc"
         )
-        analysis_dir = DATA_DIR / dataset / "arttts" / speaker / "analysis"
+        analysis_dir = main_data_dir / dataset / "arttts" / speaker / "analysis"
         analysis_dir.mkdir(parents=True, exist_ok=True)
 
         data = []
