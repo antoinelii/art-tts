@@ -44,6 +44,7 @@ class PhnmArticDataset(torch.utils.data.Dataset):
         loudness_idx=loudness_idx,
         log_normalize_loudness=log_normalize_loudness,
         random_seed=random_seed,
+        custom_dataset: str = None,  # if not None use this dataset name instead of VoxCommunis languages name
         exclude_langs: List[str] = None,
     ):
         super().__init__()
@@ -54,6 +55,7 @@ class PhnmArticDataset(torch.utils.data.Dataset):
             separate_files=separate_files,
             exclude_langs=exclude_langs,
         )
+        self.custom_dataset = custom_dataset
         # articulatory settings
         self.dataset_dir = dataset_dir
         self.reorder_feats = reorder_feats
@@ -145,8 +147,13 @@ class PhnmArticDataset(torch.utils.data.Dataset):
                 art16[:, j] = art[:, i]
             return art16
 
-        lang = file_id.split("_")[2]
-        encoded_dir = Path(self.dataset_dir) / "encoded_audio_multi" / lang
+        if self.custom_dataset is None:
+            lang = file_id.split("_")[2]
+            encoded_dir = Path(self.dataset_dir) / "encoded_audio_multi" / lang
+        else:
+            encoded_dir = (
+                Path(self.dataset_dir) / "encoded_audio_multi" / self.custom_dataset
+            )
         art_fp = encoded_dir / "emasrc" / f"{file_id}.npy"
 
         if art_fp.exists():
@@ -174,8 +181,13 @@ class PhnmArticDataset(torch.utils.data.Dataset):
             torch.FloatTensor: spk preemb features (shape: (1024,)).
         """
 
-        lang = file_id.split("_")[2]
-        encoded_dir = Path(self.dataset_dir) / "encoded_audio_multi" / lang
+        if self.custom_dataset is None:
+            lang = file_id.split("_")[2]
+            encoded_dir = Path(self.dataset_dir) / "encoded_audio_multi" / lang
+        else:
+            encoded_dir = (
+                Path(self.dataset_dir) / "encoded_audio_multi" / self.custom_dataset
+            )
         spk_preemb_fp = encoded_dir / "spk_preemb" / f"{file_id}.npy"
 
         if spk_preemb_fp.exists():
@@ -259,6 +271,7 @@ class PhnmDataset(torch.utils.data.Dataset):
         log_normalize_loudness=log_normalize_loudness,
         random_seed=random_seed,
         exclude_langs: List[str] = None,
+        custom_dataset: str = None,
     ):
         super().__init__()
         self.feature_tokenizer = feature_tokenizer
@@ -268,6 +281,7 @@ class PhnmDataset(torch.utils.data.Dataset):
             separate_files=separate_files,
             exclude_langs=exclude_langs,
         )
+        self.custom_dataset = custom_dataset
         # articulatory settings
         self.dataset_dir = dataset_dir
         self.reorder_feats = reorder_feats
@@ -346,9 +360,13 @@ class PhnmDataset(torch.utils.data.Dataset):
         Returns:
             torch.FloatTensor: spk preemb features (shape: (1024,)).
         """
-
-        lang = file_id.split("_")[2]
-        encoded_dir = Path(self.dataset_dir) / "encoded_audio_multi" / lang
+        if self.custom_dataset is None:
+            lang = file_id.split("_")[2]
+            encoded_dir = Path(self.dataset_dir) / "encoded_audio_multi" / lang
+        else:
+            encoded_dir = (
+                Path(self.dataset_dir) / "encoded_audio_multi" / self.custom_dataset
+            )
         spk_preemb_fp = encoded_dir / "spk_preemb" / f"{file_id}.npy"
 
         if spk_preemb_fp.exists():
