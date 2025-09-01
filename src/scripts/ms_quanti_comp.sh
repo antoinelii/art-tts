@@ -36,9 +36,9 @@ echo "computation start $(date)"
 DATASET=VoxCommunis
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 SPLIT=test-20h
-for E in 1000 2000; do
+for E in 1000 2000 3000 4000; do
     CKPT_NAME=grad_${E}
-    for MODEL_VERSION in v6; do
+    for MODEL_VERSION in v6_zhCN; do
         for LANG in it sw zh-CN ; do
             echo "Computing PCCs for dataset: $DATASET, src_art : $MODEL_VERSION $CKPT_NAME decoder"
             srun python -u ./quanti_art_voxcom.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
