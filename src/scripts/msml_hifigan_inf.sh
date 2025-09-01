@@ -46,26 +46,26 @@ for E in 1000; do
         #LANGs that were present in the training data
         #for LANG in  ja ba ro hi uz tt el sr mt yo be uk hy-AM sk ckb tr vi bg ta sv-SE id tk kmr dv zh-HK bn mn zh-CN yue lij fr hsb cv nl ug mr it lt sl pa-IN ru cs ml nan-tw th pt ky pl ca hu rw; do
         for LANG in  ja ba ro hi uz tt el sr mt yo be uk hy-AM sk ckb tr vi bg ta sv-SE id tk kmr dv zh-HK bn mn zh-CN yue lij fr hsb cv nl ug mr it lt sl pa-IN ru cs ml nan-tw th pt ky pl ca hu rw; do
-            echo "Running inference for dataset: $DATASET, src_art : $MODEL_VERSION $CKPT_NAME decoder"
-            srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
-                                                --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME}/sparc_multi/ \
-                                                --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
-                                                --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
-                                                --version ${MODEL_VERSION} \
-                                                --generator_ckpt ckpt/sparc_multi.ckpt \
-                                                --params_name params_${MODEL_VERSION} \
-                                                --device cuda \
-                                                --src_art decoder
-            
-            #echo "Running inference for dataset: $DATASET, src_art : sparc"
-            #srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG}/emasrc \
-            #                                    --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/sparc/sparc_multi/ \
+            #echo "Running inference for dataset: $DATASET, src_art : $MODEL_VERSION $CKPT_NAME decoder"
+            #srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
+            #                                    --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME}/sparc_multi/ \
             #                                    --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
             #                                    --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
             #                                    --version ${MODEL_VERSION} \
             #                                    --generator_ckpt ckpt/sparc_multi.ckpt \
             #                                    --params_name params_${MODEL_VERSION} \
-            #                                    --device cuda        
+            #                                    --device cuda \
+            #                                    --src_art decoder
+            
+            echo "Running inference for dataset: $DATASET, src_art : sparc"
+            srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG}/emasrc \
+                                                --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/sparc/sparc_multi/ \
+                                                --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
+                                                --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
+                                                --version ${MODEL_VERSION} \
+                                                --generator_ckpt ckpt/sparc_multi.ckpt \
+                                                --params_name params_${MODEL_VERSION} \
+                                                --device cuda        
         done
     done
 done
