@@ -53,7 +53,9 @@ srun python -u arttts_inference.py  --data_dir ${MAIN_DATA_DIR}/ \
                                 --device cuda \
                                 --batch_size 1 \
                                 --use_align 0 \
-                                --max_samples 0
+                                --max_samples 0 \
+                                --temperature 1.5 \
+                                --length_scale 0.91
 
 SRC_ART=decoder
 echo "Running vocoder inference for dataset: $DATASET, speaker: $SPK, from : $SRC_ART"

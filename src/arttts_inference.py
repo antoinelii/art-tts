@@ -242,6 +242,19 @@ parser.add_argument(
     default=0,
     help="Maximum number of samples to process. 0 means all samples (default: 0)",
 )
+parser.add_argument(
+    "--temperature",
+    type=float,
+    default=1.0,
+    help="Temperature for sampling during inference. Default is 1.0",
+)
+
+parser.add_argument(
+    "--length_scale",
+    type=float,
+    default=1.0,
+    help="Length scale for adjusting the speed of the generated speech. Default is 1.0",
+)
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -254,6 +267,8 @@ if __name__ == "__main__":
     device = args.device
     batch_size = args.batch_size
     use_align = int(args.use_align)  # bool
+    temperature = float(args.temperature)
+    length_scale = float(args.length_scale)
 
     save_dir.mkdir(parents=True, exist_ok=True)
     params = importlib.import_module(f"configs.{params_name}")
@@ -325,7 +340,11 @@ if __name__ == "__main__":
                 elif version in text_versions:
                     x, x_lengths = get_text_inputs(batch_filepaths, dataset, collator)
                     y_enc, y_dec, attn = model(
-                        x, x_lengths, n_timesteps=50
+                        x,
+                        x_lengths,
+                        n_timesteps=50,
+                        temperature=temperature,
+                        length_scale=length_scale,
                     )  # (B, 16, T) x 2 , (B,1,T0
 
                 if version in artic_versions:
