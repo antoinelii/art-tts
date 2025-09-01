@@ -48,7 +48,14 @@ def init_model(params, device):
     return model
 
 
-def get_dataset(dataset_dir, manifest_path, alignment_path, separate_files, tokenizer):
+def get_dataset(
+    dataset_dir,
+    manifest_path,
+    alignment_path,
+    separate_files,
+    tokenizer,
+    custom_dataset=None,
+):
     dataset = PhnmDataset(
         dataset_dir=dataset_dir,
         separate_files=separate_files,
@@ -60,6 +67,7 @@ def get_dataset(dataset_dir, manifest_path, alignment_path, separate_files, toke
         loudness_idx=params.loudness_idx,
         log_normalize_loudness=params.log_normalize_loudness,
         random_seed=params.random_seed,
+        custom_dataset=custom_dataset,
     )
     return dataset
 
@@ -116,6 +124,13 @@ parser.add_argument(
     help="Maximum number of samples to process. 0 means all samples (default: 0)",
 )
 
+parser.add_argument(
+    "--custom_dataset",
+    type=str,
+    default="",
+    help="Name of custom dataset directory. If not provided, use default VoxCommunis dataset.",
+)
+
 if __name__ == "__main__":
     args = parser.parse_args()
     dataset_dir = Path(args.dataset_dir)
@@ -131,6 +146,12 @@ if __name__ == "__main__":
     params_name = args.params_name
     device = args.device
     batch_size = args.batch_size
+    custom_dataset = args.custom_dataset
+
+    if custom_dataset == "":
+        custom_dataset = None
+    else:
+        custom_dataset = str(custom_dataset)
 
     save_dir.mkdir(parents=True, exist_ok=True)
     params = importlib.import_module(f"configs.{params_name}")
@@ -156,6 +177,7 @@ if __name__ == "__main__":
         alignment_path,
         separate_files=separate_files,
         tokenizer=tokenizer,
+        custom_dataset=custom_dataset,
     )
 
     mylogger.info("Dataset loaded with %d samples", len(dataset))

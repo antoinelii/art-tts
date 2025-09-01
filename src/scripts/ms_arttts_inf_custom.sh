@@ -54,7 +54,8 @@ for E in 200 500 1000 2000 3000; do
                                                 --params_name params_${MODEL_VERSION} \
                                                 --device cuda \
                                                 --batch_size 1 \
-                                                --max_samples 0
+                                                --max_samples 0 \
+                                                --custom_dataset ${CUSTOM_DATASET}
         done
     done
 done
