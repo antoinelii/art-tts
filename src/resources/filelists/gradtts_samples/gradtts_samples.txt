@@ -1,0 +1,12 @@
+DUMMY/GradTTS_samples/wavs/abstract.wav|Recently, denoising diffusion probabilistic models and generative score matching have shown high potential in modelling complex data distributions while stochastic calculus has provided a unified point of view on these techniques allowing for flexible inference schemes. In this paper we introduce Grad-TTS, a novel text-to-speech model with score-based decoder producing mel-spectrograms by gradually transforming noise predicted by encoder and aligned with text input by means of Monotonic Alignment Search. The framework of stochastic differential equations helps us to generalize conventional diffusion probabilistic models to the case of reconstructing data from noise with different parameters and allows to make this reconstruction flexible by explicitly controlling trade-off between sound quality and inference speed. Subjective human evaluation shows that Grad-TTS is competitive with state-of-the-art text-to-speech approaches in terms of Mean Opinion Score.
+DUMMY/GradTTS_samples/wavs/colombiahaiti.wav|Here are the match lineups for the Colombia Haiti match.
+DUMMY/GradTTS_samples/wavs/fox.wav|Does the quick brown fox jump over the lazy dog?
+DUMMY/GradTTS_samples/wavs/successful.wav|There were others less successful.
+DUMMY/GradTTS_samples/wavs/democratic.wav|It was said in last year's Democratic platform.
+DUMMY/GradTTS_samples/wavs/commission.wav|When he appeared before the Commission, Michael Paine lifted the blanket.
+DUMMY/GradTTS_samples/wavs/scientists.wav|Scientists at the CERN laboratory say they have discovered a new particle.
+DUMMY/GradTTS_samples/wavs/unity.wav|In all these lines the facts are drawn together by a strong thread of unity.
+DUMMY/GradTTS_samples/wavs/construction.wav|After the construction and action of the machine had been explained, the doctor asked the governor what kind of men he had commanded at Goree.
+DUMMY/GradTTS_samples/wavs/society.wav|After a few years of active exertion the Society was rewarded by fresh legislation.
+DUMMY/GradTTS_samples/wavs/soul.wav|And my soul from out that shadow that lies floating on the floor shall be lifted nevermore!
+DUMMY/GradTTS_samples/wavs/jet.wav|He had a private jet with three king-size beds, expensive rugs, porcelain vases and a dining area.
