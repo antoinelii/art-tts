@@ -40,9 +40,9 @@ echo "computation start $(date)"
 DATASET=VoxCommunis
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 
-for E in 200 500 1000 2000 3000; do
+for E in 500 1000 2000 3000; do
     CKPT_NAME=grad_${E}
-    for MODEL_VERSION in v6; do
+    for MODEL_VERSION in v6_zhCN; do
         for CUSTOM_DATASET in MNGU0 MSPKA_EMA_ita pb2007 mocha_timit ; do
             echo "Running inference for dataset: $DATASET, speaker:"
             srun python -u ./arttts_inference_ms.py  --dataset_dir ${MAIN_DATA_DIR}/${DATASET} \
