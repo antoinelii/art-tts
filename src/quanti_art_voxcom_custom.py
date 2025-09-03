@@ -25,6 +25,11 @@ from voxcommunis.io import read_manifest
 from utils import TqdmLoggingHandler
 
 import argparse
+import utils_ema.ema_dataset
+
+useless = utils_ema.ema_dataset.SentenceMetadata(
+    0, "", ""
+)  # to avoid linting error from unused import that is needed
 
 dataset_2_spkmetadata = {
     "MSPKA_EMA_ita": "mixed_speaker_metadata_100Hz.joblib",
