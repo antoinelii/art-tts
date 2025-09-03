@@ -39,3 +39,10 @@ src/voxcommunis/correction_map.pickle
 # log files
 *.out
 *.err
+
+# UTMOS checkpoints
+UTMOS-demo/epoch=3-step=7459.ckpt
+UTMOS-demo/wav2vec_small.pt
+
+UTMOS-demo/__pycache__/
+UTMOS-demo/flagged/
