@@ -238,7 +238,12 @@ parser.add_argument(
     default="grad_1000",
     help="Checkpoint name for the model used to generate data",
 )
-
+parser.add_argument(
+    "--params_name",
+    type=str,
+    default="params_v6",
+    help="Parameters file name (without .py) used to generate data",
+)
 if __name__ == "__main__":
     args = parser.parse_args()
     main_data_dir = Path(args.main_data_dir)
