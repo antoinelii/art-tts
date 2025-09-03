@@ -35,3 +35,7 @@ logs_trash/
 archive/*
 src/resources/filelists/*
 src/voxcommunis/correction_map.pickle
+
+# log files
+*.out
+*.err
