@@ -36,7 +36,8 @@ echo "computation start $(date)"
 DATASET=VoxCommunis
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 SPLIT=test-20h
-for E in 5000; do
+SPLIT=dev-1h
+for E in 500 1000 2000 3000 4000 5000; do
     CKPT_NAME=grad_${E}
     for MODEL_VERSION in v6_zhCN; do
         for LANG in it sw zh-CN ; do
