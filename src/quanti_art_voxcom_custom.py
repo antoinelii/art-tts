@@ -374,10 +374,11 @@ if __name__ == "__main__":
         else:
             res_df = pd.concat([res_df, spk_df], ignore_index=True)
 
-    res_df = pd.DataFrame(data)
     save_path = save_dir / f"quanti_gt_art_comp_{version}_{ckpt_name}.csv"
     # add it to existing csv if exists
     if save_path.exists():
         res_df_old = pd.read_csv(save_path)
         res_df = pd.concat([res_df_old, res_df], axis=0)
+        # remove duplicates
+        res_df = res_df.drop_duplicates(subset=["sample_id"], keep="last")
     res_df.to_csv(save_path, index=False)
