@@ -329,11 +329,12 @@ if __name__ == "__main__":
                     pred_art = denormalize_loudness(sparc_art, pred_art)
 
                 # Adjust lengths if needed
-                pred_art, sparc_art = match_arr_lens([pred_art, sparc_art])
+                pred_art, sparc_art, gt_ema = match_arr_lens(
+                    [pred_art, sparc_art, gt_ema]
+                )
                 assert pred_art.shape == sparc_art.shape, (
                     f"Unexpected shapes after length matching: {pred_art.shape} != {sparc_art.shape}"
                 )
-                gt_ema, pred_art = match_arr_lens([gt_ema, pred_art])
                 assert gt_ema.shape[0] == pred_art.shape[0], (
                     f"Unexpected shapes after length matching: {gt_ema.shape} != {pred_art.shape}"
                 )
