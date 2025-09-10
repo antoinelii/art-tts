@@ -38,7 +38,7 @@ echo "computation start $(date)"
 # launch your computation
 
 DATASET=GradTTS_samples
-CKPT_NAME=grad_10000
+CKPT_NAME=grad_2200
 MODEL_VERSION=v2_full
 FILELIST_PATH=resources/filelists/gradtts_samples/gradtts_samples.txt
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
