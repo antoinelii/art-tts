@@ -39,8 +39,8 @@ SPLIT=test-20h
 SPLIT=dev-1h
 for E in 500 1000 2000 3000 4000 5000; do
     CKPT_NAME=grad_${E}
-    for MODEL_VERSION in v6_zhCN; do
-        for LANG in it sw zh-CN ; do
+    for MODEL_VERSION in v6 v6_zhCN; do
+        for LANG in fr ; do
             echo "Computing PCCs for dataset: $DATASET, src_art : $MODEL_VERSION $CKPT_NAME decoder"
             srun python -u ./quanti_art_voxcom.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
                                                 --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/analysis/ \

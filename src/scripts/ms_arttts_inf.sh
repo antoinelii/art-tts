@@ -44,7 +44,7 @@ SPLIT=dev-1h
 for E in 500 1000 2000 3000 4000 5000; do
     CKPT_NAME=grad_${E}
     for MODEL_VERSION in v6 v6_zhCN; do
-        for LANG in it zh-CN; do
+        for LANG in fr; do
             echo "Running inference for dataset: $DATASET, speaker:"
             srun python -u ./arttts_inference_ms.py  --dataset_dir ${MAIN_DATA_DIR}/${DATASET} \
                                                 --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
