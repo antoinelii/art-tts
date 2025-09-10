@@ -36,7 +36,7 @@ echo "computation start $(date)"
 DATASET=VoxCommunis
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 
-for E in 3000; do
+for E in 4000; do
     CKPT_NAME=grad_${E}
     for MODEL_VERSION in msml1h; do
         for CUSTOM_DATASET in MNGU0 MSPKA_EMA_ita pb2007 mocha_timit ; do
