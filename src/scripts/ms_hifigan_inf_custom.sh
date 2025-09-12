@@ -39,6 +39,7 @@ echo "computation start $(date)"
 
 DATASET=VoxCommunis
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
+VOCODER=sparc_en
 
 for E in 4000; do
     CKPT_NAME=grad_${E}
@@ -46,22 +47,22 @@ for E in 4000; do
         for CUSTOM_DATASET in MNGU0 MSPKA_EMA_ita pb2007 mocha_timit ; do
             echo "Running inference for dataset: $CUSTOM_DATASET, src_art : $MODEL_VERSION $CKPT_NAME decoder"
             srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/${CUSTOM_DATASET}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
-                                                --save_dir ${MAIN_DATA_DIR}/${DATASET}/${CUSTOM_DATASET}/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME}/sparc_multi/ \
+                                                --save_dir ${MAIN_DATA_DIR}/${DATASET}/${CUSTOM_DATASET}/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME}/${VOCODER}/ \
                                                 --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${CUSTOM_DATASET} \
                                                 --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${CUSTOM_DATASET}/manifests/${CUSTOM_DATASET}.tsv \
                                                 --version ${MODEL_VERSION} \
-                                                --generator_ckpt ckpt/sparc_multi.ckpt \
+                                                --generator_ckpt ckpt/${VOCODER}.ckpt \
                                                 --params_name params_${MODEL_VERSION} \
                                                 --device cuda \
                                                 --src_art decoder
             
             #echo "Running inference for dataset: $DATASET, src_art : sparc"
             #srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${CUSTOM_DATASET}/emasrc \
-            #                                    --save_dir ${MAIN_DATA_DIR}/${DATASET}/${CUSTOM_DATASET}/hifigan_pred/sparc/sparc_multi/ \
+            #                                    --save_dir ${MAIN_DATA_DIR}/${DATASET}/${CUSTOM_DATASET}/hifigan_pred/sparc/${VOCODER}/ \
             #                                    --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${CUSTOM_DATASET} \
             #                                    --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${CUSTOM_DATASET}/manifests/${CUSTOM_DATASET}.tsv \
             #                                    --version ${MODEL_VERSION} \
-            #                                    --generator_ckpt ckpt/sparc_multi.ckpt \
+            #                                    --generator_ckpt ckpt/${VOCODER}.ckpt \
             #                                    --params_name params_${MODEL_VERSION} \
             #                                    --device cuda        
         done

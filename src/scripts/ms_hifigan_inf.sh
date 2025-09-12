@@ -41,44 +41,47 @@ DATASET=VoxCommunis
 MAIN_DATA_DIR=/lustre/fsn1/projects/rech/rec/commun/data
 SPLIT=test-20h
 SPLIT=dev-1h
+
+VOCODER=sparc_en
+
 for E in 500 1000 2000 3000 4000 5000; do
     CKPT_NAME=grad_${E}
     for MODEL_VERSION in v6 v6_zhCN; do
         for LANG in fr; do
             echo "Running inference for dataset: $DATASET, src_art : $MODEL_VERSION $CKPT_NAME decoder"
             srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/arttts_pred/${MODEL_VERSION}/${CKPT_NAME} \
-                                                --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME}/sparc_multi/ \
+                                                --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/${MODEL_VERSION}/${CKPT_NAME}/${VOCODER}/ \
                                                 --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
                                                 --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
                                                 --version ${MODEL_VERSION} \
-                                                --generator_ckpt ckpt/sparc_multi.ckpt \
+                                                --generator_ckpt ckpt/${VOCODER}.ckpt \
                                                 --params_name params_${MODEL_VERSION} \
                                                 --device cuda \
                                                 --src_art decoder
             
             #echo "Running inference for dataset: $DATASET, src_art : sparc"
             #srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG}/emasrc \
-            #                                    --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/sparc/sparc_multi/ \
+            #                                    --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/sparc/${VOCODER}/ \
             #                                    --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
             #                                    --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
             #                                    --version ${MODEL_VERSION} \
-            #                                    --generator_ckpt ckpt/sparc_multi.ckpt \
+            #                                    --generator_ckpt ckpt/${VOCODER}.ckpt \
             #                                    --params_name params_${MODEL_VERSION} \
             #                                    --device cuda        
         done
     done
 done
 
-#do sparc generation only once
-LANG=fr
-echo "Running inference for dataset: $DATASET, src_art : sparc"
-srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG}/emasrc \
-                                    --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/sparc/sparc_multi/ \
-                                    --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
-                                    --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
-                                    --version ${MODEL_VERSION} \
-                                    --generator_ckpt ckpt/sparc_multi.ckpt \
-                                    --params_name params_${MODEL_VERSION} \
-                                    --device cuda
-
+##do sparc generation only once
+#LANG=fr
+#echo "Running inference for dataset: $DATASET, src_art : sparc"
+#srun python -u ./hifigan_inference_ms.py  --data_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG}/emasrc \
+#                                    --save_dir ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/hifigan_pred/sparc/${VOCODER}/ \
+#                                    --sparc_dir ${MAIN_DATA_DIR}/${DATASET}/encoded_audio_multi/${LANG} \
+#                                    --manifest_path ${MAIN_DATA_DIR}/${DATASET}/${SPLIT}/manifests/${LANG}.tsv \
+#                                    --version ${MODEL_VERSION} \
+#                                    --generator_ckpt ckpt/${VOCODER}.ckpt \
+#                                    --params_name params_${MODEL_VERSION} \
+#                                    --device cuda
+#
 echo "computation end : $(date)"
