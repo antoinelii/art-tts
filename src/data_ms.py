@@ -16,7 +16,7 @@ from pathlib import Path
 
 from utils import normalize_channel
 
-# from model.utils import fix_len_compatibility
+# from art_tts.model.utils import fix_len_compatibility
 from configs.params_v6 import random_seed
 from configs.params_v6 import (
     reorder_feats,
@@ -24,7 +24,7 @@ from configs.params_v6 import (
     loudness_idx,
     log_normalize_loudness,
 )
-from model.utils import fix_len_compatibility
+from art_tts.model.utils import fix_len_compatibility
 
 from voxcommunis.data import PanPhonInventory, FeatureTokenizer
 from voxcommunis.io import read_alignment, read_manifest

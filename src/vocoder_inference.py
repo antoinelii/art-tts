@@ -8,17 +8,14 @@ from scipy.io.wavfile import write
 import torch
 
 from utils import TqdmLoggingHandler, parse_filelist
-
-import sys
-
-sys.path.append("./hifi_gan/")
-from env import AttrDict
-from models import Generator as HiFiGAN
+from art_tts.paths import ART_TTS_DIR
+from art_tts.hifi_gan.env import AttrDict
+from art_tts.hifi_gan.models import Generator as HiFiGAN
 
 import argparse
 
-HIFIGAN_CONFIG = "./checkpts/hifigan-config.json"
-HIFIGAN_CHECKPT = "./checkpts/hifigan.pt"
+HIFIGAN_CONFIG = ART_TTS_DIR / "checkpts" / "hifigan-config.json"
+HIFIGAN_CHECKPT = ART_TTS_DIR / "checkpts" / "hifigan.pt"
 
 mel_versions = ["v2", "v3", "v2_full"]
 

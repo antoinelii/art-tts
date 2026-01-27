@@ -6,7 +6,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # MIT License for more details.
 
-from model.utils import fix_len_compatibility
+#from model.utils import fix_len_compatibility
 
 # data parameters
 data_root_dir = "../../data"  # for jean-zay relative to src
@@ -60,7 +60,7 @@ random_seed = 37
 save_every = 50
 val_every = 50
 # out_size = fix_len_compatibility(2 * 22050 // 256)      # 2* sr/hop_size meaning 2 seconds of audio
-out_size = fix_len_compatibility(2 * 50)  # 2* art_sr meaning 2 seconds of audio
+#out_size = fix_len_compatibility(2 * 50)  # 2* art_sr meaning 2 seconds of audio
 
 # train data parameters
 dataset_dir = f"{data_root_dir}/VoxCommunis"

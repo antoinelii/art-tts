@@ -29,3 +29,6 @@ panphon = { git = "https://github.com/antoinelii/panphon" }
 
 [tool.ruff.lint.per-file-ignores]
 "*.py" = ["F722"]
+
+[tool.uv]
+package = true

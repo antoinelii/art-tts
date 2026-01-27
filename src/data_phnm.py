@@ -16,12 +16,12 @@ from pathlib import Path
 
 from sparc import load_model
 
-from text.converters import ipa_to_ternary, diphtongues_ipa
+from art_tts.text.converters import ipa_to_ternary, diphtongues_ipa
 from utils import parse_filelist, normalize_channel
 
 # from model.utils import fix_len_compatibility
-from configs.params_v1 import random_seed
-from configs.params_v1 import (
+from art_tts.configs.params_v1 import random_seed
+from art_tts.configs.params_v1 import (
     data_root_dir,
     sparc_ckpt_path,
     reorder_feats,
@@ -29,7 +29,7 @@ from configs.params_v1 import (
     loudness_idx,
     log_normalize_loudness,
 )
-from model.utils import fix_len_compatibility
+from art_tts.model.utils import fix_len_compatibility
 
 
 class PhnmArticDataset(torch.utils.data.Dataset):
