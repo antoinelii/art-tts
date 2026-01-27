@@ -11,7 +11,7 @@ from utils import TqdmLoggingHandler, parse_filelist
 
 import sys
 
-sys.path.append("./hifi-gan/")
+sys.path.append("./hifi_gan/")
 from env import AttrDict
 from models import Generator as HiFiGAN
 
