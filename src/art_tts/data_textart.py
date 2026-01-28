@@ -16,14 +16,14 @@ from pathlib import Path
 
 from sparc import load_model
 
-from text import text_to_sequence, cmudict
-from text.converters import text_to_arpabet
-from text.symbols import symbols
-from utils import parse_filelist, intersperse, normalize_channel
+from art_tts.text import text_to_sequence, cmudict
+from art_tts.text.converters import text_to_arpabet
+from art_tts.text.symbols import symbols
+from art_tts.utils import parse_filelist, intersperse, normalize_channel
 
-from model.utils import fix_len_compatibility
-from configs.params_v4 import random_seed
-from configs.params_v4 import (
+from art_tts.model.utils import fix_len_compatibility
+from art_tts.configs.params_v4 import random_seed
+from art_tts.configs.params_v4 import (
     data_root_dir,
     sparc_ckpt_path,
     reorder_feats,

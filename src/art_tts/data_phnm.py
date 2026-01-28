@@ -17,9 +17,8 @@ from pathlib import Path
 from sparc import load_model
 
 from art_tts.text.converters import ipa_to_ternary, diphtongues_ipa
-from utils import parse_filelist, normalize_channel
+from art_tts.utils import parse_filelist, normalize_channel
 
-# from model.utils import fix_len_compatibility
 from art_tts.configs.params_v1 import random_seed
 from art_tts.configs.params_v1 import (
     data_root_dir,

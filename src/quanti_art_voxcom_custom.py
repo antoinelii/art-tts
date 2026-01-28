@@ -1,7 +1,6 @@
 from pathlib import Path
-import sys
-
-sys.path.append(str(Path.cwd().parent))
+#import sys
+#sys.path.append(str(Path.cwd().parent))
 
 import joblib
 import pandas as pd
@@ -16,18 +15,18 @@ from scipy.stats import pearsonr
 
 from tqdm import tqdm
 
-from utils_dataset.mspka import get_MSPKA_ema
-from utils_dataset.pb2007 import get_pb2007_ema
-from utils_dataset.mocha import get_mochatimit_ema
-from utils_dataset.mngu0 import read_mngu0_ema
+from art_tts.utils_dataset.mspka import get_MSPKA_ema
+from art_tts.utils_dataset.pb2007 import get_pb2007_ema
+from art_tts.utils_dataset.mocha import get_mochatimit_ema
+from art_tts.utils_dataset.mngu0 import read_mngu0_ema
 
-from voxcommunis.io import read_manifest
-from utils import TqdmLoggingHandler
+from art_tts.voxcommunis.io import read_manifest
+from art_tts.utils import TqdmLoggingHandler
 
 import argparse
-import utils_ema.ema_dataset
+import art_tts.utils_ema.ema_dataset
 
-useless = utils_ema.ema_dataset.SentenceMetadata(
+useless = art_tts.utils_ema.ema_dataset.SentenceMetadata(
     0, "", ""
 )  # to avoid linting error from unused import that is needed
 

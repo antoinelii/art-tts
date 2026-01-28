@@ -14,11 +14,11 @@ import torch
 
 from pathlib import Path
 
-from utils import normalize_channel
+from art_tts.utils import normalize_channel
 
 # from art_tts.model.utils import fix_len_compatibility
-from configs.params_v6 import random_seed
-from configs.params_v6 import (
+from art_tts.configs.params_v6 import random_seed
+from art_tts.configs.params_v6 import (
     reorder_feats,
     pitch_idx,
     loudness_idx,
@@ -26,9 +26,9 @@ from configs.params_v6 import (
 )
 from art_tts.model.utils import fix_len_compatibility
 
-from voxcommunis.data import PanPhonInventory, FeatureTokenizer
-from voxcommunis.io import read_alignment, read_manifest
-from voxcommunis.utils import MyPathLike, unique_consecutive
+from art_tts.voxcommunis.data import PanPhonInventory, FeatureTokenizer
+from art_tts.voxcommunis.io import read_alignment, read_manifest
+from art_tts.voxcommunis.utils import MyPathLike, unique_consecutive
 
 
 class PhnmArticDataset(torch.utils.data.Dataset):

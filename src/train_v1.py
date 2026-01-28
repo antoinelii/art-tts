@@ -15,10 +15,10 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from pathlib import Path
 
-from configs import params_v1
-from model import ArtTTS
-from data_phnm import PhnmArticDataset, PhnmArticBatchCollate
-from utils import (
+from art_tts.configs import params_v1
+from art_tts.model import ArtTTS
+from art_tts.data_phnm import PhnmArticDataset, PhnmArticBatchCollate
+from art_tts.utils import (
     plot_tensor,
     save_plot,
     plot_art_14,
@@ -26,7 +26,7 @@ from utils import (
     TqdmLoggingHandler,
     EarlyStopping,
 )
-from metrics import normalized_dtw_score
+from art_tts.metrics import normalized_dtw_score
 
 log_dir = params_v1.log_dir
 reorder_feats = params_v1.reorder_feats

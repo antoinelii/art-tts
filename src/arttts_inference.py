@@ -6,14 +6,14 @@ from pathlib import Path
 
 import torch
 
-from model import ArtTTS, GradTTS, AttentionTTS, AttentionTTSPreblock
-from data_phnm import PhnmArticDataset, PhnmBatchCollate
-from data_textmel import TextMelDataset, TextBatchCollate
-from data_textart import TextArtDataset
-from data_phnmmel import PhnmMelDataset
-from text.symbols import symbols
-from utils import TqdmLoggingHandler
-from paths import CKPT_DIR
+from art_tts.model import ArtTTS, GradTTS, AttentionTTS, AttentionTTSPreblock
+from art_tts.data_phnm import PhnmArticDataset, PhnmBatchCollate
+from art_tts.data_textmel import TextMelDataset, TextBatchCollate
+from art_tts.data_textart import TextArtDataset
+from art_tts.data_phnmmel import PhnmMelDataset
+from art_tts.text.symbols import symbols
+from art_tts.utils import TqdmLoggingHandler
+from art_tts.paths import CKPT_DIR
 
 import argparse
 

@@ -12,8 +12,8 @@ from scipy.stats import pearsonr
 
 from tqdm import tqdm
 
-from voxcommunis.io import read_manifest
-from utils import TqdmLoggingHandler
+from art_tts.voxcommunis.io import read_manifest
+from art_tts.utils import TqdmLoggingHandler
 
 import argparse
 

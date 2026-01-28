@@ -13,22 +13,21 @@ from pathlib import Path
 import torch
 import torchaudio as ta
 
-from text import text_to_sequence, cmudict
-from text.converters import text_to_arpabet
-from text.symbols import symbols
-from utils import parse_filelist, intersperse
-from model.utils import fix_len_compatibility
-from configs.params_v2 import random_seed
-from configs.params_v2 import (
+from art_tts.text import text_to_sequence, cmudict
+from art_tts.text.converters import text_to_arpabet
+from art_tts.text.symbols import symbols
+from art_tts.utils import parse_filelist, intersperse
+from art_tts.model.utils import fix_len_compatibility
+from art_tts.configs.params_v2 import random_seed
+from art_tts.configs.params_v2 import (
     data_root_dir,
     cmudict_path,
     add_blank,
 )
 
-import sys
-
-sys.path.insert(0, "hifi-gan")
-from meldataset import mel_spectrogram
+#import sys
+#sys.path.insert(0, "hifi-gan")
+from art_tts.hifi_gan.meldataset import mel_spectrogram
 
 
 class TextMelDataset(torch.utils.data.Dataset):

@@ -14,10 +14,10 @@ import torch
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
-from configs import params_v0
-from model import ArtTTS
-from data import TextArticDataset, TextArticBatchCollate
-from utils import plot_tensor, save_plot, TqdmLoggingHandler, EarlyStopping
+from art_tts.configs import params_v0
+from art_tts.model import ArtTTS
+from art_tts.data import TextArticDataset, TextArticBatchCollate
+from art_tts.utils import plot_tensor, save_plot, TqdmLoggingHandler, EarlyStopping
 # from text.symbols import symbols
 
 patience = params_v0.patience

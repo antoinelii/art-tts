@@ -15,21 +15,19 @@ import torchaudio as ta
 from typing import List, Tuple
 from pathlib import Path
 
-from text.converters import ipa_to_ternary, diphtongues_ipa
-from utils import parse_filelist
+from art_tts.text.converters import ipa_to_ternary, diphtongues_ipa
+from art_tts.utils import parse_filelist
 
-# from model.utils import fix_len_compatibility
-from configs.params_v3 import random_seed
-from configs.params_v3 import (
+from art_tts.configs.params_v3 import random_seed
+from art_tts.configs.params_v3 import (
     data_root_dir,
     merge_diphtongues,
 )
-from model.utils import fix_len_compatibility
+from art_tts.model.utils import fix_len_compatibility
 
-import sys
-
-sys.path.insert(0, "hifi-gan")
-from meldataset import mel_spectrogram
+#import sys
+#sys.path.insert(0, "hifi-gan")
+from art_tts.hifi_gan.meldataset import mel_spectrogram
 
 
 class PhnmMelDataset(torch.utils.data.Dataset):

@@ -7,9 +7,9 @@ import importlib
 import soundfile as sf
 import torch
 
-from voxcommunis.io import read_manifest
-from model_ms.sparc_generator import SpkHiFiGANGenerator
-from utils import TqdmLoggingHandler
+from art_tts.voxcommunis.io import read_manifest
+from art_tts.model_ms.sparc_generator import SpkHiFiGANGenerator
+from art_tts.utils import TqdmLoggingHandler
 
 import argparse
 

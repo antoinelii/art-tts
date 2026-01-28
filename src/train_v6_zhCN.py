@@ -15,20 +15,20 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from pathlib import Path
 
-from configs import params_v6_zhCN
-from model_ms import GradTTArtic
-from data_ms import PhnmArticDataset, PhnmArticBatchCollate
-from voxcommunis.sampler import LengthGroupedSampler, LengthGroupedLanguageUpSampler
-from voxcommunis.decoder import FeatureDecoder
-from voxcommunis.data import FeatureTokenizer
-from utils import (
+from art_tts.configs import params_v6_zhCN
+from art_tts.model_ms import GradTTArtic
+from art_tts.data_ms import PhnmArticDataset, PhnmArticBatchCollate
+from art_tts.voxcommunis.sampler import LengthGroupedSampler, LengthGroupedLanguageUpSampler
+from art_tts.voxcommunis.decoder import FeatureDecoder
+from art_tts.voxcommunis.data import FeatureTokenizer
+from art_tts.utils import (
     plot_tensor,
     save_plot,
     plot_art_14,
     save_plot_art_14,
     TqdmLoggingHandler,
 )
-from metrics import normalized_dtw_score
+from art_tts.metrics import normalized_dtw_score
 
 log_dir = Path(params_v6_zhCN.log_dir)
 reorder_feats = params_v6_zhCN.reorder_feats

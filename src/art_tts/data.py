@@ -16,20 +16,20 @@ from pathlib import Path
 
 from sparc import load_model
 
-from text import cmudict
-from text.converters import text_to_ipa, ipa_to_ternary
-from utils import parse_filelist, intersperse
+from art_tts.text import cmudict
+from art_tts.text.converters import text_to_ipa, ipa_to_ternary
+from art_tts.utils import parse_filelist, intersperse
 
-# from model.utils import fix_len_compatibility
-from configs.params_v0 import seed as random_seed
-from configs.params_v0 import (
+# from art_tts.model.utils import fix_len_compatibility
+from art_tts.configs.params_v0 import seed as random_seed
+from art_tts.configs.params_v0 import (
     wavs_dir,
     artic_dir,
     sparc_ckpt_path,
     reorder_feats,
     pitch_idx,
 )
-from model.utils import fix_len_compatibility
+from art_tts.model.utils import fix_len_compatibility
 
 
 class TextArticDataset(torch.utils.data.Dataset):

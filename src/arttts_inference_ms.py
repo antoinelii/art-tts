@@ -6,14 +6,14 @@ from pathlib import Path
 
 import torch
 
-from model_ms import GradTTArtic
-from data_ms import PhnmDataset, PhnmBatchCollate
+from art_tts.model_ms import GradTTArtic
+from art_tts.data_ms import PhnmDataset, PhnmBatchCollate
 
-from voxcommunis.decoder import FeatureDecoder
-from voxcommunis.data import FeatureTokenizer
+from art_tts.voxcommunis.decoder import FeatureDecoder
+from art_tts.voxcommunis.data import FeatureTokenizer
 
-from utils import TqdmLoggingHandler
-from paths import CKPT_DIR
+from art_tts.utils import TqdmLoggingHandler
+from art_tts.paths import CKPT_DIR
 
 import argparse
 

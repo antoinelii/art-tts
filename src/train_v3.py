@@ -15,11 +15,11 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from configs import params_v3
-from data_phnmmel import PhnmMelBatchCollate, PhnmMelDataset
-from metrics import normalized_dtw_score
-from model import ArtTTS
-from utils import (
+from art_tts.configs import params_v3
+from art_tts.data_phnmmel import PhnmMelBatchCollate, PhnmMelDataset
+from art_tts.metrics import normalized_dtw_score
+from art_tts.model import ArtTTS
+from art_tts.utils import (
     EarlyStopping,
     TqdmLoggingHandler,
     plot_tensor,

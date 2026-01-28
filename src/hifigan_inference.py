@@ -7,8 +7,8 @@ import soundfile as sf
 import torch
 
 from sparc import load_model
-from utils import TqdmLoggingHandler, parse_filelist
-from paths import CKPT_DIR
+from art_tts.utils import TqdmLoggingHandler, parse_filelist
+from art_tts.paths import CKPT_DIR
 
 import argparse
 

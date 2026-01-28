@@ -1,21 +1,21 @@
 from pathlib import Path
-import sys
+#import sys
+#sys.path.append(str(Path.cwd().parent))
+#sys.path.insert(0, "hifi-gan")
 
-sys.path.append(str(Path.cwd().parent))
-sys.path.insert(0, "hifi-gan")
-from meldataset import mel_spectrogram
+from art_tts.hifi_gan.meldataset import mel_spectrogram
 
 import joblib
 import pandas as pd
 import numpy as np
 
-from paths import DATA_DIR
+from art_tts.paths import DATA_DIR
 
 
 from scipy.stats import pearsonr
-from metrics import normalized_dtw_score
+from art_tts.metrics import normalized_dtw_score
 
-from utils_dataset.mngu0 import read_mngu0_ema
+from art_tts.utils_dataset.mngu0 import read_mngu0_ema
 import torchaudio as ta
 
 from tqdm import tqdm

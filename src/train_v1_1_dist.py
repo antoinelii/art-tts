@@ -22,14 +22,14 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from balance_batch import DistLengthGroupedSampler
+from art_tts.balance_batch import DistLengthGroupedSampler
 from torch.utils.data.distributed import DistributedSampler
 
-from configs import params_v1_1
-from data_phnm import PhnmArticBatchCollate, PhnmArticDataset
-from metrics import normalized_dtw_score
-from model import ArtTTS
-from utils import (
+from art_tts.configs import params_v1_1
+from art_tts.data_phnm import PhnmArticBatchCollate, PhnmArticDataset
+from art_tts.metrics import normalized_dtw_score
+from art_tts.model import ArtTTS
+from art_tts.utils import (
     EarlyStopping,
     TqdmLoggingHandler,
     plot_art_14,

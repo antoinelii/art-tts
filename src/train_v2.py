@@ -17,11 +17,11 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-from data_textmel import TextMelBatchCollate, TextMelDataset
-from metrics import normalized_dtw_score
-from model import GradTTS
-from text.symbols import symbols
-from utils import (
+from art_tts.data_textmel import TextMelBatchCollate, TextMelDataset
+from art_tts.metrics import normalized_dtw_score
+from art_tts.model import GradTTS
+from art_tts.text.symbols import symbols
+from art_tts.utils import (
     EarlyStopping,
     TqdmLoggingHandler,
     plot_tensor,

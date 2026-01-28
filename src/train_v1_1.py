@@ -17,10 +17,10 @@ from pathlib import Path
 # from torch.profiler import profile, record_function, ProfilerActivity, schedule
 
 
-from configs import params_v1_1
-from model import ArtTTS
-from data_phnm import PhnmArticDataset, PhnmArticBatchCollate
-from utils import (
+from art_tts.configs import params_v1_1
+from art_tts.model import ArtTTS
+from art_tts.data_phnm import PhnmArticDataset, PhnmArticBatchCollate
+from art_tts.utils import (
     plot_tensor,
     save_plot,
     plot_art_14,
@@ -28,8 +28,8 @@ from utils import (
     TqdmLoggingHandler,
     EarlyStopping,
 )
-from metrics import normalized_dtw_score
-from balance_batch import LengthGroupedSampler
+from art_tts.metrics import normalized_dtw_score
+from art_tts.balance_batch import LengthGroupedSampler
 
 log_dir = params_v1_1.log_dir
 profile_log_dir = log_dir + "_profiler"

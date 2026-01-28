@@ -17,9 +17,9 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from pathlib import Path
 
-from model import GradTTS
-from data_textart import TextArtDataset, TextArtBatchCollate
-from utils import (
+from art_tts.model import GradTTS
+from art_tts.data_textart import TextArtDataset, TextArtBatchCollate
+from art_tts.utils import (
     plot_tensor,
     save_plot,
     plot_art_14,
@@ -27,8 +27,8 @@ from utils import (
     TqdmLoggingHandler,
     EarlyStopping,
 )
-from metrics import normalized_dtw_score
-from text.symbols import symbols
+from art_tts.metrics import normalized_dtw_score
+from art_tts.text.symbols import symbols
 
 # Setup logger
 mylogger = logging.getLogger(__name__)

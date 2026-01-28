@@ -7,7 +7,7 @@ from scipy.io.wavfile import write
 
 import torch
 
-from utils import TqdmLoggingHandler, parse_filelist
+from art_tts.utils import TqdmLoggingHandler, parse_filelist
 from art_tts.paths import ART_TTS_DIR
 from art_tts.hifi_gan.env import AttrDict
 from art_tts.hifi_gan.models import Generator as HiFiGAN
