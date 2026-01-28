@@ -2,10 +2,6 @@ from pathlib import Path
 
 # Global constants for the project
 
-# PATHS
-SRC_DIR = Path(__file__).resolve().parent.parent
-
-# MISC
 
 ##### MSPKA_EMA_ita #####
 # EMA channels for the MSPKA dataset

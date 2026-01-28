@@ -17,7 +17,7 @@ import soundfile as sf
 import joblib
 import re
 
-from utils_ema.cst import (
+from art_tts.utils_ema.cst import (
     SRC_DIR,
     MSPKA_ema_idx_to_keep,
     pb2007_idx_to_keep,
