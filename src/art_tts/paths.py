@@ -13,12 +13,13 @@ EMASRC_DIR = ENCODED_AUDIO_EN_DIR / "emasrc"
 SPK_EMB_DIR = ENCODED_AUDIO_EN_DIR / "spk_emb"
 
 # global specific
+CKPT_DIR = PROJECT_ROOT / "ckpt"
+RESOURCES_DIR = PROJECT_ROOT / "resources"
+SCRIPTS_DIR = PROJECT_ROOT / "scripts"
+
 ART_TTS_DIR = SRC_DIR / "art_tts"
-CKPT_DIR = SRC_DIR / "ckpt"
 CONFIGS_DIR = ART_TTS_DIR / "configs"
 MODELS_DIR = ART_TTS_DIR / "model"
-RESOURCES_DIR = ART_TTS_DIR / "resources"
-SCRIPTS_DIR = ART_TTS_DIR / "scripts"
 TEXT_DIR = ART_TTS_DIR / "text"
 
 FILELISTS_DIR = RESOURCES_DIR / "filelists"
