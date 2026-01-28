@@ -13,7 +13,7 @@
 
 module purge
 
-source ../.venv/bin/activate
+source .venv/bin/activate
 
 echo "visible nvidia gpus $(nvidia-smi)"
 echo "Running job on $(hostname)"

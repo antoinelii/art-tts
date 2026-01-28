@@ -19,7 +19,7 @@ module purge
 module load arch/h100
 module load cuda/12.6.3
 
-source ../.venv/bin/activate
+source .venv/bin/activate
 
 echo "visible nvidia gpus $(nvidia-smi)"
 echo "Running job on $(hostname)"
