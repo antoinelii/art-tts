@@ -11,13 +11,13 @@ import random
 
 import torch
 
-from model import monotonic_align
-from model.base import BaseModule
-from model.text_encoder import IpaTraitEncoder, TextEncoder
-from model.diffusion import Diffusion
-from model.diffusion_1D import Diffusion1D
-from model.diffusion_1D_preblock import Diffusion1DPreblock
-from model.utils import (
+from ..model import monotonic_align
+from art_tts.model.base import BaseModule
+from art_tts.model.text_encoder import IpaTraitEncoder, TextEncoder
+from art_tts.model.diffusion import Diffusion
+from art_tts.model.diffusion_1D import Diffusion1D
+from art_tts.model.diffusion_1D_preblock import Diffusion1DPreblock
+from art_tts.model.utils import (
     sequence_mask,
     generate_path,
     duration_loss,

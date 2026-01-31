@@ -1,5 +1,5 @@
 import numpy as np
-from utils_ema.cst import MSPKA_ema_idx_to_keep
+from art_tts.utils_ema.cst import MSPKA_ema_idx_to_keep
 
 # used chatgpt then https://www.leskoff.com/s01763-0 to get a more
 # italian specific version of the phones

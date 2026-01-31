@@ -1,5 +1,5 @@
 import numpy as np
-from text.converters import diphtongues_ipa
+from art_tts.text.converters import diphtongues_ipa
 
 
 def build_phnm3(

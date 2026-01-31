@@ -11,11 +11,11 @@ import random
 
 import torch
 
-from model_ms.base import BaseModule
-from model_ms.phnm_encoder import IpaTraitEncoder
-from model_ms.spk_encoder import SpeakerEncodingLayer
-from model_ms.diffusion import Diffusion
-from model_ms.utils import (
+from art_tts.model_ms.base import BaseModule
+from art_tts.model_ms.phnm_encoder import IpaTraitEncoder
+from art_tts.model_ms.spk_encoder import SpeakerEncodingLayer
+from art_tts.model_ms.diffusion import Diffusion
+from art_tts.model_ms.utils import (
     sequence_mask,
     fix_len_compatibility,
     generate_path,

@@ -1,5 +1,5 @@
 import numpy as np
-from utils_ema.cst import mochatimit_idx_to_keep
+from art_tts.utils_ema.cst import mochatimit_idx_to_keep
 
 
 def get_mocha_sentence(trans_file: str) -> str:

@@ -1,6 +1,6 @@
 """from https://github.com/keithito/tacotron"""
 
-from text import cmudict
+from art_tts.text import cmudict
 
 _pad = "_"
 _punctuation = "!'(),.:;? \"|"  # Added '"' and "|"

@@ -1,5 +1,5 @@
 import numpy as np
-from utils_ema.cst import pb2007_idx_to_keep
+from art_tts.utils_ema.cst import pb2007_idx_to_keep
 
 ema_sr = 100
 

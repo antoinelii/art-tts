@@ -6,7 +6,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # MIT License for more details.
 
-from model.utils import fix_len_compatibility
+from art_tts.model.utils import fix_len_compatibility
 
 # data parameters
 wavs_dir = "../../data/LJSpeech-1.1/wavs"

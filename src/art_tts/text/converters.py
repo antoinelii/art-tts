@@ -3,9 +3,9 @@ import panphon
 import numpy as np
 
 from typing import Optional, List
-from text.cmudict import CMUDict
-from text import _clean_text
-from text.symbols import _punctuation
+from art_tts.text.cmudict import CMUDict
+from art_tts.text import _clean_text
+from art_tts.text.symbols import _punctuation
 
 
 _curly_re = re.compile(r"(.*?)\{(.+?)\}(.*)")
